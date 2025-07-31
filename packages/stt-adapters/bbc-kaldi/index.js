@@ -64,7 +64,7 @@ const bbcKaldiToDraft = bbcKaldiJson => {
     // if paragraph contain words
     // eg sometimes the speaker segmentation might not contain words :man-shrugging:
     if (paragraph.words[0] !== undefined) {
-      let speakerLabel = `TBC ${ i }`;
+      let speakerLabel = `TBC ${i}`;
       if (speakerSegmentation !== null) {
         speakerLabel = paragraph.speaker;
       }

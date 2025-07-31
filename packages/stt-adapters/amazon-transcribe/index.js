@@ -137,7 +137,7 @@ const amazonTranscribeToDraft = amazonTranscribeJson => {
       text: paragraph.text.join(' '),
       type: 'paragraph',
       data: {
-        speaker: paragraph.speaker ? `Speaker ${ paragraph.speaker }` : `TBC ${ i }`,
+        speaker: paragraph.speaker ? `Speaker ${paragraph.speaker}` : `TBC ${i}`,
         words: paragraph.words,
         start: parseFloat(paragraph.words[0].start)
       },

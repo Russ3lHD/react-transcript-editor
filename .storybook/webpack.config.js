@@ -8,13 +8,13 @@ module.exports = {
       {
         test: /\.module.(sa|sc|c)ss$/,
         use: [
-          "style-loader",
+          'style-loader',
           {
-            loader: "css-loader",
+            loader: 'css-loader',
             options: { modules: true }
           },
           {
-            loader: "sass-loader",
+            loader: 'sass-loader',
             options: { sourcemap: true }
           }
         ]
@@ -23,10 +23,10 @@ module.exports = {
         test: /\.s(a|c)ss$/,
         exclude: /\.module.(s(a|c)ss)$/,
         use: [
-          "style-loader",
-          "css-loader",
+          'style-loader',
+          'css-loader',
           {
-            loader: "sass-loader",
+            loader: 'sass-loader',
             options: { sourcemap: true }
           }
         ]

@@ -20,7 +20,7 @@ addParameters({
     // showPanel: false,
     panelPosition: 'bottom',
     sidebarAnimations: true
-  },
+  }
 });
 
 configure(loadStories, module);

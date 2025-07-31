@@ -15,8 +15,7 @@
     "jest": true
   },
   "extends": [
-    "eslint:recommended",
-    "eslint:recommended/jsx-runtime"
+    "eslint:recommended"
   ],
   "plugins": [
     "react"

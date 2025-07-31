@@ -39,6 +39,7 @@ function normaliseWord(wordText) {
 }
 
 // using neighboring words to set missing start and end time when present
+// eslint-disable-next-line no-unused-vars
 function interpolationOptimization(wordsList) {
   return wordsList.map((word, index) => {
     let wordTmp = word;
@@ -101,14 +102,14 @@ function adjustTimecodesBoundaries(words) {
 // Simple linear interpolation function to replace everpolate
 function linearInterpolate(x, xValues, yValues) {
   const result = [];
-  
+
   for (let i = 0; i < x.length; i++) {
     const targetX = x[i];
-    
+
     // Find the two closest points
     let leftIndex = -1;
     let rightIndex = -1;
-    
+
     for (let j = 0; j < xValues.length; j++) {
       if (xValues[j] <= targetX) {
         leftIndex = j;
@@ -117,7 +118,7 @@ function linearInterpolate(x, xValues, yValues) {
         break;
       }
     }
-    
+
     // Handle edge cases
     if (leftIndex === -1) {
       // Target is before all known points, use the first point
@@ -131,13 +132,13 @@ function linearInterpolate(x, xValues, yValues) {
       const y1 = yValues[leftIndex];
       const x2 = xValues[rightIndex];
       const y2 = yValues[rightIndex];
-      
+
       const slope = (y2 - y1) / (x2 - x1);
       const interpolatedY = y1 + slope * (targetX - x1);
       result.push(interpolatedY);
     }
   }
-  
+
   return result;
 }
 
@@ -159,11 +160,11 @@ function interpolate(wordsList) {
       endTimes.push(word.end);
     }
   });
-  
+
   // Use our custom linear interpolation instead of everpolate
   const outStartTimes = linearInterpolate(indicies, indiciesWithStart, startTimes);
   const outEndTimes = linearInterpolate(indicies, indiciesWithEnd, endTimes);
-  
+
   const wordsResults = wordsList.map((word, index) => {
     if (!('start' in word)) {
       word.start = outStartTimes[index];

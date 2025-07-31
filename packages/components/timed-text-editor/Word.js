@@ -18,23 +18,23 @@ class Word extends Component {
     }
 
     return 'high';
-  }
+  };
 
   generatePreviousTimes = (data) => {
     let prevTimes = '';
 
     for (let i = 0; i < data.start; i++) {
-      prevTimes += `${ i } `;
+      prevTimes += `${i} `;
     }
 
     if (data.start % 1 > 0) {
       // Find the closest quarter-second to the current time, for more dynamic results
       const dec = Math.floor((data.start % 1) * 4.0) / 4.0;
-      prevTimes += ` ${ Math.floor(data.start) + dec }`;
+      prevTimes += ` ${Math.floor(data.start) + dec}`;
     }
 
     return prevTimes;
-  }
+  };
 
   render() {
     const data = this.props.entityKey

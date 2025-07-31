@@ -45,7 +45,7 @@ function groupWordsBySpeaker(wordsWithSpeakers) {
     // if current speaker same as word speaker add words to paragraph
     if (currentSpeaker === word.speaker) {
       paragraph.words.push(word);
-      paragraph.text += word.punct + ' ';
+      paragraph.text += `${word.punct} `;
       paragraph.speaker = currentSpeaker;
     }
     // if it's not same speaker
@@ -60,7 +60,7 @@ function groupWordsBySpeaker(wordsWithSpeakers) {
       paragraph = { words: [], text: '', speaker: 'U_UKN' };
       // add words attributes to new
       paragraph.words.push(word);
-      paragraph.text += word.punct + ' ';
+      paragraph.text += `${word.punct} `;
     }
   });
   // add last paragraph
@@ -112,7 +112,7 @@ function findSegmentForWord(word, segments) {
 * @return {string} -
 */
 function formatSpeakerName(speaker) {
-  return speaker.gender + '_' + speaker['@id'];
+  return `${speaker.gender}_${speaker['@id']}`;
 }
 
 export default groupWordsInParagraphsBySpeakers;

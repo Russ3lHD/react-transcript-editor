@@ -7,11 +7,11 @@ import style from './ProgressBar.module.scss';
 class ProgressBar extends React.Component {
   shouldComponentUpdate = (nextProps) => {
     return !isEqual(this.props, nextProps);
-  }
+  };
 
   handleOnChange = (e) => {
     this.props.buttonClick(e);
-  }
+  };
 
   render() {
     return (
@@ -37,7 +37,7 @@ ProgressBar.propTypes = {
 
 ProgressBar.defaultProps = {
   value: '0',
-  max: '0',
+  max: '0'
 };
 
 export default ProgressBar;

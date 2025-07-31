@@ -9,15 +9,15 @@ import removeSpaceAfterCarriageReturn from '../util/remove-space-after-carriage-
   * TODO: this could be refactored with smaller helper functions
   */
 function foldWordsReturnArray(textArray, foldNumber = 35) {
-  var counter = 0;
-  var result = textArray.map((word, index, list) => {
+  let counter = 0;
+  const result = textArray.map((word, index, list) => {
     counter += word.length + 1;
     //resetting counter when there is a 'paragraph' line break \n\n
     if (counter <= foldNumber) {
     // if not last word in list
     // cover edge case last element in array does not have a next element
       if (list[index + 1] !== undefined) {
-        var nextElementLength = list[index + 1].length;
+        const nextElementLength = list[index + 1].length;
         //check if adding next word would make the line go over the char limit foldNumber
         if ((counter + nextElementLength) < foldNumber) {
           return word;
@@ -25,7 +25,7 @@ function foldWordsReturnArray(textArray, foldNumber = 35) {
           // if it makes it go over, reset counter, return and add line break
           counter = 0;
 
-          return `${ word }\n`;
+          return `${word}\n`;
         }
         //last word in the list
       } else {
@@ -35,7 +35,7 @@ function foldWordsReturnArray(textArray, foldNumber = 35) {
     } else {
       counter = 0;
 
-      return `${ word }\n`;
+      return `${word}\n`;
     }
   });
 
@@ -48,13 +48,13 @@ function foldWordsReturnArray(textArray, foldNumber = 35) {
 */
 function foldWords(text, foldNumber) {
   // split on two line break
-  var lineArr = text.split('\n\n');
+  const lineArr = text.split('\n\n');
   // fold each line on non fold number char count
-  var foldedWordsInArray = lineArr.map((line) => {
+  const foldedWordsInArray = lineArr.map((line) => {
   	return foldWordsReturnArray(line.split(' '), foldNumber);
   });
   // flatten result
-  var foldedWordsFlatten = foldedWordsInArray.map((line) => {
+  const foldedWordsFlatten = foldedWordsInArray.map((line) => {
     return line.join(' ');
   });
 

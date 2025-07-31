@@ -6,11 +6,11 @@ import style from './index.module.scss';
 class TimeBox extends React.Component {
   shouldComponentUpdate = (nextProps) => {
     return !isEqual(this.props, nextProps);
-  }
+  };
 
   handleClick = (e) => {
     this.props.promptSetCurrentTime(e);
-  }
+  };
 
   render() {
     return (

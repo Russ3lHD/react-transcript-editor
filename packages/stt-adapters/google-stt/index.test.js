@@ -31,11 +31,11 @@ describe('Best alternative sentence should be returned', () => {
     alternatives: [
       {
         'transcript': 'this is the first sentence',
-        'confidence': 0.95,
+        'confidence': 0.95
       },
       {
         'transcript': 'this is the first sentence alternative',
-        'confidence': 0.80,
+        'confidence': 0.80
       }
     ]
   };

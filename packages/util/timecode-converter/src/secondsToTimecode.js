@@ -36,18 +36,18 @@ const secondsToTimecode = function (seconds, framePerSeconds) {
 
   // prepends zero - example pads 3 to 03
   function _padZero(n) {
-    if (n < 10) return `0${ parseInt(n) }`;
+    if (n < 10) return `0${parseInt(n)}`;
 
     return parseInt(n);
   }
 
-  return `${ _padZero((wholeSeconds / 60 / 60) % 60)
+  return `${_padZero((wholeSeconds / 60 / 60) % 60)
   }:${
     _padZero((wholeSeconds / 60) % 60)
   }:${
     _padZero(wholeSeconds % 60)
   }:${
-    _padZero(frames) }`;
+    _padZero(frames)}`;
 };
 
 export default secondsToTimecode;

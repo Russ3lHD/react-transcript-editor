@@ -9,7 +9,7 @@ class ExportOptions extends React.Component {
 
   render() {
     const btns = this.props.exportOptionsList.map((opt, index) => {
-      return (<><button 
+      return (<><button
         key={opt.label+index}
         title={ opt.label }
         className={ style.playerButton }
@@ -18,7 +18,7 @@ class ExportOptions extends React.Component {
         value={ opt.value }>
         {opt.label}
       </button>
-        <br/>
+      <br/>
       </>);
     });
 

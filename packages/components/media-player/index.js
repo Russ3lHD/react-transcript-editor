@@ -31,7 +31,7 @@ class MediaPlayer extends React.Component {
       isMute: false
     };
   }
-  /*eslint-disable camelcase */
+
   hot_keys = returnHotKeys(this);
 
   static getDerivedStateFromProps(nextProps) {

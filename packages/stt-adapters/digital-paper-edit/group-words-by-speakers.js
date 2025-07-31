@@ -95,7 +95,7 @@ function addWordsToSpeakersParagraphs (words, segments) {
       currentSegmentIndex = segments.indexOf(currentSegment);
       if (currentSegmentIndex === previousSegmentIndex) {
         paragraph.words.push(word);
-        paragraph.text += word.text + ' ';
+        paragraph.text += `${word.text} `;
         paragraph.speaker = currentSegment.speaker;
       }
       else {
@@ -104,7 +104,7 @@ function addWordsToSpeakersParagraphs (words, segments) {
         results.push(paragraph);
         paragraph = { words: [], text: '', speaker: '' };
         paragraph.words.push(word);
-        paragraph.text += word.text + ' ';
+        paragraph.text += `${word.text} `;
         paragraph.speaker = currentSegment.speaker;
       }
     }

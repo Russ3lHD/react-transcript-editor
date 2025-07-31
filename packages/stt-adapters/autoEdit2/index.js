@@ -24,7 +24,7 @@ const groupWordsInParagraphs = (autoEditText) => {
         const tmpWord = {
           text: word.text,
           start: word.startTime,
-          end: word.endTime,
+          end: word.endTime
         };
         //  if word contains punctuation
         if (/[.?!]/.test(word.text)) {
@@ -54,13 +54,13 @@ const autoEdit2ToDraft = (autoEdit2Json) => {
       text: paragraph.text.join(' '),
       type: 'paragraph',
       data: {
-        speaker: `TBC ${ i }`,
+        speaker: `TBC ${i}`,
         words: paragraph.words,
         start: paragraph.words[0].start
       },
       // the entities as ranges are each word in the space-joined text,
       // so it needs to be compute for each the offset from the beginning of the paragraph and the length
-      entityRanges: generateEntitiesRanges(paragraph.words, 'text'),
+      entityRanges: generateEntitiesRanges(paragraph.words, 'text')
     };
     // console.log(JSON.stringify(draftJsContentBlockParagraph,null,2))
     results.push(draftJsContentBlockParagraph);

@@ -13,7 +13,7 @@ function generateDocxFromDraftJs(blockData, transcriptTitle) {
   const doc = new Document({
     creator: 'Test',
     description: 'Test Description',
-    title: transcriptTitle,
+    title: transcriptTitle
   });
 
   // Transcript Title
@@ -25,7 +25,7 @@ function generateDocxFromDraftJs(blockData, transcriptTitle) {
   doc.addParagraph(paragraphTitle);
 
   // add spacing
-  var paragraphEmpty = new Paragraph();
+  const paragraphEmpty = new Paragraph();
   doc.addParagraph(paragraphEmpty);
 
   blockData.blocks.forEach((draftJsParagraph) => {
@@ -43,7 +43,7 @@ function generateDocxFromDraftJs(blockData, transcriptTitle) {
   const packer = new Packer();
 
   packer.toBlob(doc).then(blob => {
-    const filename = `${ transcriptTitle }.docx`;
+    const filename = `${transcriptTitle}.docx`;
     // // const type =  'application/octet-stream';
     const a = document.createElement('a');
     a.href = window.URL.createObjectURL(blob);

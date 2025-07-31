@@ -10,7 +10,7 @@ class PlaybackRate extends React.Component {
 
   shouldComponentUpdate = (nextProps) => {
     return !isEqual(this.props, nextProps);
-  }
+  };
 
   render() {
     return (

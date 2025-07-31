@@ -12,7 +12,7 @@ import generateEntitiesRanges from '../generate-entities-ranges/index.js';
  * @param {array} speakers - list of all speakers with start and end time
  */
 const getSpeaker = (start, speakers) => {
-  for (var speakerIdx in speakers) {
+  for (const speakerIdx in speakers) {
     const speaker = speakers[speakerIdx];
     const segmentStart = parseFloat(start);
     if (segmentStart >= speaker.start & segmentStart < speaker.end) {
@@ -89,7 +89,7 @@ const speechmaticsToDraft = (speechmaticsJson) => {
       confidence: element.confidence,
       word: element.name.toLowerCase().replace(/[.?!]/g, ''),
       punct: element.name,
-      index: index,
+      index
     });
   });
 
@@ -99,7 +99,7 @@ const speechmaticsToDraft = (speechmaticsJson) => {
     return ({
       start: parseFloat(element.time),
       end: (parseFloat(element.time) + parseFloat(element.duration)),
-      name: element.name,
+      name: element.name
     });
   });
 
@@ -117,7 +117,7 @@ const speechmaticsToDraft = (speechmaticsJson) => {
       },
       // the entities as ranges are each word in the space-joined text,
       // so it needs to be compute for each the offset from the beginning of the paragraph and the length
-      entityRanges: generateEntitiesRanges(paragraph.words, 'punct'), // wordAttributeName
+      entityRanges: generateEntitiesRanges(paragraph.words, 'punct') // wordAttributeName
     };
     results.push(draftJsContentBlockParagraph);
   });

@@ -23,7 +23,7 @@ const createEntityMap = (blocks) => {
     entityMap[data.key] = {
       type: 'WORD',
       mutability: 'MUTABLE',
-      data,
+      data
     };
   });
 

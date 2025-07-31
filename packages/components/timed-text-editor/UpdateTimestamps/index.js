@@ -15,12 +15,12 @@ const convertContentToText = (content) => {
 
 const createEntity = (start, end, confidence, word, wordIndex) => {
   return ({
-    start: start,
-    end: end,
-    confidence: confidence,
+    start,
+    end,
+    confidence,
     word: word.toLowerCase().replace(/[.?!]/g, ''),
     punct: word,
-    index: wordIndex,
+    index: wordIndex
   });
 };
 
@@ -46,11 +46,11 @@ const createContentFromEntityList = (currentContent, newEntities) => {
       text: blockEntites.map((entry) => entry.punct).join(' '),
       type: 'paragraph',
       data: {
-        speaker: speaker,
+        speaker,
         words: blockEntites,
         start: blockEntites[0].start
       },
-      entityRanges: generateEntitiesRanges(blockEntites, 'punct'),
+      entityRanges: generateEntitiesRanges(blockEntites, 'punct')
     };
 
     updatedBlockArray.push(updatedBlock);
@@ -72,7 +72,7 @@ const updateTimestamps = (currentContent, originalContent) => {
     entities.push({
       start: parseFloat(entityMap[entityIdx].data.start),
       end: parseFloat(entityMap[entityIdx].data.end),
-      word: entityMap[entityIdx].data.text,
+      word: entityMap[entityIdx].data.text
     });
   }
 

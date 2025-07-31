@@ -49,7 +49,7 @@ const ibmToDraft = ibmJson => {
       return 'UKN';
     } else {
       // find returns the first element that matches the criteria
-      return `S_${ tmpSegment.speaker }`;
+      return `S_${tmpSegment.speaker}`;
     }
   };
   // add speakers to words
@@ -80,7 +80,7 @@ const ibmToDraft = ibmJson => {
         },
         // the entities as ranges are each word in the space-joined text,
         // so it needs to be compute for each the offset from the beginning of the paragraph and the length
-        entityRanges: generateEntitiesRanges(ibmParagraph, 'text'), // wordAttributeName
+        entityRanges: generateEntitiesRanges(ibmParagraph, 'text') // wordAttributeName
       };
       draftJsParagraphsResults.push(draftJsContentBlockParagraph);
     });

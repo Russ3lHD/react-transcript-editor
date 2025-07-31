@@ -14,7 +14,7 @@ function returnHotKeys(self) {
 
       },
       displayKeyCombination: 'alt + k',
-      label: 'Play Media',
+      label: 'Play Media'
     },
     'alt+l': {
       priority: 1,
@@ -30,7 +30,7 @@ function returnHotKeys(self) {
 
       },
       displayKeyCombination: 'alt + l',
-      label: 'Fast Forward',
+      label: 'Fast Forward'
     },
     'alt+j': {
       priority: 1,
@@ -46,7 +46,7 @@ function returnHotKeys(self) {
 
       },
       displayKeyCombination: 'alt + j',
-      label: 'Rewind',
+      label: 'Rewind'
     },
     'alt+-': {
       priority: 1,
@@ -62,7 +62,7 @@ function returnHotKeys(self) {
 
       },
       displayKeyCombination: 'alt + -',
-      label: 'Decrease Playback Speed',
+      label: 'Decrease Playback Speed'
     },
     // https://github.com/ccampbell/mousetrap/issues/266
     'alt+=': {
@@ -79,7 +79,7 @@ function returnHotKeys(self) {
 
       },
       displayKeyCombination: 'alt + +',
-      label: 'Increase Playback Speed',
+      label: 'Increase Playback Speed'
     },
     'alt+r': {
       priority: 1,
@@ -95,7 +95,7 @@ function returnHotKeys(self) {
 
       },
       displayKeyCombination: 'alt + r',
-      label: 'Roll Back',
+      label: 'Roll Back'
     },
     'alt+t': {
       priority: 1,
@@ -111,7 +111,7 @@ function returnHotKeys(self) {
 
       },
       displayKeyCombination: 'alt + t',
-      label: 'set current time',
+      label: 'set current time'
     }
   };
 }

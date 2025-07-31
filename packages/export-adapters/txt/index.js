@@ -25,7 +25,7 @@ export default (blockData) => {
   // const lines = blockData.blocks.map(paragraph => paragraph.text);
   const lines = blockData.blocks.map(paragraph => {
     // return `${ shortTimecode(paragraph.data.words[0].start) }\t${ paragraph.data.speaker }\n${ paragraph.text }`;
-    return `${ paragraph.text }`;
+    return `${paragraph.text}`;
   });
 
   return lines.join('\n\n');

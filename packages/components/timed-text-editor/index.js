@@ -1,5 +1,5 @@
-import React from "react";
-import PropTypes from "prop-types";
+import React from 'react';
+import PropTypes from 'prop-types';
 
 import {
   EditorState,
@@ -8,9 +8,10 @@ import {
   convertToRaw,
   getDefaultKeyBinding,
   Modifier
-} from "draft-js";
+} from 'draft-js';
 
 
+// eslint-disable-next-line no-unused-vars
 import CustomEditor from './CustomEditor.js';
 import Word from './Word';
 
@@ -40,7 +41,7 @@ class TimedTextEditor extends React.Component {
     return false;
   };
 
-  componentDidUpdate(prevProps, prevState) {
+  componentDidUpdate(prevProps, _prevState) {
     if (
       prevProps.timecodeOffset !== this.props.timecodeOffset ||
       prevProps.showSpeakers !== this.props.showSpeakers ||
@@ -132,9 +133,9 @@ class TimedTextEditor extends React.Component {
     if (selectionState.getHasFocus()) {
       // Build block map, which maps the block keys of the previous content to the block keys of the
       // updated content.
-      var blockMap = {};
+      const blockMap = {};
       for (
-        var blockIdx = 0;
+        let blockIdx = 0;
         blockIdx < currentContent.blocks.length;
         blockIdx++
       ) {
@@ -185,17 +186,17 @@ class TimedTextEditor extends React.Component {
   }
 
   // click on words - for navigation
-  // eslint-disable-next-line class-methods-use-this
+
   handleDoubleClick = event => {
     // nativeEvent --> React giving you the DOM event
     let element = event.nativeEvent.target;
     // find the parent in Word that contains span with time-code start attribute
-    while (!element.hasAttribute("data-start") && element.parentElement) {
+    while (!element.hasAttribute('data-start') && element.parentElement) {
       element = element.parentElement;
     }
 
-    if (element.hasAttribute("data-start")) {
-      const t = parseFloat(element.getAttribute("data-start"));
+    if (element.hasAttribute('data-start')) {
+      const t = parseFloat(element.getAttribute('data-start'));
       this.props.onWordClick(t);
     }
   };
@@ -205,7 +206,7 @@ class TimedTextEditor extends React.Component {
   getWordCount = editorState => {
     const plainText = editorState.getCurrentContent().getPlainText('');
     const regex = /(?:\r\n|\r|\n)/g; // new line, carriage return, line feed
-    const cleanString = plainText.replace(regex, " ").trim(); // replace above characters w/ space
+    const cleanString = plainText.replace(regex, ' ').trim(); // replace above characters w/ space
     const wordArray = cleanString.match(/\S+/g); // matches words according to whitespace
 
     return wordArray ? wordArray.length : 0;
@@ -219,19 +220,19 @@ class TimedTextEditor extends React.Component {
    */
   setEditorContentState = data => {
     const contentState = convertFromRaw(data);
-    // eslint-disable-next-line no-use-before-define
+
     const editorState = EditorState.createWithContent(contentState, decorator);
 
     if (this.props.handleAnalyticsEvents !== undefined) {
       this.props.handleAnalyticsEvents({
-        category: "TimedTextEditor",
-        action: "setEditorContentState",
-        name: "getWordCount",
+        category: 'TimedTextEditor',
+        action: 'setEditorContentState',
+        name: 'getWordCount',
         value: this.getWordCount(editorState)
       });
     }
 
-    this.setState({ editorState }, ()=>{
+    this.setState({ editorState }, () => {
       this.forceRenderDecorator();
     });
   };
@@ -304,7 +305,7 @@ class TimedTextEditor extends React.Component {
     if (e.keyCode === enterKey) {
       console.log('customKeyBindingFn');
 
-      return "split-paragraph";
+      return 'split-paragraph';
     }
     // if alt key is pressed in combination with these other keys
     if (
@@ -321,7 +322,7 @@ class TimedTextEditor extends React.Component {
     ) {
       e.preventDefault();
 
-      return "keyboard-shortcuts";
+      return 'keyboard-shortcuts';
     }
 
     return getDefaultKeyBinding(e);
@@ -335,8 +336,8 @@ class TimedTextEditor extends React.Component {
       this.splitParagraph();
     }
 
-    if (command === "keyboard-shortcuts") {
-      return "handled";
+    if (command === 'keyboard-shortcuts') {
+      return 'handled';
     }
     return 'not-handled';
   };
@@ -373,13 +374,13 @@ class TimedTextEditor extends React.Component {
         newContentState.selectionBefore.getStartKey()
       );
       const originalBlockData = originalBlock.getData();
-      const blockSpeaker = originalBlockData.get("speaker");
+      const blockSpeaker = originalBlockData.get('speaker');
 
-      let wordStartTime = "NA";
-      // eslint-disable-next-line prefer-const
+      let wordStartTime = 'NA';
+
       let isEndOfParagraph = false;
       // identify the entity (word) at the selection/cursor point on split.
-      // eslint-disable-next-line prefer-const
+
       let entityKey = originalBlock.getEntityAt(
         currentSelection.getStartOffset()
       );
@@ -395,7 +396,7 @@ class TimedTextEditor extends React.Component {
         // handle edge case when it doesn't find a closest entity (word)
         // eg pres enter on an empty line
         if (entityKey === null) {
-          return "not-handled";
+          return 'not-handled';
         }
       }
       // if there is an entityKey at or close to the selection point
@@ -420,7 +421,7 @@ class TimedTextEditor extends React.Component {
       );
       this.setEditorNewContentState(afterMergeContentState);
 
-      return "handled";
+      return 'handled';
     }
 
     return 'not-handled';
@@ -475,8 +476,8 @@ class TimedTextEditor extends React.Component {
 
   getCurrentWord = () => {
     const currentWord = {
-      start: "NA",
-      end: "NA"
+      start: 'NA',
+      end: 'NA'
     };
 
     if (this.props.transcriptData) {
@@ -485,7 +486,7 @@ class TimedTextEditor extends React.Component {
       const contentStateConvertEdToRaw = convertToRaw(contentState);
       const entityMap = contentStateConvertEdToRaw.entityMap;
 
-      for (var entityKey in entityMap) {
+      for (const entityKey in entityMap) {
         const entity = entityMap[entityKey];
         const word = entity.data;
 
@@ -499,10 +500,10 @@ class TimedTextEditor extends React.Component {
       }
     }
 
-    if (currentWord.start !== "NA") {
+    if (currentWord.start !== 'NA') {
       if (this.props.isScrollIntoViewOn) {
         const currentWordElement = document.querySelector(
-          `span.Word[data-start="${ currentWord.start }"]`
+          `span.Word[data-start="${currentWord.start}"]`
         );
         currentWordElement.scrollIntoView({
           block: 'nearest',
@@ -521,9 +522,9 @@ class TimedTextEditor extends React.Component {
   render() {
     // console.log('render TimedTextEditor');
     const currentWord = this.getCurrentWord();
-    const highlightColour = "#69e3c2";
-    const unplayedColor = "#767676";
-    const correctionBorder = "1px dotted blue";
+    const highlightColour = '#69e3c2';
+    const unplayedColor = '#767676';
+    const correctionBorder = '1px dotted blue';
 
     // Time to the nearest half second
     const time = Math.round(this.props.currentTime * 4.0) / 4.0;
@@ -538,13 +539,13 @@ class TimedTextEditor extends React.Component {
         // onTouchStart={ event => this.handleDoubleClick(event) }
       >
         <style scoped>
-          {`span.Word[data-start="${ currentWord.start }"] { background-color: ${ highlightColour }; text-shadow: 0 0 0.01px black }`}
-          {`span.Word[data-start="${ currentWord.start }"]+span { background-color: ${ highlightColour } }`}
-          {`span.Word[data-prev-times~="${ Math.floor(
+          {`span.Word[data-start="${currentWord.start}"] { background-color: ${highlightColour}; text-shadow: 0 0 0.01px black }`}
+          {`span.Word[data-start="${currentWord.start}"]+span { background-color: ${highlightColour} }`}
+          {`span.Word[data-prev-times~="${Math.floor(
             time
-          ) }"] { color: ${ unplayedColor } }`}
-          {`span.Word[data-prev-times~="${ time }"] { color: ${ unplayedColor } }`}
-          {`span.Word[data-confidence="low"] { border-bottom: ${ correctionBorder } }`}
+          )}"] { color: ${unplayedColor} }`}
+          {`span.Word[data-prev-times~="${time}"] { color: ${unplayedColor} }`}
+          {`span.Word[data-confidence="low"] { border-bottom: ${correctionBorder} }`}
         </style>
         <CustomEditor
           editorState={this.state.editorState}

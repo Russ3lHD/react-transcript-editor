@@ -35,16 +35,16 @@ const generateDraftJsContentBlock = (paragraph) => {
   const start = words.length > 0 ? words[0].start : 0;
 
   return {
-    text: text,
+    text,
     type: 'paragraph',
     data: {
-      speaker: speaker,
-      words: words,
-      start: start,
+      speaker,
+      words,
+      start
     },
     // the entities as ranges are each word in the space-joined text,
     // so it needs to be compute for each the offset from the beginning of the paragraph and the length
-    entityRanges: generateEntitiesRanges(words, 'text'), // wordAttributeName
+    entityRanges: generateEntitiesRanges(words, 'text') // wordAttributeName
   };
 };
 
@@ -61,7 +61,7 @@ const digitalPaperEditToDraft = (digitalPaperEditTranscriptJson) => {
 
   const results = wordsByParagraphs.map((paragraph, i) => {
     if (!paragraph.speaker) {
-      paragraph.speaker = `TBC ${ i }`;
+      paragraph.speaker = `TBC ${i}`;
     }
 
     return generateDraftJsContentBlock(paragraph);

@@ -24,32 +24,32 @@ class PlayerControls extends React.Component {
 
   shouldComponentUpdate = (nextProps) => {
     return !isEqual(this.props, nextProps);
-  }
+  };
 
   setIntervalHelperBackward = () => {
     // this.props.skipBackward();
     this.interval = setInterval(() => {
       this.props.skipBackward();
     }, 300);
-  }
+  };
 
   setIntervalHelperForward = () => {
     // this.props.skipForward();
     this.interval = setInterval(() => {
       this.props.skipForward();
     }, 300);
-  }
+  };
 
   clearIntervalHelper = () => {
     clearInterval(this.interval);
-  }
+  };
 
   render() {
-    
+
     const pictureInPicture = ('pictureInPictureEnabled' in document) ? ( <button
       value="Picture-in-picture"
       title="Picture-in-picture"
-      className={ `${ style.playerButton } ${ style.pip }` }
+      className={ `${style.playerButton} ${style.pip}` }
       onClick={ this.props.pictureInPicture }>
       <FontAwesomeIcon icon={ faTv } />
     </button> ) : null;

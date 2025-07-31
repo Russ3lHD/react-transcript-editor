@@ -51,9 +51,9 @@ const HowDoesThisWork = (handleAnalyticsEvents) => (
     onMouseOver={ () => {
       if (handleAnalyticsEvents) {
         handleAnalyticsEvents({
-          category: "TranscriptEditor",
-          action: "hover",
-          name: "howDoesThisWork"
+          category: 'TranscriptEditor',
+          action: 'hover',
+          name: 'howDoesThisWork'
         });
       }
     } }

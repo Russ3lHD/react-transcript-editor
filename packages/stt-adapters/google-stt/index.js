@@ -60,7 +60,7 @@ const normalizeWord = (currentWord, confidence) => {
     start: computeTimeInSeconds(currentWord.startTime.seconds, currentWord.startTime.nanos),
     end: computeTimeInSeconds(currentWord.endTime.seconds, currentWord.endTime.nanos),
     text: currentWord.word,
-    confidence: confidence
+    confidence
   };
 };
 
@@ -101,7 +101,7 @@ const gcpSttToDraft = gcpSttJson => {
       text: paragraph.text.join(' '),
       type: 'paragraph',
       data: {
-        speaker: paragraph.speaker ? `Speaker ${ paragraph.speaker }` : `TBC ${ i }`,
+        speaker: paragraph.speaker ? `Speaker ${paragraph.speaker}` : `TBC ${i}`,
         words: paragraph.words,
         start: parseFloat(paragraph.words[0].start)
       },
