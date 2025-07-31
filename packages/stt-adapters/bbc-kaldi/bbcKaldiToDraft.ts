@@ -24,7 +24,6 @@ const groupWordsInParagraphs = (words: Word[]): Paragraph[] => {
     if (/[.?!]/.test(word.punct)) {
       paragraph.words.push(word);
       paragraph.text.push(word.punct);
-      paragraph.text = paragraph.text.join(' ');
       results.push(paragraph);
       // reset paragraph
       paragraph = { words: [], text: [] };
@@ -78,7 +77,7 @@ const bbcKaldiToDraft = (bbcKaldiJson: BbcKaldiJson): DraftJsContentBlock[] => {
       }
 
       const draftJsContentBlockParagraph: DraftJsContentBlock = {
-        text: paragraph.text,
+        text: Array.isArray(paragraph.text) ? paragraph.text.join(' ') : paragraph.text,
         type: 'paragraph',
         data: {
           speaker: speakerLabel,

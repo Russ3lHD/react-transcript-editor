@@ -82,7 +82,7 @@ export const mapPunctuationItemsToWords = (words: any[]) => {
  */
 const groupWordsInParagraphs = (words: any[]) => {
   const results: any[] = [];
-  let paragraph = {
+  let paragraph: { words: Word[]; text: string[] } = {
     words: [],
     text: [],
   };
