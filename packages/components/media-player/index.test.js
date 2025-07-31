@@ -1,6 +1,5 @@
 import React from 'react';
-import { render, cleanup } from 'react-testing-library';
-import { shallow } from 'enzyme';
+import { render, cleanup } from '@testing-library/react';
 
 import MediaPlayer from './index.js';
 
@@ -18,8 +17,4 @@ xtest("GIVEN a video as a chapter with src video url THEN the video is rendered 
   const { getByTestId } = render(<MediaPlayer mediaUrl={ fakeVideoUrl } />);
 
   expect(getByTestId('media-player-id').attributes.src.value).toBe(fakeVideoUrl);
-});
-xtest('WHEN the Video component is rendered THEN a video element is displayed', () => {
-  const wrapper = shallow(<MediaPlayer mediaUrl={ fakeVideoUrl } />);
-  expect(wrapper.find('video').type()).toBe('video');
 });

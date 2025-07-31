@@ -8,18 +8,11 @@ module.exports = {
         targets: { node: 'current' }
       }
     ],
-    '@babel/preset-react',
-    [
-      'minify',
-      {
-        builtIns: false,
-        evaluate: false,
-        mangle: false
-      }
-    ]
+    '@babel/preset-react'
   ],
   plugins: [
-    '@babel/plugin-proposal-object-rest-spread',
-    '@babel/plugin-proposal-class-properties'
+    '@babel/plugin-transform-object-rest-spread',
+    '@babel/plugin-transform-class-properties',
+    '@babel/plugin-transform-optional-chaining'
   ]
 };
