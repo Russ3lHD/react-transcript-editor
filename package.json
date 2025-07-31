@@ -148,7 +148,7 @@
       "trim": "^0.0.3",
       "nth-check": "^2.0.1",
       "minimatch": "^3.0.5",
-      "webpack-dev-middleware": "^3.7.3",
+      "webpack-dev-middleware": "^4.3.0",
       "braces": "^3.0.3",
       "cross-spawn": "^6.0.6",
       "node-notifier": "^8.0.1",
