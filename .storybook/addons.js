@@ -1,5 +1,1 @@
-import '@storybook/addon-knobs/register';
-import '@storybook/addon-viewport/register';
-import '@storybook/addon-actions/register';
-import '@storybook/addon-links/register';
-import '@storybook/addon-a11y/register';
+// Storybook 7 addons - no need to register manually, they're configured in main.js

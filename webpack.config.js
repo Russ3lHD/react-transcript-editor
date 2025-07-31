@@ -3,11 +3,8 @@
 const path = require('path');
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 
-const isDevelopment = process.env.NODE_ENV !== 'production';
-
 module.exports = {
   mode: 'production',
-  devtool: 'source-map',
   entry: {
     index: './packages/index.js',
     TranscriptEditor: './packages/components/transcript-editor/index.js',
@@ -26,72 +23,15 @@ module.exports = {
     groupWordsInParagraphsBySpeakersDPE: './packages/stt-adapters/digital-paper-edit/group-words-by-speakers.js'
   },
   output: {
-    path: path.resolve('dist'),
+    path: path.resolve(__dirname, 'dist'),
     filename: '[name].js',
-    libraryTarget: 'commonjs2'
-  },
-  optimization: {
-    minimize: true
-  },
-  plugins: [
-    new MiniCssExtractPlugin({
-      filename: isDevelopment ? '[name].css' : '[name].[hash].css',
-      chunkFilename: isDevelopment ? '[id].css' : '[id].[hash].css'
-    })
-  ],
-  module: {
-    rules: [
-      {
-        test: /\.module.(sa|sc|c)ss$/,
-        use: [
-          isDevelopment ? 'style-loader' : MiniCssExtractPlugin.loader,
-          {
-            loader: 'css-loader',
-            options: { modules: true, sourceMap: isDevelopment }
-          },
-          {
-            loader: 'sass-loader',
-            options: { sourceMap: isDevelopment }
-          }
-        ]
-      },
-      {
-        test: /\.s(a|c)ss$/,
-        exclude: /\.module.(s(a|c)ss)$/,
-        use: [
-          isDevelopment ? 'style-loader' : MiniCssExtractPlugin.loader,
-          {
-            loader: 'css-loader',
-            options: { sourceMap: isDevelopment }
-          },
-          {
-            loader: 'sass-loader',
-            options: { sourceMap: isDevelopment }
-          }
-        ]
-      },
-      {
-        test: /\.(js|jsx)$/,
-        include: path.resolve(__dirname, 'packages'),
-        // TODO: because it uses entry point to determine graph of dependencies, might not be needed to exclude test ans sample files?
-        exclude: /(node_modules|bower_components|build|dist|demo|.storybook)/,
-        use: {
-          loader: 'babel-loader',
-          options: {
-            presets: [ '@babel/preset-env', '@babel/preset-react' ]
-          }
-        }
-      }
-    ]
-  },
-  resolve: {
-    alias: {
-      'react': path.resolve(__dirname, './node_modules/react'),
-      'react-dom': path.resolve(__dirname, './node_modules/react-dom')
-    }
+    library: {
+      type: 'umd',
+      name: '[name]'
+    },
+    globalObject: 'this'
   },
   externals: {
-    // Don't bundle react or react-dom
     react: {
       commonjs: 'react',
       commonjs2: 'react',
@@ -104,5 +44,70 @@ module.exports = {
       amd: 'ReactDOM',
       root: 'ReactDOM'
     }
+  },
+  module: {
+    rules: [
+      {
+        test: /\.jsx?$/,
+        exclude: /node_modules/,
+        use: {
+          loader: 'babel-loader',
+          options: {
+            presets: [
+              ['@babel/preset-env', {
+                targets: {
+                  browsers: ['>0.2%', 'not dead', 'not ie <= 11', 'not op_mini all']
+                }
+              }],
+              '@babel/preset-react'
+            ],
+            plugins: [
+              '@babel/plugin-transform-object-rest-spread',
+              '@babel/plugin-transform-class-properties',
+              '@babel/plugin-transform-optional-chaining'
+            ]
+          }
+        }
+      },
+      {
+        test: /\.scss$/,
+        use: [
+          MiniCssExtractPlugin.loader,
+          {
+            loader: 'css-loader',
+            options: {
+              modules: {
+                localIdentName: '[name]__[local]___[hash:base64:5]'
+              },
+              importLoaders: 1
+            }
+          },
+          'sass-loader'
+        ]
+      },
+      {
+        test: /\.css$/,
+        use: [
+          MiniCssExtractPlugin.loader,
+          {
+            loader: 'css-loader',
+            options: {
+              modules: {
+                localIdentName: '[name]__[local]___[hash:base64:5]'
+              },
+              importLoaders: 1
+            }
+          }
+        ]
+      }
+    ]
+  },
+  plugins: [
+    new MiniCssExtractPlugin({
+      filename: '[name].css'
+    })
+  ],
+  resolve: {
+    extensions: ['.js', '.jsx']
   }
 };
