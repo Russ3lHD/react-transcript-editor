@@ -1,5 +1,6 @@
 import js from '@eslint/js';
 import babelParser from '@babel/eslint-parser';
+import reactPlugin from 'eslint-plugin-react';
 
 export default [
   js.configs.recommended,
@@ -50,12 +51,7 @@ export default [
       }
     },
     plugins: {
-      react: {
-        rules: {
-          'react/jsx-uses-react': 'error',
-          'react/jsx-uses-vars': 'error'
-        }
-      }
+      react: reactPlugin
     },
     rules: {
       'no-console': 'warn',

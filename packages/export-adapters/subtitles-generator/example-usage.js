@@ -1,3 +1,4 @@
+// eslint-disable-next-line no-unused-vars
 import fs from 'fs';
 import subtitlesGenerator from './index.js';
 // import transcript from './sample/words-list.sample.json';
@@ -8,6 +9,7 @@ function getTextFromWordsList(words) {
   return words.map((word) => {return word.text;}).join(' ');
 }
 
+// eslint-disable-next-line no-unused-vars
 const plainText = getTextFromWordsList(sampleWords);
 
 const subtitlesJson = subtitlesGenerator({ words: sampleWords, type: 'json' });

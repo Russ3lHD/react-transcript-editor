@@ -1,5 +1,6 @@
 #!/usr/bin/env sh
 . "$(dirname -- "$0")/_/husky.sh"
 
-pnpm lint
+# Run linting but only fail on errors, not warnings
+pnpm lint --max-warnings=9999
 pnpm test

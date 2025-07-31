@@ -2,8 +2,7 @@ import textSegmentation from './presegment-text/text-segmentation/index.js';
 import addLineBreakBetweenSentences from './presegment-text/line-break-between-sentences/index.js';
 import foldWords from './presegment-text/fold/index.js';
 import divideIntoTwoLines from './presegment-text/divide-into-two-lines/index.js';
-import preSegmentText from './presegment-text/index.js';
-import { getTextFromWordsList } from './presegment-text/index.js';
+import preSegmentText, { getTextFromWordsList } from './presegment-text/index.js';
 
 import ttmlGeneratorPremiere from './compose-subtitles/premiere.js';
 import ittGenerator from './compose-subtitles/itt.js';

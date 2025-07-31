@@ -7,7 +7,7 @@ class Select extends React.Component {
 
   render() {
     const options = this.props.options.map((option, index) => {
-      // eslint-disable-next-line react/no-array-index-key
+
       return <option key={ index } value={ option.value }>{option.label}</option>;
     });
 
