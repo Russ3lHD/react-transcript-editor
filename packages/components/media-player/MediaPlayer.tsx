@@ -77,7 +77,7 @@ const MediaPlayer: React.FC<MediaPlayerProps> = ({
   }, [hookSeek, hookPlayMedia, hookIsPlaying]);
 
   // Event handlers
-  const setCurrentTime = useCallback((newCurrentTime: string | number) => {
+  const setCurrentTime = useCallback((newCurrentTime: string | number | null) => {
     if (newCurrentTime !== '' && newCurrentTime !== null) {
       const newCurrentTimeInSeconds = timecodeToSeconds(newCurrentTime);
       const video = videoRef.current;
@@ -199,7 +199,8 @@ const MediaPlayer: React.FC<MediaPlayerProps> = ({
   const getMediaCurrentTime = useCallback(() => {
     const video = videoRef.current;
     if (video) {
-      return secondsToTimecode(video.currentTime + state.timecodeOffset);
+      const offset = typeof state.timecodeOffset === 'string' ? parseFloat(state.timecodeOffset) : state.timecodeOffset;
+      return secondsToTimecode(video.currentTime + offset);
     }
     return '00:00:00:00';
   }, [videoRef, state.timecodeOffset]);
@@ -279,7 +280,7 @@ const MediaPlayer: React.FC<MediaPlayerProps> = ({
       <video
         ref={videoRef}
         className={styles.video}
-        src={mediaUrl}
+        src={mediaUrl || undefined}
         onTimeUpdate={handleTimeUpdate}
         onLoadedData={onLoadedDataGetDuration}
         muted={state.isMute}

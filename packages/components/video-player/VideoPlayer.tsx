@@ -25,7 +25,7 @@ const VideoPlayer: React.FC<VideoPlayerProps> = ({
     <video
       id="video"
       playsInline
-      src={mediaUrl}
+      src={mediaUrl || undefined}
       onTimeUpdate={onTimeUpdate}
       data-testid="media-player-id"
       onClick={handlePlayMedia}

@@ -1,4 +1,5 @@
 export { default as KeyboardShortcuts } from './KeyboardShortcuts';
+export { default } from './KeyboardShortcuts';
 export { default as getHotKeys } from './hot-keys';
 export type {
   KeyboardShortcutsProps,

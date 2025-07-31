@@ -204,29 +204,26 @@ const TranscriptEditor: React.FC<TranscriptEditorProps> = ({
   const mediaControls = useMemo(() => {
     if (mediaType === 'audio') {
       return (
-                 <MediaPlayer
-           ref={videoRef}
-           mediaUrl={mediaUrl}
-           handleTimeUpdate={handleTimeUpdateCallback}
-           handlePlayMedia={handlePlayMedia}
-           handleIsPlaying={handleIsPlaying}
-           onLoadedDataGetDuration={onLoadedDataGetDuration}
-           currentTime={state.currentTime}
-           mediaDuration={state.mediaDuration}
-         />
+                         <MediaPlayer
+          mediaUrl={mediaUrl}
+          handleTimeUpdate={handleTimeUpdateCallback}
+          handlePlayMedia={handlePlayMedia}
+          handleIsPlaying={handleIsPlaying}
+          onLoadedDataGetDuration={onLoadedDataGetDuration}
+          currentTime={state.currentTime}
+          mediaDuration={state.mediaDuration}
+          videoRef={videoRef}
+        />
       );
     }
     return (
-             <VideoPlayer
-         ref={videoRef}
-         mediaUrl={mediaUrl}
-         handleTimeUpdate={handleTimeUpdateCallback}
-         handlePlayMedia={handlePlayMedia}
-         handleIsPlaying={handleIsPlaying}
-         onLoadedDataGetDuration={onLoadedDataGetDuration}
-         currentTime={state.currentTime}
-         mediaDuration={state.mediaDuration}
-       />
+                   <VideoPlayer
+        mediaUrl={mediaUrl}
+        onTimeUpdate={handleTimeUpdateCallback}
+        videoRef={videoRef}
+        onLoadedDataGetDuration={onLoadedDataGetDuration}
+        previewIsDisplayed={state.previewIsDisplayed}
+      />
     );
   }, [
     mediaType,
@@ -312,7 +309,6 @@ const TranscriptEditor: React.FC<TranscriptEditorProps> = ({
 
       <div className={style.editorContainer}>
         <TimedTextEditor
-          ref={timedTextEditorRef}
           transcriptData={state.transcriptData}
           handleWordClick={handleWordClick}
           handleTimeUpdate={handleTimeUpdateCallback}

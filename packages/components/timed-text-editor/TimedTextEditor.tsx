@@ -41,15 +41,15 @@ const TimedTextEditor: React.FC<TimedTextEditorProps> = ({
 
   // Initialize editor with transcript data
   useEffect(() => {
-    if (transcriptData) {
-      try {
-        const contentState = convertFromRaw(transcriptData);
-        const newEditorState = EditorState.createWithContent(contentState);
-        setEditorState(newEditorState);
-      } catch (error) {
-        console.error('Error converting transcript data:', error);
+          if (transcriptData) {
+        try {
+          const contentState = convertFromRaw(transcriptData as any);
+          const newEditorState = EditorState.createWithContent(contentState);
+          setEditorState(newEditorState);
+        } catch (error) {
+          console.error('Error converting transcript data:', error);
+        }
       }
-    }
   }, [transcriptData]);
 
   // Auto-save functionality

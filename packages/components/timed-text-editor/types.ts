@@ -43,6 +43,9 @@ export interface TranscriptData {
   entityMap: Record<string, any>;
 }
 
+// Alias for Draft.js compatibility
+export type RawTranscriptData = TranscriptData;
+
 export interface WordProps {
   word: string;
   startTime: number;

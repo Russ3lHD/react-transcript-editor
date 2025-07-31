@@ -1,5 +1,5 @@
 export interface MediaPlayerProps {
-  mediaUrl: string;
+  mediaUrl: string | null;
   currentTime: number;
   mediaDuration: string;
   videoRef: React.RefObject<HTMLVideoElement>;
@@ -9,7 +9,7 @@ export interface MediaPlayerProps {
   onLoadedDataGetDuration: (event: React.SyntheticEvent<HTMLVideoElement>) => void;
   rollBackValueInSeconds?: number;
   timecodeOffset?: number | string;
-  hookSeek?: (callback: (time: string | number) => void) => void;
+  hookSeek?: (callback: (time: string | number | null) => void) => void;
   hookPlayMedia?: (callback: () => void) => void;
   hookIsPlaying?: (callback: () => boolean) => void;
   handleAnalyticsEvents?: (event: AnalyticsEvent) => void;
@@ -18,7 +18,7 @@ export interface MediaPlayerProps {
 export interface MediaPlayerState {
   playbackRate: number;
   rollBackValueInSeconds: number;
-  timecodeOffset: number;
+  timecodeOffset: number | string;
   hotKeys: Record<string, any>;
   isPlaying: boolean;
   playbackRateOptions: PlaybackRateOption[];

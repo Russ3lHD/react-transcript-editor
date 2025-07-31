@@ -1,4 +1,5 @@
 export { default as MediaPlayer } from './MediaPlayer';
+export { default } from './MediaPlayer';
 export type {
   MediaPlayerProps,
   MediaPlayerState,

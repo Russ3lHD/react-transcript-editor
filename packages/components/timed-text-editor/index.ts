@@ -1,4 +1,5 @@
 export { default as TimedTextEditor } from './TimedTextEditor';
+export { default } from './TimedTextEditor';
 export type {
   TimedTextEditorProps,
   TranscriptData,

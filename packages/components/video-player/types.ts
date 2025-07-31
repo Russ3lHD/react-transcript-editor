@@ -1,5 +1,5 @@
 export interface VideoPlayerProps {
-  mediaUrl: string;
+  mediaUrl: string | null;
   onTimeUpdate: (event: React.SyntheticEvent<HTMLVideoElement>) => void;
   onClick?: () => void;
   videoRef: React.RefObject<HTMLVideoElement>;
