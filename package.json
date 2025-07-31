@@ -12,7 +12,16 @@
     "fork",
     "security-updates"
   ],
-  "main": "index.js",
+  "main": "dist/index.js",
+  "module": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js",
+      "require": "./dist/index.js"
+    }
+  },
   "scripts": {
     "start": "pnpm run storybook",
     "storybook": "start-storybook -p 6006",
@@ -22,13 +31,14 @@
     "lint": "eslint .",
     "lint:fix": "eslint . --fix",
     "lint:fix-styles": "prettier-stylelint --write 'packages/**/*.{css,scss}'",
+    "build": "pnpm run build:component && pnpm run build:types",
     "build:component": "webpack --config webpack.config.js",
-    "build:types": "tsc --emitDeclarationOnly",
+    "build:types": "tsc --project tsconfig.build.json",
     "type-check": "tsc --noEmit",
     "build:storybook": "rimraf build && build-storybook -c .storybook -o build",
     "build:storybook:serve": "npx serve build",
     "deploy:ghpages": "rimraf build && pnpm run build:storybook && gh-pages -d build",
-    "pre:publish": "pnpm run build:component && /bin/cp -rf package.json dist && /bin/cp -rf README.md dist",
+    "pre:publish": "pnpm run build && /bin/cp -rf package.json dist && /bin/cp -rf README.md dist",
     "publish:public": "pnpm run pre:publish && npm publish dist --access public",
     "publish:dry:run": "npm publish --dry-run",
     "prepare": "husky install"
