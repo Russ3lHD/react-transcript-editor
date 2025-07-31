@@ -1,6 +1,8 @@
 import js from '@eslint/js';
 import babelParser from '@babel/eslint-parser';
 import reactPlugin from 'eslint-plugin-react';
+import typescriptParser from '@typescript-eslint/parser';
+import typescriptPlugin from '@typescript-eslint/eslint-plugin';
 
 export default [
   js.configs.recommended,
@@ -68,7 +70,7 @@ export default [
       'semi': ['error', 'always'],
       'quotes': ['error', 'single', { 'avoidEscape': true }],
       'comma-dangle': ['error', 'never'],
-      'indent': ['error', 2],
+      'indent': 'off',
       'no-trailing-spaces': 'error',
       'eol-last': 'error'
     },

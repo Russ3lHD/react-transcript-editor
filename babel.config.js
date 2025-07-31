@@ -8,7 +8,8 @@ module.exports = {
         targets: { node: 'current' }
       }
     ],
-    '@babel/preset-react'
+    '@babel/preset-react',
+    '@babel/preset-typescript'
   ],
   plugins: [
     '@babel/plugin-transform-object-rest-spread',

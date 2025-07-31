@@ -14,7 +14,6 @@ class ExportOptions extends React.Component {
         key={opt.label+index}
         title={ opt.label }
         className={ style.playerButton }
-        key={ opt.value }
         onClick={ this.props.handleExportOptionsChange }
         value={ opt.value }>
         {opt.label}

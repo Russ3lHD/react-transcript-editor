@@ -1,0 +1,48 @@
+{
+  "compilerOptions": {
+    "target": "ES2022",
+    "lib": ["ES2022", "DOM", "DOM.Iterable"],
+    "allowJs": true,
+    "skipLibCheck": true,
+    "esModuleInterop": true,
+    "allowSyntheticDefaultImports": true,
+    "strict": true,
+    "forceConsistentCasingInFileNames": true,
+    "noFallthroughCasesInSwitch": true,
+    "module": "ESNext",
+    "moduleResolution": "bundler",
+    "resolveJsonModule": true,
+    "isolatedModules": true,
+    "noEmit": true,
+    "jsx": "react-jsx",
+    "declaration": true,
+    "declarationMap": true,
+    "sourceMap": true,
+    "outDir": "./dist",
+    "rootDir": "./packages",
+    "baseUrl": ".",
+    "paths": {
+      "@/*": ["./packages/*"],
+      "@/components/*": ["./packages/components/*"],
+      "@/util/*": ["./packages/util/*"],
+      "@/export-adapters/*": ["./packages/export-adapters/*"],
+      "@/stt-adapters/*": ["./packages/stt-adapters/*"]
+    }
+  },
+  "include": [
+    "packages/**/*",
+    "types/**/*"
+  ],
+  "exclude": [
+    "node_modules",
+    "dist",
+    "build",
+    "coverage",
+    "**/*.test.js",
+    "**/*.test.ts",
+    "**/*.spec.js",
+    "**/*.spec.ts",
+    "**/stories/**",
+    "**/sample/**"
+  ]
+} 
