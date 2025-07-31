@@ -2,7 +2,6 @@
 
 import { toWords } from 'number-to-words';
 import difflib from 'difflib';
-import everpolate from 'everpolate';
 
 /**
  * https://stackoverflow.com/questions/175739/built-in-way-in-javascript-to-check-if-a-string-is-a-valid-number
@@ -99,6 +98,49 @@ function adjustTimecodesBoundaries(words) {
   });
 }
 
+// Simple linear interpolation function to replace everpolate
+function linearInterpolate(x, xValues, yValues) {
+  const result = [];
+  
+  for (let i = 0; i < x.length; i++) {
+    const targetX = x[i];
+    
+    // Find the two closest points
+    let leftIndex = -1;
+    let rightIndex = -1;
+    
+    for (let j = 0; j < xValues.length; j++) {
+      if (xValues[j] <= targetX) {
+        leftIndex = j;
+      } else {
+        rightIndex = j;
+        break;
+      }
+    }
+    
+    // Handle edge cases
+    if (leftIndex === -1) {
+      // Target is before all known points, use the first point
+      result.push(yValues[0]);
+    } else if (rightIndex === -1) {
+      // Target is after all known points, use the last point
+      result.push(yValues[yValues.length - 1]);
+    } else {
+      // Linear interpolation between two points
+      const x1 = xValues[leftIndex];
+      const y1 = yValues[leftIndex];
+      const x2 = xValues[rightIndex];
+      const y2 = yValues[rightIndex];
+      
+      const slope = (y2 - y1) / (x2 - x1);
+      const interpolatedY = y1 + slope * (targetX - x1);
+      result.push(interpolatedY);
+    }
+  }
+  
+  return result;
+}
+
 function interpolate(wordsList) {
   const indicies = [ ...Array(wordsList.length).keys() ];
   const indiciesWithStart = [];
@@ -117,9 +159,11 @@ function interpolate(wordsList) {
       endTimes.push(word.end);
     }
   });
-  // http://borischumichev.github.io/everpolate/#linear
-  const outStartTimes = everpolate.linear(indicies, indiciesWithStart, startTimes);
-  const outEndTimes = everpolate.linear(indicies, indiciesWithEnd, endTimes);
+  
+  // Use our custom linear interpolation instead of everpolate
+  const outStartTimes = linearInterpolate(indicies, indiciesWithStart, startTimes);
+  const outEndTimes = linearInterpolate(indicies, indiciesWithEnd, endTimes);
+  
   const wordsResults = wordsList.map((word, index) => {
     if (!('start' in word)) {
       word.start = outStartTimes[index];
