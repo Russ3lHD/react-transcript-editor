@@ -3,6 +3,7 @@ import PropTypes from 'prop-types';
 import isEqual from 'react-fast-compare';
 
 import {
+  // eslint-disable-next-line no-unused-vars
   faSave,
   faTv,
   faPlay,
@@ -13,9 +14,12 @@ import {
   faVolumeUp,
   faVolumeMute
 } from '@fortawesome/free-solid-svg-icons';
+// eslint-disable-next-line no-unused-vars
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
+// eslint-disable-next-line no-unused-vars
 import PlaybackRate from '../PlaybackRate';
+// eslint-disable-next-line no-unused-vars
 import TimeBox from './TimeBox.js';
 
 import style from './index.module.scss';

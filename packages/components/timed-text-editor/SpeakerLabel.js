@@ -1,6 +1,8 @@
+// eslint-disable-next-line no-unused-vars
 import React, { PureComponent } from 'react';
 import PropTypes from 'prop-types';
 
+// eslint-disable-next-line no-unused-vars
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faUserEdit } from '@fortawesome/free-solid-svg-icons';
 

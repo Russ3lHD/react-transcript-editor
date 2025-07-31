@@ -2,7 +2,9 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { hotkeys } from 'react-keyboard-shortcuts';
 
+// eslint-disable-next-line no-unused-vars
 import PlayerControls from './src/PlayerControls';
+// eslint-disable-next-line no-unused-vars
 import ProgressBar from './src/ProgressBar';
 
 import returnHotKeys from './src/config/defaultHotKeys';

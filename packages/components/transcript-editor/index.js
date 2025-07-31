@@ -1,12 +1,19 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+// eslint-disable-next-line no-unused-vars
 import TimedTextEditor from '../timed-text-editor';
+// eslint-disable-next-line no-unused-vars
 import MediaPlayer from '../media-player';
+// eslint-disable-next-line no-unused-vars
 import VideoPlayer from '../video-player';
+// eslint-disable-next-line no-unused-vars
 import Settings from '../settings';
+// eslint-disable-next-line no-unused-vars
 import Shortcuts from '../keyboard-shortcuts';
 import { secondsToTimecode } from '../../util/timecode-converter';
+// eslint-disable-next-line no-unused-vars
 import Header from './src/Header.js';
+// eslint-disable-next-line no-unused-vars
 import ExportOptions from './src/ExportOptions.js';
 import style from './index.module.css';
 
