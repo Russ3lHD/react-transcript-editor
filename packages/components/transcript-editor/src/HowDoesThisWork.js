@@ -1,3 +1,4 @@
+// eslint-disable-next-line no-unused-vars
 import React from 'react';
 import {
   faKeyboard,
@@ -7,7 +8,9 @@ import {
   faUserEdit,
   faSave
 } from '@fortawesome/free-solid-svg-icons';
+// eslint-disable-next-line no-unused-vars
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+// eslint-disable-next-line no-unused-vars
 import Tooltip from 'react-simple-tooltip';
 import style from '../index.module.css';
 
