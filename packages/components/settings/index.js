@@ -1,10 +1,13 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 
+// eslint-disable-next-line no-unused-vars
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faWindowClose } from '@fortawesome/free-solid-svg-icons';
 
+// eslint-disable-next-line no-unused-vars
 import Toggle from './Toggle/';
+// eslint-disable-next-line no-unused-vars
 import TimecodeOffset from './TimecodeOffset';
 
 import style from './index.module.css';

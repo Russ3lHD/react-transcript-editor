@@ -1,5 +1,6 @@
 import React from 'react';
 import {
+  // eslint-disable-next-line no-unused-vars
   EditorBlock,
   Modifier,
   EditorState,
@@ -8,6 +9,7 @@ import {
   convertToRaw
 } from 'draft-js';
 
+// eslint-disable-next-line no-unused-vars
 import SpeakerLabel from './SpeakerLabel';
 // import { shortTimecode, secondsToTimecode } from '../../Util/timecode-converter/';
 
