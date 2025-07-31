@@ -1,7 +1,7 @@
 {
   "name": "react-transcript-editor",
-  "description": "A React component to make transcribing audio and video easier and faster. Forked from @bbc/react-transcript-editor with security updates and modern dependency fixes.",
-  "version": "2.0.0",
+  "description": "A React component to make transcribing audio and video easier and faster. Forked from @bbc/react-transcript-editor with security updates, modern dependency fixes, and full React 18/19 compatibility.",
+  "version": "2.1.0",
   "keywords": [
     "transcript",
     "transcriptions",
@@ -171,9 +171,7 @@
       "immer": "^10.1.0",
       "node-fetch": "^3.3.2",
       "trim-newlines": "^4.1.1",
-      "@eslint-community/eslint-utils": "^4.7.0",
-      "eslint": "^9.0.0",
-      "knip": "^5.33.3"
+      "@eslint-community/eslint-utils": "^4.7.0"
     }
   }
 }

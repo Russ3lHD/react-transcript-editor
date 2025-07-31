@@ -29,8 +29,6 @@ overrides:
   node-fetch: ^3.3.2
   trim-newlines: ^4.1.1
   '@eslint-community/eslint-utils': ^4.7.0
-  eslint: ^9.0.0
-  knip: ^5.33.3
 
 importers:
 
@@ -251,7 +249,7 @@ packages:
     engines: {node: ^10.13.0 || ^12.13.0 || >=14.0.0}
     peerDependencies:
       '@babel/core': ^7.11.0
-      eslint: ^9.0.0
+      eslint: ^7.5.0 || ^8.0.0 || ^9.0.0
 
   '@babel/generator@7.28.0':
     resolution: {integrity: sha512-lJjzvrbEeWrhB4P3QBsH7tey117PjLZnDbLiQEKjQ/fNJTjuq4HSqgFA+UNSwZT8D7dxxbnuSBMsa1lrWzKlQg==}
@@ -1055,7 +1053,7 @@ packages:
     resolution: {integrity: sha512-dyybb3AcajC7uha6CvhdVRJqaKyn7w2YKqKyAN37NKYgZT36w+iRb0Dymmc5qEJ549c/S31cMMSFd75bteCpCw==}
     engines: {node: ^12.22.0 || ^14.17.0 || >=16.0.0}
     peerDependencies:
-      eslint: ^9.0.0
+      eslint: ^6.0.0 || ^7.0.0 || >=8.0.0
 
   '@eslint-community/regexpp@4.12.1':
     resolution: {integrity: sha512-CCZCDJuduB9OUkFkY2IgppNZMi2lBQgD2qzwXkEia16cge2pijY/aXi96CJMquDMn3nJdlPV1A5KrJEXwfLNzQ==}
@@ -3330,7 +3328,7 @@ packages:
     resolution: {integrity: sha512-xaX3z4ZZIcFLvh2oUNvcX5oEofXda7giYmuplVxoOg5A7EXJMrUyqRgR+mhDhPK8LZ4PttFOBvCYDbX3sUoUig==}
     engines: {node: ^10.12.0 || >=12.0.0}
     peerDependencies:
-      eslint: ^9.0.0
+      eslint: ^7.32.0 || ^8.2.0
       eslint-plugin-import: ^2.25.2
 
   eslint-import-resolver-node@0.3.9:
@@ -3361,14 +3359,14 @@ packages:
     resolution: {integrity: sha512-ruFBdad69ABrbCDCh5mXj7UzNmrvytfzPACjyvZWIAjFZAG8BXpYSbqmE8gU5wF+pIzV3jU2CWhLvfekXT/IgQ==}
     engines: {node: '>=4.0.0'}
     peerDependencies:
-      eslint: ^9.0.0
+      eslint: '>=2.0.0'
 
   eslint-plugin-import@2.32.0:
     resolution: {integrity: sha512-whOE1HFo/qJDyX4SnXzP4N6zOWn79WhnCUY/iDR0mPfQZO8wcYE4JClzI2oZrhBnnMUCBCHZhO6VQyoBU95mZA==}
     engines: {node: '>=4'}
     peerDependencies:
       '@typescript-eslint/parser': '*'
-      eslint: ^9.0.0
+      eslint: ^2 || ^3 || ^4 || ^5 || ^6 || ^7.2.0 || ^8 || ^9
     peerDependenciesMeta:
       '@typescript-eslint/parser':
         optional: true
@@ -3377,7 +3375,7 @@ packages:
     resolution: {integrity: sha512-Qteup0SqU15kdocexFNAJMvCJEfa2xUKNV4CC1xsVMrIIqEy3SQ/rqyxCWNzfrd3/ldy6HMlD2e0JDVpDg2qIA==}
     engines: {node: '>=4'}
     peerDependencies:
-      eslint: ^9.0.0
+      eslint: ^3 || ^4 || ^5 || ^6 || ^7 || ^8 || ^9.7
 
   eslint-scope@5.1.1:
     resolution: {integrity: sha512-2NxwbF/hZ0KpepYN0cNbo+FN6XoK7GaHlQhgx/hIZl6Va0bF45RQOOwhLIy8lQDbuCiadSLCBnH2CFYquit5bw==}
