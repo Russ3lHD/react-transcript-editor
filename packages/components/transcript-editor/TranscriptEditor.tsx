@@ -311,13 +311,13 @@ const TranscriptEditor: React.FC<TranscriptEditorProps> = ({
       />
 
       <div className={style.editorContainer}>
-                 <TimedTextEditor
-           ref={timedTextEditorRef}
-           transcriptData={state.transcriptData}
-           handleWordClick={handleWordClick}
-           handleTimeUpdate={handleTimeUpdateCallback}
-           handlePlayMedia={handlePlayMedia}
-           handleIsPlaying={handleIsPlaying}
+        <TimedTextEditor
+          ref={timedTextEditorRef}
+          transcriptData={state.transcriptData}
+          handleWordClick={handleWordClick}
+          handleTimeUpdate={handleTimeUpdateCallback}
+          handlePlayMedia={handlePlayMedia}
+          handleIsPlaying={handleIsPlaying}
           isScrollIntoViewOn={state.isScrollIntoViewOn}
           isPauseWhileTypingOn={state.isPauseWhileTypingOn}
           rollBackValueInSeconds={state.rollBackValueInSeconds}
