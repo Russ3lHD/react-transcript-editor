@@ -1,14 +1,16 @@
 {
-  "name": "@bbc/react-transcript-editor",
-  "description": "A React component to make transcribing audio and video easier and faster.",
-  "version": "1.4.4",
+  "name": "react-transcript-editor",
+  "description": "A React component to make transcribing audio and video easier and faster. Forked from @bbc/react-transcript-editor with security updates and modern dependency fixes.",
+  "version": "2.0.0",
   "keywords": [
     "transcript",
     "transcriptions",
     "react",
     "speech",
     "speech to text",
-    "textAV"
+    "textAV",
+    "fork",
+    "security-updates"
   ],
   "main": "index.js",
   "scripts": {
@@ -64,8 +66,8 @@
     "smpte-timecode": "^1.2.3"
   },
   "peerDependencies": {
-    "react": "^16.6.0",
-    "react-dom": "^16.8.6"
+    "react": "^16.6.0 || ^17.0.0 || ^18.0.0 || ^19.0.0",
+    "react-dom": "^16.8.6 || ^17.0.0 || ^18.0.0 || ^19.0.0"
   },
   "devDependencies": {
     "@babel/cli": "^7.23.9",
@@ -108,7 +110,9 @@
     "stylelint-config-standard": "^18.3.0",
     "webpack": "^4.47.0",
     "webpack-cli": "^3.3.9",
-    "@welldone-software/why-did-you-render": "^7.0.1"
+    "@welldone-software/why-did-you-render": "^7.0.1",
+    "react": "^18.2.0",
+    "react-dom": "^18.2.0"
   },
   "contributors": [
     {
@@ -124,12 +128,12 @@
   ],
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/bbc/react-transcript-editor/issues"
+    "url": "https://github.com/pmacom/react-transcript-editor/issues"
   },
-  "homepage": "https://github.com/bbc/react-transcript-editor",
+  "homepage": "https://github.com/pmacom/react-transcript-editor",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/bbc/react-transcript-editor.git"
+    "url": "git+https://github.com/pmacom/react-transcript-editor.git"
   },
   "browserslist": [
     ">0.2%",
