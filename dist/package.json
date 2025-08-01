@@ -1,0 +1,195 @@
+{
+  "name": "pmacom-react-transcript-editor",
+  "description": "A React component to make transcribing audio and video easier and faster. Forked from @bbc/react-transcript-editor with security updates, modern dependency fixes, and full React 18/19 compatibility.",
+  "version": "2.2.1",
+  "keywords": [
+    "transcript",
+    "transcriptions",
+    "react",
+    "speech",
+    "speech to text",
+    "textAV",
+    "fork",
+    "security-updates"
+  ],
+  "main": "index.js",
+  "module": "index.js",
+  "types": "index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./index.d.ts",
+      "import": "./index.js",
+      "require": "./index.js"
+    }
+  },
+  "scripts": {
+    "start": "pnpm run storybook",
+    "storybook": "start-storybook -p 6006",
+    "test": "jest",
+    "test:watch": "jest --watchAll",
+    "test:ci": "jest --ci",
+    "lint": "eslint .",
+    "lint:fix": "eslint . --fix",
+    "lint:fix-styles": "prettier-stylelint --write 'packages/**/*.{css,scss}'",
+    "build": "pnpm run build:component && pnpm run build:types",
+    "build:component": "webpack --config webpack.config.js",
+    "build:types": "tsc --project tsconfig.build.json",
+    "type-check": "tsc --noEmit",
+    "build:storybook": "rimraf build && build-storybook -c .storybook -o build",
+    "build:storybook:serve": "npx serve build",
+    "deploy:ghpages": "rimraf build && pnpm run build:storybook && gh-pages -d build",
+    "pre:publish": "pnpm run build && /bin/cp -rf package.json dist && /bin/cp -rf README.md dist",
+    "publish:public": "pnpm run pre:publish && npm publish dist --access public",
+    "publish:dry:run": "npm publish --dry-run",
+    "prepare": "echo 'Skipping husky install for dist build'"
+  },
+  "jest": {
+    "testEnvironment": "jsdom",
+    "moduleFileExtensions": [
+      "js",
+      "jsx"
+    ],
+    "moduleDirectories": [
+      "node_modules"
+    ],
+    "moduleNameMapper": {
+      "\\.(jpg|jpeg|png|gif|eot|otf|webp|svg|ttf|woff|woff2|mp4|webm|wav|mp3|m4a|aac|oga)$": "<rootDir>/__mocks__/fileMock.js",
+      "\\.(css|scss|less)$": "<rootDir>/__mocks__/styleMock.js",
+      "^node:stream$": "stream",
+      "^node:buffer$": "buffer",
+      "^node:util$": "util"
+    },
+    "setupFilesAfterEnv": [
+      "<rootDir>/jest.setup.js"
+    ]
+  },
+  "dependencies": {
+    "@fortawesome/fontawesome-svg-core": "^7.0.0",
+    "@fortawesome/free-brands-svg-icons": "^7.0.0",
+    "@fortawesome/free-solid-svg-icons": "^7.0.0",
+    "@fortawesome/react-fontawesome": "^0.2.3",
+    "difflib": "^0.2.4",
+    "docx": "^9.5.1",
+    "draft-js": "^0.11.7",
+    "mousetrap": "^1.6.5",
+    "number-to-words": "^1.2.4",
+    "prop-types": "^15.8.1",
+    "react-fast-compare": "^3.2.2",
+    "react-keyboard-shortcuts": "^1.1.3",
+    "react-simple-tooltip": "^2.6.3",
+    "sbd": "^1.0.19",
+    "smpte-timecode": "^1.3.6"
+  },
+  "peerDependencies": {
+    "react": "^16.6.0 || ^17.0.0 || ^18.0.0 || ^19.0.0",
+    "react-dom": "^16.8.6 || ^17.0.0 || ^18.0.0 || ^19.0.0"
+  },
+  "devDependencies": {
+    "@babel/cli": "^7.28.0",
+    "@babel/core": "^7.28.0",
+    "@babel/eslint-parser": "^7.28.0",
+    "@babel/plugin-transform-class-properties": "^7.27.1",
+    "@babel/plugin-transform-object-rest-spread": "^7.28.0",
+    "@babel/plugin-transform-optional-chaining": "^7.27.1",
+    "@babel/preset-env": "^7.28.0",
+    "@babel/preset-react": "^7.27.1",
+    "@babel/preset-typescript": "^7.27.1",
+    "@eslint/js": "^9.32.0",
+    "@storybook/addon-a11y": "^7.6.20",
+    "@storybook/addon-actions": "^7.6.20",
+    "@storybook/addon-controls": "^7.6.20",
+    "@storybook/addon-links": "^7.6.20",
+    "@storybook/addon-viewport": "^7.6.20",
+    "@storybook/addons": "^7.6.20",
+    "@storybook/react": "^7.6.20",
+    "@storybook/react-webpack5": "^7.6.20",
+    "@testing-library/jest-dom": "^6.6.4",
+    "@testing-library/react": "^16.3.0",
+    "@types/draft-js": "^0.11.18",
+    "@types/jest": "^30.0.0",
+    "@types/node": "^24.1.0",
+    "@types/react": "^19.1.9",
+    "@types/react-dom": "^19.1.7",
+    "@typescript-eslint/eslint-plugin": "^8.38.0",
+    "@typescript-eslint/parser": "^8.38.0",
+    "@welldone-software/why-did-you-render": "^10.0.1",
+    "babel-jest": "^30.0.5",
+    "babel-loader": "^10.0.0",
+    "css-loader": "^7.1.2",
+    "eslint": "^9.32.0",
+    "eslint-plugin-react": "^7.37.5",
+    "gh-pages": "^6.3.0",
+    "husky": "^8.0.3",
+    "jest": "^30.0.5",
+    "jest-environment-jsdom": "^30.0.5",
+    "mini-css-extract-plugin": "^2.9.2",
+    "prettier-stylelint": "^0.4.2",
+    "react": "^19.1.1",
+    "react-dom": "^19.1.1",
+    "regenerator-runtime": "^0.14.1",
+    "rimraf": "^6.0.1",
+    "sass": "^1.89.2",
+    "sass-loader": "^16.0.5",
+    "style-loader": "^4.0.0",
+    "stylelint-config-standard": "^39.0.0",
+    "typescript": "^5.9.2",
+    "webpack": "^5.101.0",
+    "webpack-cli": "^6.0.1"
+  },
+  "contributors": [
+    {
+      "name": "Pietro Passarelli",
+      "email": "pietro.passarelli@bbc.co.uk",
+      "url": "https://github.com/pietrop"
+    },
+    {
+      "name": "James Dooley",
+      "email": "james.dooley@bbc.co.uk",
+      "url": "https://github.com/jamesdools"
+    }
+  ],
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/pmacom/react-transcript-editor/issues"
+  },
+  "homepage": "https://github.com/pmacom/react-transcript-editor",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/pmacom/react-transcript-editor.git"
+  },
+  "browserslist": [
+    ">0.2%",
+    "not dead",
+    "not ie <= 11",
+    "not op_mini all"
+  ],
+  "packageManager": "pnpm@9.15.4+sha512.b2dc20e2fc72b3e18848459b37359a32064663e5627a51e4c74b2c29dd8e8e0491483c3abb40789cfd578bf362fb6ba8261b05f0387d76792ed6e23ea3b1b6a0",
+  "pnpm": {
+    "overrides": {
+      "ejs": "^3.1.9",
+      "loader-utils": "^3.2.1",
+      "shell-quote": "^1.7.4",
+      "form-data": "^4.0.0",
+      "prismjs": "^1.29.0",
+      "trim": "^0.0.3",
+      "nth-check": "^2.1.1",
+      "minimatch": "^5.1.6",
+      "braces": "^3.0.3",
+      "cross-spawn": "^7.0.3",
+      "node-notifier": "^10.0.1",
+      "highlight.js": "^11.9.0",
+      "got": "^12.0.4",
+      "react-dev-utils": "^12.0.1",
+      "browserslist": "^4.22.2",
+      "postcss": "^8.4.35",
+      "request": "^2.88.2",
+      "tough-cookie": "^4.1.3",
+      "micromatch": "^4.0.8",
+      "markdown-to-jsx": "^7.4.0",
+      "immer": "^10.1.0",
+      "node-fetch": "^3.3.2",
+      "trim-newlines": "^4.1.1",
+      "@eslint-community/eslint-utils": "^4.7.0"
+    }
+  }
+}

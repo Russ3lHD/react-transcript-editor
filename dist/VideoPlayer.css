@@ -1,0 +1,19 @@
+.index-module__videoEl___vRDod {
+  cursor: pointer;
+}
+
+/* Desktop size */
+@media (min-width: 768px) {
+
+  .index-module__videoEl___vRDod {
+    max-width: 100%;
+  }
+}
+
+/* Mobile devices - excluding ipad*/
+@media (max-width: 767px) {
+
+  .index-module__videoEl___vRDod {
+    max-width: 100%;
+  }
+}

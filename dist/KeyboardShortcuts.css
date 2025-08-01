@@ -1,0 +1,66 @@
+$color-labs-red: #a0372d !default;
+$color-darkest-grey: #282828 !default;
+$color-dark-grey: #4a4a4a !default;
+$color-mid-grey: #696969 !default;
+$color-light-grey: #767676 !default;
+$color-lightest-grey: #f2f2f2 !default;
+$color-subt-green: #69e3c2 !default;
+$color-light-shilo: #E2A9A2 !default;
+
+.index-module__shortcuts___QFw0O {
+  font-size: 0.85em;
+  padding: 1em;
+  margin: 0 auto;
+  height: auto;
+  vertical-align: middle;
+  color: black;
+  background: $color-lightest-grey;
+  z-index: 2;
+  position: absolute;
+  top: 0;
+  right: 0;
+}
+
+.index-module__header___Rz4YB {
+  margin-top: 0;
+  margin-bottom: 1em;
+  text-align: center;
+}
+
+.index-module__closeButton____bFAQ {
+  position: absolute;
+  top: 0;
+  right: 0;
+  padding: 1em;
+  cursor: pointer;
+  z-index: 3;
+}
+
+.index-module__list___A12WO {
+  list-style: none;
+  padding: 1em;
+  margin: 0 auto;
+}
+
+.index-module__listItem___dIXXG {
+  margin: 0 auto;
+  margin-bottom: 0.5em;
+}
+
+.index-module__shortcut___iKZSX {
+  display: inline-block;
+  width: 6em;
+  background: $color-labs-red;
+  font-weight: lighter;
+  color: white;
+  padding: 0 0;
+  border-radius: 1em;
+  text-align: center;
+  margin-right: 1em;
+}
+
+.index-module__shortcutLabel___hRnwm {
+  display: inline-block;
+  text-align: left;
+}
+

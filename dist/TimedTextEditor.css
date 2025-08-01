@@ -1,0 +1,152 @@
+$color-labs-red: #a0372d !default;
+$color-darkest-grey: #282828 !default;
+$color-dark-grey: #4a4a4a !default;
+$color-mid-grey: #696969 !default;
+$color-light-grey: #767676 !default;
+$color-lightest-grey: #f2f2f2 !default;
+$color-subt-green: #69e3c2 !default;
+$color-light-shilo: #E2A9A2 !default;
+
+/* https://developer.mozilla.org/en-US/docs/Web/CSS/user-select
+TODO: only working in Chrome, not working in Firefox, and Safari - OSX
+if selecting text, not showing selection
+Commented out because it means cannot select speakers and timecode anymore
+which is the intended default behavior but needs to come with export
+functionality to export as plain text, word etc.. otherwise user won't be able
+to get text out of component with timecodes and speaker names in the interim */
+ .WrapperBlock-module__unselectable___pqUmE {
+  -moz-user-select: none;
+  -webkit-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+}
+
+/* Desktop size */
+@media (min-width: 768px) {
+
+  .WrapperBlock-module__markers___LciWo {
+    display: grid;
+    grid-template-columns: 2fr 1fr;
+  }
+
+  .WrapperBlock-module__WrapperBlock___jR_wN {
+    margin-bottom: 1em;
+    overflow: hidden;
+    display: grid;
+    grid-template-columns: [col-speaker] minmax(200px, 18%) [col-text] minmax(
+      50%,
+      81%
+    );
+    grid-column-gap: 1%;
+    justify-content: center;
+    align-content: center;
+  }
+
+  .WrapperBlock-module__speaker____MOrB {
+    color: $color-mid-grey;
+    font-weight: bold;
+    text-transform: uppercase;
+    text-overflow: ellipsis;
+    overflow: hidden;
+    white-space: nowrap;
+    justify-self: start;
+    max-width: 100%;
+    text-align: left;
+  }
+
+  .WrapperBlock-module__text___j2DGQ {
+    font-size: 1em;
+    float: right;
+    clear: right;
+  }
+}
+
+
+.WrapperBlock-module__time___TC6MD {
+  font-weight: lighter;
+  cursor: pointer;
+  justify-self: start;
+}
+
+.WrapperBlock-module__time___TC6MD:hover {
+  text-decoration: underline;
+
+  /* color: blue; */
+}
+
+.WrapperBlock-module__speakerEditable___HKzC_ {
+  cursor: pointer;
+}
+
+.WrapperBlock-module__speakerNotEditable___b6vNw {
+  cursor: no-drop;
+}
+
+.WrapperBlock-module__EditLabel___QEP8V {
+  margin-right: 0.5em;
+}
+
+
+/* Mobile devices */
+@media (max-width: 768px) {
+
+  .WrapperBlock-module__markers___LciWo {
+    width: 100%;
+    font-size: 0.8em;
+    line-height: 1.2em;
+    margin-bottom: 0.5em;
+  }
+
+  .WrapperBlock-module__WrapperBlock___jR_wN {
+    width: 100%;
+    margin-bottom: 1em;
+    line-height: 1.2em;
+    overflow: hidden;
+  }
+
+  .WrapperBlock-module__speaker____MOrB {
+    padding-right: 2em;
+    vertical-align: middle;
+    color: $color-mid-grey;
+    font-weight: bold;
+    text-transform: uppercase;
+    text-align: right;
+    text-overflow: ellipsis;
+    overflow: hidden;
+    white-space: nowrap;
+    text-align: left;
+  }
+
+  .WrapperBlock-module__text___j2DGQ {
+    width: 100%;
+    font-size: 1em;
+    float: left;
+
+    /* clear: right; */
+  }
+}
+
+.index-module__DraftEditor-root___aC90d {
+  background: #f9f9f9;
+}
+
+/*
+Giving the editor a oveflow
+https://github.com/facebook/draft-js/issues/528
+*/
+
+.index-module__editor___PYFqL .public-DraftEditor-content {
+  max-height: 75vh;
+  overflow: auto;
+  padding: 8px 16px;
+  background-color: white;
+}
+
+/* Mobile devices */
+@media (max-width: 768px) {
+
+  .index-module__editor___PYFqL .public-DraftEditor-content {
+    margin: 0 auto;
+  }
+}
+

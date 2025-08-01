@@ -12,7 +12,7 @@
 /build
 
 # component to distribute to npm 
-/dist
+# /dist
 
 # misc
 .DS_Store
