@@ -78,9 +78,12 @@ module.exports = {
             loader: 'css-loader',
             options: {
               modules: {
-                localIdentName: '[name]__[local]___[hash:base64:5]'
+                localIdentName: '[name]__[local]___[hash:base64:5]',
+                namedExport: false,
+                exportLocalsConvention: 'asIs'
               },
-              importLoaders: 1
+              importLoaders: 1,
+              esModule: false
             }
           },
           'sass-loader'
@@ -94,9 +97,12 @@ module.exports = {
             loader: 'css-loader',
             options: {
               modules: {
-                localIdentName: '[name]__[local]___[hash:base64:5]'
+                localIdentName: '[name]__[local]___[hash:base64:5]',
+                namedExport: false,
+                exportLocalsConvention: 'asIs'
               },
-              importLoaders: 1
+              importLoaders: 1,
+              esModule: false
             }
           }
         ]
