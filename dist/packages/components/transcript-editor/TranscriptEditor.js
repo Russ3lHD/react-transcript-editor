@@ -154,12 +154,14 @@ const TranscriptEditor = ({ transcriptData: initialTranscriptData, mediaUrl, med
     }, [
         mediaType,
         mediaUrl,
-        handleTimeUpdate,
+        handleTimeUpdateCallback,
         handlePlayMedia,
         handleIsPlaying,
         onLoadedDataGetDuration,
         state.currentTime,
         state.mediaDuration,
+        state.previewIsDisplayed,
+        videoRef,
     ]);
     const settings = useMemo(() => (_jsx(Settings, { showTimecodes: state.showTimecodes, showSpeakers: state.showSpeakers, timecodeOffset: state.timecodeOffset, handleShowTimecodes: handleShowTimecodes, handleShowSpeakers: handleShowSpeakers, handleSetTimecodeOffset: handleSetTimecodeOffset, handleSettingsToggle: handleSettingsToggle, handlePauseWhileTyping: handlePauseWhileTyping, handleIsScrollIntoViewChange: handleIsScrollIntoViewChange, handleRollBackValueInSeconds: handleRollBackValueInSeconds, defaultValueScrollSync: state.isScrollIntoViewOn, defaultValuePauseWhileTyping: state.isPauseWhileTypingOn, defaultRollBackValueInSeconds: state.rollBackValueInSeconds, previewIsDisplayed: state.previewIsDisplayed, handlePreviewIsDisplayed: handlePreviewIsDisplayed, handleAnalyticsEvents: handleAnalyticsEvents })), [
         state.showTimecodes,

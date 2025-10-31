@@ -115,6 +115,13 @@ https://github.com/facebook/draft-js/issues/528
   font-weight: 500;
 }
 
+/* Phase 7: Device tier badge styling */
+.index-module__deviceTierBadge___vfB8W {
+  opacity: 0.8;
+  font-weight: 400;
+  font-size: 11px;
+}
+
 /* Low confidence words - always visible regardless of playback */
 .index-module__editor___PYFqL .Word[data-confidence="low"] {
   border-bottom: 1px dotted blue;

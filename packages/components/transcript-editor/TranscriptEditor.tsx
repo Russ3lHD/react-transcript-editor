@@ -228,12 +228,14 @@ const TranscriptEditor: React.FC<TranscriptEditorProps> = ({
   }, [
     mediaType,
     mediaUrl,
-    handleTimeUpdate,
+    handleTimeUpdateCallback,
     handlePlayMedia,
     handleIsPlaying,
     onLoadedDataGetDuration,
     state.currentTime,
     state.mediaDuration,
+    state.previewIsDisplayed,
+    videoRef,
   ]);
 
   const settings = useMemo(() => (
