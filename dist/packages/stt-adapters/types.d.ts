@@ -7,6 +7,15 @@ export interface Word {
     text?: string;
     speaker?: string;
 }
+export interface WhisperWord {
+    word?: string;
+    start?: number;
+    end?: number;
+    probability?: number;
+    confidence?: number;
+    text?: string;
+    speaker?: string;
+}
 export interface SpeakerSegment {
     start: number;
     end: number;
@@ -131,6 +140,23 @@ export interface GoogleSttJson {
         }>;
     }>;
 }
-export type SttJsonType = 'bbckaldi' | 'autoedit2' | 'speechmatics' | 'ibm' | 'draftjs' | 'amazontranscribe' | 'digitalpaperedit' | 'google-stt';
-export type TranscriptData = BbcKaldiJson | AutoEdit2Json | SpeechmaticsJson | AmazonTranscribeJson | IbmJson | DigitalPaperEditJson | GoogleSttJson | DraftJsTranscript;
+export interface WhisperSegment {
+    id?: number;
+    segment_index?: number;
+    start: number;
+    end: number;
+    text?: string;
+    speaker_label?: string;
+    confidence?: number;
+    language?: string;
+    words?: WhisperWord[];
+}
+export type WhisperJson = WhisperSegment[] | {
+    segments?: WhisperSegment[];
+    results?: {
+        segments?: WhisperSegment[];
+    };
+};
+export type SttJsonType = 'bbckaldi' | 'autoedit2' | 'speechmatics' | 'ibm' | 'draftjs' | 'amazontranscribe' | 'digitalpaperedit' | 'google-stt' | 'whisper';
+export type TranscriptData = BbcKaldiJson | AutoEdit2Json | SpeechmaticsJson | AmazonTranscribeJson | IbmJson | DigitalPaperEditJson | GoogleSttJson | WhisperJson | DraftJsTranscript;
 //# sourceMappingURL=types.d.ts.map

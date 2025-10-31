@@ -6,7 +6,19 @@ import PropTypes from 'prop-types';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faUserEdit } from '@fortawesome/free-solid-svg-icons';
 
-import style from './WrapperBlock.module.css';
+// Handle CSS module import with fallback for Storybook
+let style;
+try {
+  style = require('./WrapperBlock.module.css');
+} catch (error) {
+  // Fallback styles for Storybook
+  style = {
+    speaker: 'speaker-label',
+    speakerEditable: 'speaker-label-editable',
+    speakerNotEditable: 'speaker-label-not-editable',
+    EditLabel: 'speaker-edit-label'
+  };
+}
 
 class SpeakerLabel extends PureComponent {
   render() {

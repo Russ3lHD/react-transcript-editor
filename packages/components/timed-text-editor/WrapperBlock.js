@@ -11,14 +11,27 @@ import {
 
 // eslint-disable-next-line no-unused-vars
 import SpeakerLabel from './SpeakerLabel';
-// import { shortTimecode, secondsToTimecode } from '../../Util/timecode-converter/';
+import { TranscriptDisplayContext } from './TranscriptDisplayContext.js';
 
 import {
   shortTimecode,
   secondsToTimecode
 } from '../../util/timecode-converter';
 
-import style from './WrapperBlock.module.css';
+// Handle CSS module import with fallback for Storybook
+let style;
+try {
+  style = require('./WrapperBlock.module.css');
+} catch (error) {
+  // Fallback styles for Storybook
+  style = {
+    WrapperBlock: 'wrapper-block',
+    markers: 'wrapper-block-markers',
+    unselectable: 'wrapper-block-unselectable',
+    time: 'wrapper-block-time',
+    text: 'wrapper-block-text'
+  };
+}
 
 const updateSpeakerName = (oldName, newName, state) => {
   const contentToUpdate = convertToRaw(state);
@@ -34,13 +47,15 @@ const updateSpeakerName = (oldName, newName, state) => {
 
 
 class WrapperBlock extends React.Component {
+  // Subscribe to TranscriptDisplayContext for display preferences
+  static contextType = TranscriptDisplayContext;
+
   constructor(props) {
     super(props);
 
     this.state = {
       speaker: '',
-      start: 0,
-      timecodeOffset: this.props.blockProps.timecodeOffset
+      start: 0
     };
   }
 
@@ -56,20 +71,25 @@ class WrapperBlock extends React.Component {
     });
   }
   // reducing unnecessary re-renders
-  shouldComponentUpdate = (nextProps, nextState) => {
+  shouldComponentUpdate = (nextProps, nextState, nextContext) => {
     if (nextProps.block.getText() !== this.props.block.getText()) {
       return true;
     }
 
-    if (nextProps.blockProps.showSpeakers !== this.props.blockProps.showSpeakers) {
+    // Check context changes (display preferences)
+    if (nextContext.showSpeakers !== this.context.showSpeakers) {
       return true;
     }
 
-    if (nextProps.blockProps.showTimecodes !== this.props.blockProps.showTimecodes) {
+    if (nextContext.showTimecodes !== this.context.showTimecodes) {
       return true;
     }
 
-    if (nextProps.blockProps.timecodeOffset !== this.props.blockProps.timecodeOffset) {
+    if (nextContext.timecodeOffset !== this.context.timecodeOffset) {
+      return true;
+    }
+
+    if (nextContext.isEditable !== this.context.isEditable) {
       return true;
     }
 
@@ -77,27 +97,20 @@ class WrapperBlock extends React.Component {
       return true;
     }
 
-    if (nextProps.blockProps.isEditable !== this.props.blockProps.isEditable) {
-      return true;
-    }
-
     if(nextProps.block.getData().get('speaker') !== this.state.speaker){
-      console.log('shouldComponentUpdate wrapper speaker', nextProps.block.getData().get('speaker') , this.state.speaker );
       return true;
     }
     return false;
   };
 
   componentDidUpdate  = (prevProps, prevState) => {
-
-    if(prevProps.block.getData().get('speaker') !== prevState.speaker){
-      console.log('componentDidUpdate wrapper speaker', prevProps.block.getData().get('speaker') , prevState.speaker );
-
+    // Update local state when speaker changes in block data
+    const currentSpeaker = this.props.block.getData().get('speaker');
+    
+    if(prevProps.block.getData().get('speaker') !== currentSpeaker && currentSpeaker !== this.state.speaker){
       this.setState({
-        speaker: prevProps.block.getData().get('speaker')
+        speaker: currentSpeaker
       });
-
-      return true;
     }
   };
 
@@ -168,16 +181,19 @@ class WrapperBlock extends React.Component {
   };
 
   render() {
+    // Get display preferences from context instead of props
+    const { showSpeakers, showTimecodes, timecodeOffset, isEditable } = this.context;
+
     let startTimecode = this.state.start;
-    if (this.props.blockProps.timecodeOffset) {
-      startTimecode += this.props.blockProps.timecodeOffset;
+    if (timecodeOffset) {
+      startTimecode += timecodeOffset;
     }
 
     const speakerElement = (
       <SpeakerLabel
         name={ this.state.speaker }
         handleOnClickEdit={ this.handleOnClickEdit }
-        isEditable={this.props.blockProps.isEditable}
+        isEditable={isEditable}
       />
     );
 
@@ -193,9 +209,9 @@ class WrapperBlock extends React.Component {
           className={ [ style.markers, style.unselectable ].join(' ') }
           contentEditable={ false }
         >
-          {this.props.blockProps.showSpeakers ? speakerElement : ''}
+          {showSpeakers ? speakerElement : ''}
 
-          {this.props.blockProps.showTimecodes ? timecodeElement : ''}
+          {showTimecodes ? timecodeElement : ''}
         </div>
         <div className={ style.text }>
           <EditorBlock { ...this.props } />

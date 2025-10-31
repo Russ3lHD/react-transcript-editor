@@ -1,36 +1,45 @@
 import React from 'react';
 
-import { storiesOf } from '@storybook/react';
-import { action } from '@storybook/addon-actions';
-import { withKnobs, number, boolean } from '@storybook/addon-knobs';
-
 import Settings from '../index.js';
 
-storiesOf('Settings', module)
-  .addDecorator(withKnobs)
-  .add('default', () => {
+const meta = {
+  title: 'Settings',
+  component: Settings,
+  parameters: {
+    layout: 'centered',
+  },
+  tags: ['autodocs'],
+  argTypes: {
+    showTimecodes: { control: 'boolean' },
+    showSpeakers: { control: 'boolean' },
+    timecodeOffset: { control: 'number' },
+    defaultValueScrollSync: { control: 'boolean' },
+    defaultValuePauseWhileTyping: { control: 'boolean' },
+    defaultRollBackValueInSeconds: { control: 'number' },
+    previewIsDisplayed: { control: 'boolean' },
+  },
+};
 
-    const fixtureProps = {
-      handleSettingsToggle: action('Toggle settings'),
-      showTimecodes: boolean('showTimecodes', true),
-      showSpeakers: boolean('showSpeakers', true),
-      timecodeOffset: number('timecodeOffset', 3600),
-      defaultValueScrollSync: boolean('defaultValueScrollSync', true),
-      defaultValuePauseWhileTyping: boolean('defaultValuePauseWhileTyping', true),
-      defaultRollBackValueInSeconds: number('defaultRollBackValueInSeconds', 10),
-      previewIsDisplayed: boolean('previewIsDisplayed', true),
-      handleShowTimecodes: action('handleShowTimecodes'),
-      handleShowSpeakers: action('handleShowSpeakers'),
-      handleSetTimecodeOffset: action('handleSetTimecodeOffset'),
-      handleSettingsToggle: action('handleSettingsToggle'),
-      handlePauseWhileTyping: action('handlePauseWhileTyping'),
-      handleIsScrollIntoViewChange: action('handleIsScrollIntoViewChange'),
-      handleRollBackValueInSeconds: action('handleRollBackValueInSeconds'),
-      handlePreviewIsDisplayed: action('handlePreviewIsDisplayed'),
-      handleChangePreviewViewWidth: action('handleChangePreviewViewWidth'),
-      handleAnalyticsEvents: action('handleAnalyticsEvents')
-    };
+export default meta;
 
-    return (
-      <Settings { ...fixtureProps } />
-    );});
+export const Default = {
+  args: {
+    showTimecodes: true,
+    showSpeakers: true,
+    timecodeOffset: 3600,
+    defaultValueScrollSync: true,
+    defaultValuePauseWhileTyping: true,
+    defaultRollBackValueInSeconds: 10,
+    previewIsDisplayed: true,
+    handleSettingsToggle: (...args) => console.log('Toggle settings', ...args),
+    handleShowTimecodes: (...args) => console.log('handleShowTimecodes', ...args),
+    handleShowSpeakers: (...args) => console.log('handleShowSpeakers', ...args),
+    handleSetTimecodeOffset: (...args) => console.log('handleSetTimecodeOffset', ...args),
+    handlePauseWhileTyping: (...args) => console.log('handlePauseWhileTyping', ...args),
+    handleIsScrollIntoViewChange: (...args) => console.log('handleIsScrollIntoViewChange', ...args),
+    handleRollBackValueInSeconds: (...args) => console.log('handleRollBackValueInSeconds', ...args),
+    handlePreviewIsDisplayed: (...args) => console.log('handlePreviewIsDisplayed', ...args),
+    handleChangePreviewViewWidth: (...args) => console.log('handleChangePreviewViewWidth', ...args),
+    handleAnalyticsEvents: (...args) => console.log('handleAnalyticsEvents', ...args),
+  },
+};

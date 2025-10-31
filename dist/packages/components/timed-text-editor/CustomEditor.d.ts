@@ -7,14 +7,10 @@ declare class CustomEditor extends React.Component<any, any, any> {
         component: typeof WrapperBlock;
         editable: boolean;
         props: {
-            showSpeakers: any;
-            showTimecodes: any;
-            timecodeOffset: any;
             editorState: any;
             setEditorNewContentStateSpeakersUpdate: any;
             onWordClick: (e: any) => void;
             handleAnalyticsEvents: any;
-            isEditable: any;
         };
     };
     shouldComponentUpdate(nextProps: any): boolean;

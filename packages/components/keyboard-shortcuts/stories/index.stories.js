@@ -1,14 +1,22 @@
 import React from 'react';
-
-import { storiesOf } from '@storybook/react';
-import { action } from '@storybook/addon-actions';
-
 import KeyboardShortcuts from '../index.js';
 
-const fixtureProps = {
-  handleShortcutsToggle: action('Shortcuts toggle')
+const meta = {
+  title: 'Components/KeyboardShortcuts',
+  component: KeyboardShortcuts,
+  parameters: {
+    layout: 'centered',
+  },
+  tags: ['autodocs'],
+  argTypes: {
+    handleShortcutsToggle: { action: 'Shortcuts toggle' }
+  },
 };
 
-storiesOf('KeyboardShortcuts', module).add('default', () => (
-  <KeyboardShortcuts { ...fixtureProps } />
-));
+export default meta;
+
+export const Default = {
+  args: {
+    handleShortcutsToggle: (...args) => console.log('Shortcuts toggle', ...args),
+  },
+};

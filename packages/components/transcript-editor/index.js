@@ -15,7 +15,21 @@ import { secondsToTimecode } from '../../util/timecode-converter';
 import Header from './src/Header.js';
 // eslint-disable-next-line no-unused-vars
 import ExportOptions from './src/ExportOptions.js';
-import style from './index.module.css';
+// Handle CSS module import with fallback for Storybook
+let style;
+try {
+  style = require('./index.module.css');
+} catch (error) {
+  // Fallback styles for Storybook
+  style = {
+    container: 'transcript-editor-container',
+    grid: 'transcript-editor-grid',
+    row: 'transcript-editor-row',
+    aside: 'transcript-editor-aside',
+    main: 'transcript-editor-main',
+    mainWithAudiio: 'transcript-editor-main-with-audio'
+  };
+}
 
 // TODO: move to another file with tooltip - rename HowDoesThisWork or HelpMessage
 import HowDoesThisWork from './src/HowDoesThisWork.js';
@@ -47,7 +61,7 @@ class TranscriptEditor extends React.Component {
     this.state = {
       currentTime: 0,
       transcriptData: null,
-      isScrollIntoViewOn: false,
+      isScrollIntoViewOn: true, // Enable scroll sync by default
       showSettings: false,
       showShortcuts: false,
       showExportOptions: false,

@@ -6,6 +6,7 @@ import ibmToDraft from './ibm/index';
 import digitalPaperEditToDraft from './digital-paper-edit/index';
 import createEntityMap from './create-entity-map/index';
 import gcpSttToDraft from './google-stt/index';
+import whisperToDraft from './whisper/index';
 /**
  * Adapters for STT conversion
  * @param transcriptData - A json transcript with some word accurate timecode
@@ -38,6 +39,9 @@ const sttJsonAdapter = (transcriptData, sttJsonType) => {
                 return { blocks, entityMap: createEntityMap(blocks) };
             case 'google-stt':
                 blocks = gcpSttToDraft(transcriptData);
+                return { blocks, entityMap: createEntityMap(blocks) };
+            case 'whisper':
+                blocks = whisperToDraft(transcriptData);
                 return { blocks, entityMap: createEntityMap(blocks) };
             default:
                 console.error(`Unsupported STT engine: ${sttJsonType}`);

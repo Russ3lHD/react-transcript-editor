@@ -1,65 +1,79 @@
 // eslint-disable-next-line no-unused-vars
-import React, { Component } from 'react';
+import React, { memo, useMemo } from 'react';
 import PropTypes from 'prop-types';
 
-class Word extends Component {
+/**
+ * Word Component - Optimized with React.memo and useMemo
+ * Renders individual words with timing data for transcript synchronization
+ * 
+ * Performance optimizations:
+ * - Converted from class to functional component with memo
+ * - Memoized expensive calculations (prevTimes, confidence)
+ * - Custom comparison function to prevent unnecessary re-renders
+ * - Pre-allocated arrays for better performance
+ */
+const Word = memo(({ entityKey, contentState, children, decoratedText }) => {
+  // Memoize word data extraction
+  const wordData = useMemo(() => {
+    if (!entityKey) return {};
+    return contentState.getEntity(entityKey).getData();
+  }, [entityKey, contentState]);
 
-  shouldComponentUpdate(nextProps) {
-    if ( nextProps.decoratedText !== this.props.decoratedText) {
-      return true;
-    }
-
-    return false;
-  }
-
-  generateConfidence = (data) => {
+  // Memoize confidence calculation
+  const confidence = useMemo(() => {
     // handling edge case where confidence score not present
-    if (data.confidence) {
-      return data.confidence > 0.6 ? 'high' : 'low';
+    if (wordData.confidence) {
+      return wordData.confidence > 0.6 ? 'high' : 'low';
     }
-
     return 'high';
-  };
+  }, [wordData.confidence]);
 
-  generatePreviousTimes = (data) => {
-    let prevTimes = '';
+  // Memoize previous times generation - optimized with pre-allocated array
+  const prevTimes = useMemo(() => {
+    if (!wordData.start) return '';
+    
+    const startInt = Math.floor(wordData.start);
+    
+    // Pre-allocate array for better performance than string concatenation
+    const timeArray = Array.from({ length: startInt }, (_, i) => i);
+    let times = timeArray.join(' ');
 
-    for (let i = 0; i < data.start; i++) {
-      prevTimes += `${i} `;
-    }
-
-    if (data.start % 1 > 0) {
+    if (wordData.start % 1 > 0) {
       // Find the closest quarter-second to the current time, for more dynamic results
-      const dec = Math.floor((data.start % 1) * 4.0) / 4.0;
-      prevTimes += ` ${Math.floor(data.start) + dec}`;
+      const dec = Math.floor((wordData.start % 1) * 4.0) / 4.0;
+      times += ` ${startInt + dec}`;
     }
 
-    return prevTimes;
-  };
+    return times;
+  }, [wordData.start]);
 
-  render() {
-    const data = this.props.entityKey
-      ? this.props.contentState.getEntity(this.props.entityKey).getData()
-      : {};
+  return (
+    <span
+      data-start={wordData.start}
+      data-end={wordData.end}
+      data-confidence={confidence}
+      data-prev-times={prevTimes}
+      data-entity-key={wordData.key}
+      className="Word"
+    >
+      {children}
+    </span>
+  );
+}, (prevProps, nextProps) => {
+  // Custom comparison: only re-render if decoratedText or entityKey changes
+  return (
+    prevProps.decoratedText === nextProps.decoratedText &&
+    prevProps.entityKey === nextProps.entityKey
+  );
+});
 
-    return (
-      <span
-        data-start={ data.start }
-        data-end={ data.end }
-        data-confidence = { this.generateConfidence(data) }
-        data-prev-times = { this.generatePreviousTimes(data) }
-        data-entity-key={ data.key }
-        className="Word">
-        {this.props.children}
-      </span>
-    );
-  }
-}
+Word.displayName = 'Word';
 
 Word.propTypes = {
   contentState: PropTypes.object,
   entityKey: PropTypes.string,
-  children: PropTypes.array
+  children: PropTypes.array,
+  decoratedText: PropTypes.string
 };
 
 export default Word;

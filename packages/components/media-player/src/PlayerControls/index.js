@@ -22,7 +22,19 @@ import PlaybackRate from '../PlaybackRate';
 // eslint-disable-next-line no-unused-vars
 import TimeBox from './TimeBox.js';
 
-import style from './index.module.scss';
+// Handle CSS module import with fallback for Storybook
+let style;
+try {
+  style = require('./index.module.scss');
+} catch (error) {
+  // Fallback styles for Storybook
+  style = {
+    playerControls: 'player-controls',
+    playerButton: 'player-button',
+    pip: 'player-button-pip',
+    btnsGroup: 'player-buttons-group'
+  };
+}
 
 class PlayerControls extends React.Component {
 

@@ -1,1 +1,1 @@
-{"version":3,"file":"CustomEditor.d.ts","sourceRoot":"","sources":["../../../../packages/components/timed-text-editor/CustomEditor.js"],"names":[],"mappings":";AAYA;;;IACE,kBAAkB,MAAC,UAEjB;IAEF;;;;;;;;;;;;;MAeE;IAEF,+CAWC;IAED,iBAAiB,MAAC,UAEhB;IAEF,kDAYC;CACF;kBAhEiB,OAAO;yBAOA,gBAAgB"}
+{"version":3,"file":"CustomEditor.d.ts","sourceRoot":"","sources":["../../../../packages/components/timed-text-editor/CustomEditor.js"],"names":[],"mappings":";AAYA;;;IACE,kBAAkB,MAAC,UAEjB;IAEF;;;;;;;;;MAcE;IAEF,+CAUC;IAED,iBAAiB,MAAC,UAEhB;IAEF,kDAYC;CACF;kBA9DiB,OAAO;yBAOA,gBAAgB"}

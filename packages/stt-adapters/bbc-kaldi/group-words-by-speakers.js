@@ -24,7 +24,7 @@ function addSpeakerToEachWord(words, segments) {
   words.forEach((word) => {
     const tmpSpeakerSegment = findSegmentForWord(word, segments);
 
-    word.speaker = formatSpeakerName(tmpSpeakerSegment.speaker);
+    word.speaker = tmpSpeakerSegment.speaker['@id'];
     tmpWordsWithSpeakers.push(word);
   });
 
@@ -95,9 +95,7 @@ function findSegmentForWord(word, segments) {
     // adding UKN speaker label
     return {
       '@type': 'Segment',
-      // keeping both speaker id and gender as this is used later
-      // to format speaker label combining the two
-      speaker: { '@id': 'UKN', gender: 'U' }
+      speaker: { '@id': 'UKN' }
     };
   } else {
     // find returns the first element that matches the criteria
@@ -105,14 +103,5 @@ function findSegmentForWord(word, segments) {
   }
 }
 
-/**
-* formats kaldi speaker object into a string
-* Combining Gender and speaker Id
-* @param {object} speaker - BBC kaldi speaker object
-* @return {string} -
-*/
-function formatSpeakerName(speaker) {
-  return `${speaker.gender}_${speaker['@id']}`;
-}
 
 export default groupWordsInParagraphsBySpeakers;

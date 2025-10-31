@@ -6,6 +6,7 @@ import ibmToDraft from './ibm/index';
 import digitalPaperEditToDraft from './digital-paper-edit/index';
 import createEntityMap from './create-entity-map/index';
 import gcpSttToDraft from './google-stt/index';
+import whisperToDraft from './whisper/index';
 
 import type {
   TranscriptData,
@@ -18,6 +19,7 @@ import type {
   IbmJson,
   DigitalPaperEditJson,
   GoogleSttJson,
+  WhisperJson,
 } from './types';
 
 /**
@@ -63,6 +65,10 @@ const sttJsonAdapter = (
 
       case 'google-stt':
         blocks = gcpSttToDraft(transcriptData as GoogleSttJson);
+        return { blocks, entityMap: createEntityMap(blocks) as any };
+
+      case 'whisper':
+        blocks = whisperToDraft(transcriptData as WhisperJson);
         return { blocks, entityMap: createEntityMap(blocks) as any };
 
       default:

@@ -20,14 +20,13 @@ class CustomEditor extends React.Component {
       component: WrapperBlock,
       editable: true,
       props: {
-        showSpeakers: this.props.showSpeakers,
-        showTimecodes: this.props.showTimecodes,
-        timecodeOffset: this.props.timecodeOffset,
+        // Note: showSpeakers, showTimecodes, timecodeOffset, and isEditable
+        // are now provided via TranscriptDisplayContext instead of props
+        // This improves performance by eliminating forceRenderDecorator() calls
         editorState: this.props.editorState,
         setEditorNewContentStateSpeakersUpdate: this.props.setEditorNewContentStateSpeakersUpdate,
         onWordClick: this.handleWordClick,
-        handleAnalyticsEvents: this.props.handleAnalyticsEvents,
-        isEditable: this.props.isEditable
+        handleAnalyticsEvents: this.props.handleAnalyticsEvents
       }
     };
   };
@@ -38,9 +37,8 @@ class CustomEditor extends React.Component {
       return true;
     }
 
-    if (nextProps.isEditable !== this.props.isEditable) {
-      return true;
-    }
+    // Note: isEditable check removed as it now comes from context
+    // Context changes automatically trigger WrapperBlock updates
 
     return false;
   }

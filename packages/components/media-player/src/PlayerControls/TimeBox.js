@@ -1,7 +1,19 @@
 import React from 'react';
 import isEqual from 'react-fast-compare';
 
-import style from './index.module.scss';
+// Handle CSS module import with fallback for Storybook
+let style;
+try {
+  style = require('./index.module.scss');
+} catch (error) {
+  // Fallback styles for Storybook
+  style = {
+    timeBox: 'time-box',
+    currentTime: 'current-time',
+    separator: 'time-separator',
+    duration: 'duration'
+  };
+}
 
 class TimeBox extends React.Component {
   shouldComponentUpdate = (nextProps) => {

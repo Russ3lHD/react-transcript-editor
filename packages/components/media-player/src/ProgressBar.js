@@ -2,7 +2,17 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import isEqual from 'react-fast-compare';
 
-import style from './ProgressBar.module.scss';
+// Handle CSS module import with fallback for Storybook
+let style;
+try {
+  style = require('./ProgressBar.module.scss');
+} catch (error) {
+  // Fallback styles for Storybook
+  style = {
+    wrapper: 'progress-bar-wrapper',
+    bar: 'progress-bar'
+  };
+}
 
 class ProgressBar extends React.Component {
   shouldComponentUpdate = (nextProps) => {

@@ -1,7 +1,16 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 
-import style from './Select.module.scss';
+// Handle CSS module import with fallback for Storybook
+let style;
+try {
+  style = require('./Select.module.scss');
+} catch (error) {
+  // Fallback styles for Storybook
+  style = {
+    selectPlayerControl: 'select-player-control'
+  };
+}
 
 class Select extends React.Component {
 

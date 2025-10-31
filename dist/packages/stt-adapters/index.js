@@ -8,4 +8,5 @@ export { default as amazonTranscribeToDraft } from './amazon-transcribe/index';
 export { default as ibmToDraft } from './ibm/index';
 export { default as digitalPaperEditToDraft } from './digital-paper-edit/index';
 export { default as gcpSttToDraft } from './google-stt/index';
+export { default as whisperToDraft } from './whisper/index';
 //# sourceMappingURL=index.js.map

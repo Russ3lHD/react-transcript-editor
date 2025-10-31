@@ -4,7 +4,17 @@ import PropTypes from 'prop-types';
 import isEqual from 'react-fast-compare';
 // eslint-disable-next-line no-unused-vars
 import Select from './Select';
-import style from './PlayerControls/index.module.scss';
+// Handle CSS module import with fallback for Storybook
+let style;
+try {
+    style = require('./PlayerControls/index.module.scss');
+}
+catch (error) {
+    // Fallback styles for Storybook
+    style = {
+        playBackRate: 'playback-rate'
+    };
+}
 class PlaybackRate extends React.Component {
     shouldComponentUpdate = (nextProps) => {
         return !isEqual(this.props, nextProps);

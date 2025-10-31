@@ -7,7 +7,7 @@ export interface BlockData {
     blocks: DraftJsContentBlock[];
     entityMap?: Record<string, any>;
 }
-export type ExportFormat = 'draftjs' | 'txt' | 'docx' | 'txtspeakertimecodes' | 'digitalpaperedit' | 'srt' | 'premiereTTML' | 'ttml' | 'itt' | 'csv' | 'vtt' | 'json-captions' | 'pre-segment-txt';
+export type ExportFormat = 'draftjs' | 'txt' | 'docx' | 'txtspeakertimecodes' | 'digitalpaperedit' | 'srt' | 'premiereTTML' | 'ttml' | 'itt' | 'csv' | 'vtt' | 'json-captions' | 'pre-segment-txt' | 'whisper';
 export interface SubtitlesOptions {
     words: Word[] | string;
     type: SubtitlesType;

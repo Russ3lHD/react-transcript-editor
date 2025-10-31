@@ -21,6 +21,7 @@
     "outDir": "./dist",
     "rootDir": "./packages",
     "baseUrl": ".",
+    "ignoreDeprecations": "5.0",
     "paths": {
       "@/*": ["./packages/*"],
       "@/components/*": ["./packages/components/*"],

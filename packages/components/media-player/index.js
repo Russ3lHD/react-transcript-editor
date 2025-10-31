@@ -9,7 +9,19 @@ import ProgressBar from './src/ProgressBar';
 
 import returnHotKeys from './src/config/defaultHotKeys';
 
-import styles from './index.module.scss';
+// Handle CSS module import with fallback for Storybook
+let styles;
+try {
+  styles = require('./index.module.scss');
+} catch (error) {
+  // Fallback styles for Storybook
+  styles = {
+    topSection: 'media-player-top-section',
+    playerSection: 'media-player-section',
+    controlsSection: 'media-player-controls-section',
+    title: 'media-player-title'
+  };
+}
 
 import {
   secondsToTimecode,
@@ -368,8 +380,15 @@ class MediaPlayer extends React.Component {
     }
   };
 
-  getProgressBarMax = () => parseInt(this.props.videoRef.current.duration).toString();
-  getProgressBarValue = () => parseInt(this.props.videoRef.current.currentTime).toString();
+  getProgressBarMax = () => {
+    const video = this.props.videoRef.current;
+    return video && !isNaN(video.duration) ? parseInt(video.duration).toString() : '0';
+  };
+
+  getProgressBarValue = () => {
+    const video = this.props.videoRef.current;
+    return video && !isNaN(video.currentTime) ? parseInt(video.currentTime).toString() : '0';
+  };
 
   render() {
     const progressBar = (

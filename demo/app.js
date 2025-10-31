@@ -5,6 +5,7 @@ import SttTypeSelect from "./select-stt-json-type";
 import ExportFormatSelect from "./select-export-format";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faGithub } from "@fortawesome/free-brands-svg-icons";
+import { getCacheManager } from "../packages/util/CacheManager.js";
 
 import {
   loadLocalSavedData,
@@ -18,7 +19,26 @@ const DEMO_MEDIA_URL =
 const DEMO_TITLE =
   "TED Talk | Kate Darling - Why we have an emotional connection to robots";
 
-import style from "./index.module.scss";
+// Handle CSS module import with fallback for Storybook
+let style;
+try {
+  style = require("./index.module.scss");
+} catch (error) {
+  // Fallback styles for Storybook
+  style = {
+    container: 'demo-container',
+    demoNav: 'demo-nav',
+    demoNavItem: 'demo-nav-item',
+    dropdown: 'demo-dropdown',
+    sectionLabel: 'demo-section-label',
+    fileNameLabel: 'demo-file-name-label',
+    titleLabel: 'demo-title-label',
+    editableLabel: 'demo-editable-label',
+    warningButton: 'demo-warning-button',
+    demoButton: 'demo-button',
+    checkbox: 'demo-checkbox'
+  };
+}
 
 class App extends React.Component {
   constructor(props) {
@@ -35,11 +55,23 @@ class App extends React.Component {
       fileName: "",
       autoSaveData: {},
       autoSaveContentType: "draftjs",
-      autoSaveExtension: "json"
+      autoSaveExtension: "json",
+      cacheStats: null
     };
 
     this.transcriptEditorRef = React.createRef();
   }
+
+  componentDidMount() {
+    // Load cache stats on mount
+    this.updateCacheStats();
+  }
+
+  updateCacheStats = async () => {
+    const cacheManager = getCacheManager();
+    const stats = await cacheManager.getCacheStats();
+    this.setState({ cacheStats: stats });
+  };
 
   loadDemo = () => {
     if(isPresentInLocalStorage(DEMO_MEDIA_URL)){
@@ -163,6 +195,14 @@ class App extends React.Component {
   clearLocalStorage = () => {
     localStorage.clear();
     console.info("Cleared local storage.");
+  };
+
+  clearIndexedDBCache = async () => {
+    const cacheManager = getCacheManager();
+    await cacheManager.clearAllCache();
+    await this.updateCacheStats();
+    console.info("Cleared IndexedDB cache.");
+    alert("IndexedDB cache cleared successfully!");
   };
 
   handleAnalyticsEvents = event => {
@@ -306,7 +346,32 @@ class App extends React.Component {
             >
               Clear Local Storage
             </button>
+
+            <button
+              className={style.warningButton}
+              onClick={() => this.clearIndexedDBCache()}
+              title="Clear cached transcript data from IndexedDB"
+            >
+              Clear IndexedDB Cache
+            </button>
           </section>
+
+          {this.state.cacheStats && this.state.cacheStats.isSupported && (
+            <section className={style.demoNavItem}>
+              <label className={style.sectionLabel}>Cache Stats</label>
+              <div style={{ fontSize: '12px', lineHeight: '1.4' }}>
+                <div>📦 Cached Transcripts: {this.state.cacheStats.entryCount || 0} / {this.state.cacheStats.maxEntries}</div>
+                <div>💾 Storage Used: {this.state.cacheStats.totalSizeFormatted || '0 Bytes'}</div>
+                <div>✨ Version: {this.state.cacheStats.version}</div>
+              </div>
+              <button
+                style={{ marginTop: '5px', fontSize: '11px', padding: '3px 8px' }}
+                onClick={() => this.updateCacheStats()}
+              >
+                Refresh Stats
+              </button>
+            </section>
+          )}
         </div>
 
         <TranscriptEditor

@@ -2,6 +2,7 @@
 // and http://jasonwatmore.com/post/2018/04/14/react-npm-how-to-publish-a-react-component-to-npm
 const path = require('path');
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
+const webpack = require('webpack');
 
 module.exports = {
   mode: 'production',
@@ -105,9 +106,26 @@ module.exports = {
   plugins: [
     new MiniCssExtractPlugin({
       filename: '[name].css'
+    }),
+    // Provide polyfills for Node.js globals
+    new webpack.ProvidePlugin({
+      Buffer: ['buffer', 'Buffer'],
+      process: 'process/browser.js'
     })
   ],
   resolve: {
-    extensions: ['.js', '.jsx']
+    extensions: ['.js', '.jsx'],
+    fallback: {
+      // Polyfills for Node.js core modules (required for webpack 5)
+      // These are needed by the difflib package
+      assert: require.resolve('assert/'),
+      buffer: require.resolve('buffer/'),
+      process: require.resolve('process/browser.js'),
+      // Add other polyfills as needed
+      util: false,
+      stream: false,
+      path: false,
+      fs: false
+    }
   }
 };

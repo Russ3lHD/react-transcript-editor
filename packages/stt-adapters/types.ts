@@ -8,6 +8,16 @@ export interface Word {
   speaker?: string;
 }
 
+export interface WhisperWord {
+  word?: string;
+  start?: number;
+  end?: number;
+  probability?: number;
+  confidence?: number;
+  text?: string;
+  speaker?: string;
+}
+
 export interface SpeakerSegment {
   start: number;
   end: number;
@@ -146,6 +156,25 @@ export interface GoogleSttJson {
   }>;
 }
 
+export interface WhisperSegment {
+  id?: number;
+  segment_index?: number;
+  start: number;
+  end: number;
+  text?: string;
+  speaker_label?: string;
+  confidence?: number;
+  language?: string;
+  words?: WhisperWord[];
+}
+
+export type WhisperJson =
+  | WhisperSegment[]
+  | {
+      segments?: WhisperSegment[];
+      results?: { segments?: WhisperSegment[] };
+    };
+
 export type SttJsonType = 
   | 'bbckaldi'
   | 'autoedit2'
@@ -154,7 +183,8 @@ export type SttJsonType =
   | 'draftjs'
   | 'amazontranscribe'
   | 'digitalpaperedit'
-  | 'google-stt';
+  | 'google-stt'
+  | 'whisper';
 
 export type TranscriptData = 
   | BbcKaldiJson
@@ -164,4 +194,5 @@ export type TranscriptData =
   | IbmJson
   | DigitalPaperEditJson
   | GoogleSttJson
+  | WhisperJson
   | DraftJsTranscript; 

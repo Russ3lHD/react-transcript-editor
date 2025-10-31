@@ -23,7 +23,8 @@ export type ExportFormat =
   | 'csv'
   | 'vtt'
   | 'json-captions'
-  | 'pre-segment-txt';
+  | 'pre-segment-txt'
+  | 'whisper';
 
 export interface SubtitlesOptions {
   words: Word[] | string;

@@ -10,7 +10,22 @@ import Toggle from './Toggle/';
 // eslint-disable-next-line no-unused-vars
 import TimecodeOffset from './TimecodeOffset';
 
-import style from './index.module.css';
+// Handle CSS module import with fallback for Storybook
+let style;
+try {
+  style = require('./index.module.css');
+} catch (error) {
+  // Fallback styles for Storybook
+  style = {
+    settings: 'settings-panel',
+    header: 'settings-header',
+    closeButton: 'settings-close-button',
+    controlsContainer: 'settings-controls-container',
+    settingElement: 'settings-element',
+    label: 'settings-label',
+    rollbackValue: 'settings-rollback-value'
+  };
+}
 
 class Settings extends React.Component {
 

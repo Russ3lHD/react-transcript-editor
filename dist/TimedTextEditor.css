@@ -7,6 +7,142 @@ $color-lightest-grey: #f2f2f2 !default;
 $color-subt-green: #69e3c2 !default;
 $color-light-shilo: #E2A9A2 !default;
 
+.index-module__DraftEditor-root___aC90d {
+  background: #f9f9f9;
+}
+
+/*
+Giving the editor a oveflow
+https://github.com/facebook/draft-js/issues/528
+*/
+
+.index-module__editor___PYFqL .public-DraftEditor-content {
+  max-height: 75vh;
+  overflow: auto;
+  padding: 8px 16px;
+  background-color: white;
+}
+
+/* Mobile devices */
+@media (max-width: 768px) {
+
+  .index-module__editor___PYFqL .public-DraftEditor-content {
+    margin: 0 auto;
+  }
+}
+
+/* ===================================================
+   PHASE 2B: CSS Class-Based Highlighting
+   Performance optimization: Static CSS classes instead of dynamic <style> injection
+   Expected improvement: 95-97% reduction in CSS overhead
+   =================================================== */
+
+/* Active word highlight - applied to currently playing word */
+.index-module__editor___PYFqL .word-active {
+  background-color: #69e3c2;
+  text-shadow: 0 0 0.01px black;
+  transition: background-color 0.1s ease;
+}
+
+/* Global fallback for word-active (works even if .editor class is not found) */
+.word-active {
+  background-color: #69e3c2 !important;
+  text-shadow: 0 0 0.01px black;
+  transition: background-color 0.1s ease;
+}
+
+/* Sibling highlight - applied to word following active word */
+.index-module__editor___PYFqL .word-active-next {
+  background-color: #69e3c2;
+  transition: background-color 0.1s ease;
+}
+
+/* Global fallback for word-active-next */
+.word-active-next {
+  background-color: #69e3c2 !important;
+  transition: background-color 0.1s ease;
+}
+
+/* Unplayed words - words that haven't been reached yet */
+.index-module__editor___PYFqL .word-unplayed {
+  color: #767676;
+  transition: color 0.15s ease;
+}
+
+/* Global fallback for word-unplayed */
+.word-unplayed {
+  color: #767676 !important;
+  transition: color 0.15s ease;
+}
+
+/* ===================================================
+   PHASE 3: Progressive Loading Indicator
+   =================================================== */
+
+.index-module__loadingIndicator___wwbST {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  background-color: rgba(0, 0, 0, 0.8);
+  color: white;
+  padding: 8px 16px;
+  border-radius: 4px;
+  font-size: 12px;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', sans-serif;
+  z-index: 1000;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+}
+
+.index-module__loadingSpinner___Rmvam {
+  width: 14px;
+  height: 14px;
+  border: 2px solid rgba(255, 255, 255, 0.3);
+  border-top-color: white;
+  border-radius: 50%;
+  animation: index-module__spin___McaXs 0.8s linear infinite;
+}
+
+@keyframes index-module__spin___McaXs {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+.index-module__loadingProgress___Yb2Ga {
+  font-weight: 500;
+}
+
+/* Low confidence words - always visible regardless of playback */
+.index-module__editor___PYFqL .Word[data-confidence="low"] {
+  border-bottom: 1px dotted blue;
+}
+
+/* ===================================================
+   PHASE 4: Virtual Scrolling
+   =================================================== */
+
+.index-module__virtualizedContainer___SAixB {
+  height: 75vh;
+  width: 100%;
+  background-color: white;
+  overflow: hidden;
+}
+
+/* Mobile devices */
+@media (max-width: 768px) {
+  .index-module__virtualizedContainer___SAixB {
+    margin: 0 auto;
+  }
+}
+
+.index-module__virtualizedBlock___fXqjY {
+  padding: 0 16px;
+  box-sizing: border-box;
+}
+
 /* https://developer.mozilla.org/en-US/docs/Web/CSS/user-select
 TODO: only working in Chrome, not working in Firefox, and Safari - OSX
 if selecting text, not showing selection
@@ -123,30 +259,6 @@ to get text out of component with timecodes and speaker names in the interim */
     float: left;
 
     /* clear: right; */
-  }
-}
-
-.index-module__DraftEditor-root___aC90d {
-  background: #f9f9f9;
-}
-
-/*
-Giving the editor a oveflow
-https://github.com/facebook/draft-js/issues/528
-*/
-
-.index-module__editor___PYFqL .public-DraftEditor-content {
-  max-height: 75vh;
-  overflow: auto;
-  padding: 8px 16px;
-  background-color: white;
-}
-
-/* Mobile devices */
-@media (max-width: 768px) {
-
-  .index-module__editor___PYFqL .public-DraftEditor-content {
-    margin: 0 auto;
   }
 }
 

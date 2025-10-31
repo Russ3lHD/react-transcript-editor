@@ -7,5 +7,6 @@ export { default as amazonTranscribeToDraft } from './amazon-transcribe/index';
 export { default as ibmToDraft } from './ibm/index';
 export { default as digitalPaperEditToDraft } from './digital-paper-edit/index';
 export { default as gcpSttToDraft } from './google-stt/index';
-export type { Word, SpeakerSegment, Paragraph, DraftJsContentBlock, EntityRange, EntityMap, DraftJsTranscript, BbcKaldiJson, AutoEdit2Json, SpeechmaticsJson, AmazonTranscribeJson, IbmJson, DigitalPaperEditJson, GoogleSttJson, SttJsonType, TranscriptData, } from './types';
+export { default as whisperToDraft } from './whisper/index';
+export type { Word, SpeakerSegment, Paragraph, DraftJsContentBlock, EntityRange, EntityMap, DraftJsTranscript, BbcKaldiJson, AutoEdit2Json, SpeechmaticsJson, AmazonTranscribeJson, IbmJson, DigitalPaperEditJson, GoogleSttJson, WhisperJson, SttJsonType, TranscriptData, } from './types';
 //# sourceMappingURL=index.d.ts.map

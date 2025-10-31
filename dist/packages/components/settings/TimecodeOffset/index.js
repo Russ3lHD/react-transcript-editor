@@ -1,62 +1,71 @@
 import { jsx as _jsx, jsxs as _jsxs } from "react/jsx-runtime";
-import React from 'react';
-import PropTypes from 'prop-types';
+import { useState, useCallback, useEffect } from 'react';
 import style from './index.module.css';
 import { timecodeToSeconds, secondsToTimecode } from '../../../util/timecode-converter';
-class TimecodeOffset extends React.Component {
-    constructor(props) {
-        super(props);
-        this.state = {
-            timecodeOffset: secondsToTimecode(this.props.timecodeOffset)
-        };
-    }
-    handleChange = e => {
-        this.setState({
-            timecodeOffset: e.target.value
-        });
-    };
-    resetTimecodeOffset = () => {
-        const resetTimecodeOffsetValue = 0;
-        if (this.props.handleAnalyticsEvents !== undefined) {
-            this.props.handleAnalyticsEvents({
+/**
+ * TimecodeOffset component for adjusting media time offset
+ *
+ * Allows users to set a timecode offset to synchronize media
+ * with transcript timestamps. Supports both timecode format
+ * (HH:MM:SS:FF) and seconds input.
+ */
+const TimecodeOffset = ({ handleSetTimecodeOffset, onChange, timecodeOffset = 0, handleAnalyticsEvents, className = '', 'data-testid': testId, }) => {
+    const [localTimecodeOffset, setLocalTimecodeOffset] = useState(secondsToTimecode(timecodeOffset));
+    // Update local state when prop changes
+    useEffect(() => {
+        setLocalTimecodeOffset(secondsToTimecode(timecodeOffset));
+    }, [timecodeOffset]);
+    const handleChange = useCallback((e) => {
+        const newTimecode = e.target.value;
+        setLocalTimecodeOffset(newTimecode);
+        // Notify parent of change if callback provided
+        if (onChange) {
+            let offsetInSeconds = 0;
+            if (typeof newTimecode === 'string' &&
+                newTimecode.includes(':') &&
+                !newTimecode.includes('NaN')) {
+                offsetInSeconds = timecodeToSeconds(newTimecode);
+            }
+            else {
+                offsetInSeconds = parseFloat(newTimecode) || 0;
+            }
+            onChange(offsetInSeconds);
+        }
+    }, [onChange]);
+    const resetTimecodeOffset = useCallback(() => {
+        const resetValue = 0;
+        if (handleAnalyticsEvents) {
+            handleAnalyticsEvents({
                 category: 'TimecodeOffset',
                 action: 'resetTimecodeOffset',
                 name: 'resetTimecodeOffset',
-                value: 0
+                value: String(resetValue)
             });
         }
-        this.setState({
-            timecodeOffset: secondsToTimecode(resetTimecodeOffsetValue)
-        }, () => {
-            this.props.handleSetTimecodeOffset(resetTimecodeOffsetValue);
-        });
-    };
-    setTimecodeOffset = () => {
-        if (this.props.handleAnalyticsEvents !== undefined) {
-            this.props.handleAnalyticsEvents({
+        setLocalTimecodeOffset(secondsToTimecode(resetValue));
+        handleSetTimecodeOffset?.(resetValue);
+    }, [handleAnalyticsEvents, handleSetTimecodeOffset]);
+    const saveTimecodeOffset = useCallback(() => {
+        if (handleAnalyticsEvents) {
+            handleAnalyticsEvents({
                 category: 'TimecodeOffset',
                 action: 'setTimecodeOffset',
                 name: 'setTimecodeOffset',
-                value: this.state.timecodeOffset
+                value: localTimecodeOffset
             });
         }
-        let newCurrentTimeInSeconds = this.state.timecodeOffset;
-        if (typeof newCurrentTimeInSeconds === 'string' &&
-            newCurrentTimeInSeconds.includes(':') &&
-            !newCurrentTimeInSeconds.includes('NaN')) {
-            newCurrentTimeInSeconds = timecodeToSeconds(newCurrentTimeInSeconds);
+        let offsetInSeconds = 0;
+        if (typeof localTimecodeOffset === 'string' &&
+            localTimecodeOffset.includes(':') &&
+            !localTimecodeOffset.includes('NaN')) {
+            offsetInSeconds = timecodeToSeconds(localTimecodeOffset);
         }
-        this.props.handleSetTimecodeOffset(newCurrentTimeInSeconds);
-    };
-    render() {
-        return (_jsxs("div", { className: style.offsetContainer, children: [_jsx("input", { className: style.inputBox, type: "text", value: this.state.timecodeOffset, onChange: this.handleChange, name: "lname" }), _jsx("span", { className: style.button, onClick: this.resetTimecodeOffset, children: _jsx("u", { children: "Reset" }) }), _jsx("span", { children: " | " }), _jsx("span", { className: style.button, onClick: this.setTimecodeOffset, children: _jsx("u", { children: "Save" }) })] }));
-    }
-}
-TimecodeOffset.propTypes = {
-    handleSetTimecodeOffset: PropTypes.func,
-    onChange: PropTypes.func,
-    timecodeOffset: PropTypes.number,
-    handleAnalyticsEvents: PropTypes.func
+        else {
+            offsetInSeconds = parseFloat(localTimecodeOffset) || 0;
+        }
+        handleSetTimecodeOffset?.(offsetInSeconds);
+    }, [handleAnalyticsEvents, handleSetTimecodeOffset, localTimecodeOffset]);
+    return (_jsxs("div", { className: `${style.offsetContainer} ${className}`.trim(), children: [_jsx("label", { htmlFor: "timecode-offset-input", className: style.visuallyHidden, children: "Timecode Offset" }), _jsx("input", { id: "timecode-offset-input", className: style.inputBox, type: "text", value: localTimecodeOffset, onChange: handleChange, placeholder: "00:00:00:00", "aria-label": "Timecode offset in HH:MM:SS:FF format", "data-testid": testId }), _jsx("button", { type: "button", className: style.button, onClick: resetTimecodeOffset, "aria-label": "Reset timecode offset to zero", children: _jsx("u", { children: "Reset" }) }), _jsx("span", { "aria-hidden": "true", children: " | " }), _jsx("button", { type: "button", className: style.button, onClick: saveTimecodeOffset, "aria-label": "Apply timecode offset", children: _jsx("u", { children: "Save" }) })] }));
 };
 export default TimecodeOffset;
 //# sourceMappingURL=index.js.map

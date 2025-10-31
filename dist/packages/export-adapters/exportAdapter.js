@@ -3,6 +3,7 @@ import draftToDocx from './docx/index';
 import draftToTxtSpeakersTimecodes from './txt-speakers-timecodes/index';
 import draftToDigitalPaperEdit from './draftjs-to-digital-paper-edit/index.js';
 import subtitlesGenerator from './subtitles-generator/index.js';
+import draftToWhisper from './draftjs-to-whisper/index';
 /**
  * Adapters for Draft.js conversion
  * @param blockData - Draft.js blocks
@@ -88,6 +89,8 @@ const exportAdapter = (blockData, exportFormat, transcriptTitle) => {
                 });
                 return { data: content, ext: 'txt' };
             }
+            case 'whisper':
+                return { data: draftToWhisper(blockData), ext: 'json' };
             default:
                 console.error(`Unsupported export format: ${exportFormat}`);
                 return null;

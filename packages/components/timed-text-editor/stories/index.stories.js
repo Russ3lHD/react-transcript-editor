@@ -1,64 +1,67 @@
 import React from 'react';
-
-import { storiesOf } from '@storybook/react';
-import { action } from '@storybook/addon-actions';
-import { withKnobs, text, number, boolean } from '@storybook/addon-knobs';
-
 import bbcKaldiTranscript from './fixtures/bbc-kaldi.json';
 import TimedTextEditor from '../index.js';
 
-storiesOf('TimedTextEditor', module)
-  .addDecorator(withKnobs)
-  .add('default', () => {
-    const mediaUrl = 'https://download.ted.com/talks/KateDarling_2018S-950k.mp4';
+const meta = {
+  title: 'Components/TimedTextEditor',
+  component: TimedTextEditor,
+  parameters: {
+    layout: 'centered',
+  },
+  tags: ['autodocs'],
+  argTypes: {
+    mediaUrl: { control: 'text' },
+    isEditable: { control: 'boolean' },
+    spellCheck: { control: 'boolean' },
+    sttJsonType: { control: 'text' },
+    currentTime: { control: { type: 'number', min: 0, step: 0.1 } },
+    isScrollIntoViewOn: { control: 'boolean' },
+    isPauseWhileTypingOn: { control: 'boolean' },
+    timecodeOffset: { control: { type: 'number', min: -3600, max: 3600, step: 1 } },
+    showSpeakers: { control: 'boolean' },
+    showTimecodes: { control: 'boolean' },
+    fileName: { control: 'text' },
+    onWordClick: { action: 'onWordClick' },
+    isPlaying: { action: 'isPlaying' },
+    playMedia: { action: 'playMedia' },
+    handleAnalyticsEvents: { action: 'handleAnalyticsEvents' }
+  },
+};
 
-    const fixtureProps = {
-      transcriptData: bbcKaldiTranscript,
-      mediaUrl: text('mediaUrl', mediaUrl),
-      isEditable: boolean('isEditable', true),
-      spellCheck: boolean('spellCheck', false),
-      onWordClick: action('onWordClick'),
-      sttJsonType: text('sttJsonType', 'bbckaldi'),
-      isPlaying: action('isPlaying'),
-      playMedia: action('playMedia'),
-      currentTime: number('currentTime', 0),
-      isScrollIntoViewOn: boolean('isScrollIntoViewOn', true),
-      isPauseWhileTypingOn: boolean('isPauseWhileTypingOn', true),
-      timecodeOffset: number('timecodeOffset', 0),
-      handleAnalyticsEvents: action('handleAnalyticsEvents'),
-      showSpeakers: boolean('showSpeakers', true),
-      showTimecodes: boolean('showTimecodes', true),
-      fileName: text('fileName', 'KateDarling_2018S-950k.mp4')
-    };
+export default meta;
 
-    return (
-      <TimedTextEditor { ...fixtureProps } />
-    );
-  })
-  .add('empty dpe', () => {
-    const mediaUrl = 'https://download.ted.com/talks/KateDarling_2018S-950k.mp4';
-    const emptyTranscriptData = { 'paragraphs': [], 'words': [] };
+const mediaUrl = 'https://download.ted.com/talks/KateDarling_2018S-950k.mp4';
 
-    const fixtureProps = {
-      transcriptData: emptyTranscriptData,
-      mediaUrl: text('mediaUrl', mediaUrl),
-      isEditable: boolean('isEditable', true),
-      spellCheck: boolean('spellCheck', false),
-      onWordClick: action('onWordClick'),
-      sttJsonType: text('sttJsonType', 'digitalpaperedit'),
-      isPlaying: action('isPlaying'),
-      playMedia: action('playMedia'),
-      currentTime: number('currentTime', 0),
-      isScrollIntoViewOn: boolean('isScrollIntoViewOn', true),
-      isPauseWhileTypingOn: boolean('isPauseWhileTypingOn', true),
-      timecodeOffset: number('timecodeOffset', 0),
-      handleAnalyticsEvents: action('handleAnalyticsEvents'),
-      showSpeakers: boolean('showSpeakers', true),
-      showTimecodes: boolean('showTimecodes', true),
-      fileName: text('fileName', 'KateDarling_2018S-950k.mp4')
-    };
+export const Default = {
+  args: {
+    transcriptData: bbcKaldiTranscript,
+    mediaUrl: mediaUrl,
+    isEditable: true,
+    spellCheck: false,
+    sttJsonType: 'bbckaldi',
+    currentTime: 0,
+    isScrollIntoViewOn: true,
+    isPauseWhileTypingOn: true,
+    timecodeOffset: 0,
+    showSpeakers: true,
+    showTimecodes: true,
+    fileName: 'KateDarling_2018S-950k.mp4',
+  },
+};
 
-    return (
-      <TimedTextEditor { ...fixtureProps } />
-    );
-  });
+export const EmptyDPE = {
+  args: {
+    transcriptData: { 'paragraphs': [], 'words': [] },
+    mediaUrl: mediaUrl,
+    isEditable: true,
+    spellCheck: false,
+    sttJsonType: 'digitalpaperedit',
+    currentTime: 0,
+    isScrollIntoViewOn: true,
+    isPauseWhileTypingOn: true,
+    timecodeOffset: 0,
+    showSpeakers: true,
+    showTimecodes: true,
+    fileName: 'KateDarling_2018S-950k.mp4',
+  },
+};

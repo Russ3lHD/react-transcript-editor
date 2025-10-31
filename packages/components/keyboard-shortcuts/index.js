@@ -6,7 +6,22 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
 import returnHotKeys from './hot-keys';
 
-import style from './index.module.css';
+// Handle CSS module import with fallback for Storybook
+let style;
+try {
+  style = require('./index.module.css');
+} catch (error) {
+  // Fallback styles for Storybook
+  style = {
+    shortcuts: 'keyboard-shortcuts',
+    header: 'keyboard-shortcuts-header',
+    closeButton: 'keyboard-shortcuts-close-button',
+    list: 'keyboard-shortcuts-list',
+    listItem: 'keyboard-shortcuts-list-item',
+    shortcut: 'keyboard-shortcut',
+    shortcutLabel: 'keyboard-shortcut-label'
+  };
+}
 
 export const getHotKeys = returnHotKeys;
 

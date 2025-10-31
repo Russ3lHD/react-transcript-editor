@@ -1,10 +1,10 @@
-@import '../../../config/style-guide/colours.scss';
+@use '../../../config/style-guide/colours';
 
 $slider-width-number: 1440;
 $slider-width: #{$slider-width-number}px;
 $slider-height: 10px;
-$background-slider: $color-light-grey;
-$bar-slider-filled: $color-labs-red;
+$background-slider: colours.$color-light-grey;
+$bar-slider-filled: colours.$color-labs-red;
 $thumb-width: 16px;
 $thumb-height: 24px;
 $shadow-size: -7px;
@@ -56,8 +56,8 @@ $fit-thumb-in-slider: -7px;
     height: $thumb-height;
     width: $thumb-width;
     margin-top: $fit-thumb-in-slider;
-    background: $color-labs-red;
-    box-shadow: makelongshadow($color-light-grey, $shadow-size);
+    background: colours.$color-labs-red;
+    box-shadow: makelongshadow(colours.$color-light-grey, $shadow-size);
   }
 
   // Firefox
@@ -76,7 +76,7 @@ $fit-thumb-in-slider: -7px;
     margin-top: $fit-thumb-in-slider;
     border: 0;
     border-radius: 0;
-    background: $color-labs-red;
-    box-shadow: makelongshadow($color-light-grey, $shadow-size);
+    background: colours.$color-labs-red;
+    box-shadow: makelongshadow(colours.$color-light-grey, $shadow-size);
   }
 }
