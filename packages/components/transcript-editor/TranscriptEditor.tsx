@@ -200,31 +200,29 @@ const TranscriptEditor: React.FC<TranscriptEditorProps> = ({
     }
   }, [autoSaveContent]);
 
-  // Memoized components
-  const mediaControls = useMemo(() => {
+  // Media controls props object instead of memoized JSX
+  const mediaControlsProps = useMemo(() => {
     if (mediaType === 'audio') {
-      return (
-                         <MediaPlayer
-          mediaUrl={mediaUrl}
-          handleTimeUpdate={handleTimeUpdateCallback}
-          handlePlayMedia={handlePlayMedia}
-          handleIsPlaying={handleIsPlaying}
-          onLoadedDataGetDuration={onLoadedDataGetDuration}
-          currentTime={state.currentTime}
-          mediaDuration={state.mediaDuration}
-          videoRef={videoRef}
-        />
-      );
+      return {
+        type: 'audio' as const,
+        mediaUrl,
+        handleTimeUpdate: handleTimeUpdateCallback,
+        handlePlayMedia,
+        handleIsPlaying,
+        onLoadedDataGetDuration,
+        currentTime: state.currentTime,
+        mediaDuration: state.mediaDuration,
+        videoRef,
+      };
     }
-    return (
-                   <VideoPlayer
-        mediaUrl={mediaUrl}
-        onTimeUpdate={handleTimeUpdateCallback}
-        videoRef={videoRef}
-        onLoadedDataGetDuration={onLoadedDataGetDuration}
-        previewIsDisplayed={state.previewIsDisplayed}
-      />
-    );
+    return {
+      type: 'video' as const,
+      mediaUrl,
+      onTimeUpdate: handleTimeUpdateCallback,
+      videoRef,
+      onLoadedDataGetDuration,
+      previewIsDisplayed: state.previewIsDisplayed,
+    };
   }, [
     mediaType,
     mediaUrl,
@@ -303,7 +301,7 @@ const TranscriptEditor: React.FC<TranscriptEditorProps> = ({
         exportOptions={exportOptions}
         tooltip={tooltip}
         mediaUrl={mediaUrl}
-        mediaControls={mediaControls}
+        mediaControlsProps={mediaControlsProps}
         handleSettingsToggle={handleSettingsToggle}
         handleShortcutsToggle={handleShortcutsToggle}
         handleExportToggle={handleExportToggle}

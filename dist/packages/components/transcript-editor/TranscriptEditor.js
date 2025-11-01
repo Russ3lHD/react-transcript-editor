@@ -2,8 +2,6 @@ import { jsx as _jsx, jsxs as _jsxs } from "react/jsx-runtime";
 import { useState, useEffect, useRef, useCallback, useMemo } from 'react';
 import { secondsToTimecode } from '../../util/timecode-converter';
 import TimedTextEditor from '../timed-text-editor';
-import MediaPlayer from '../media-player';
-import VideoPlayer from '../video-player';
 import Settings from '../settings';
 import Shortcuts from '../keyboard-shortcuts';
 import Header from './src/Header';
@@ -145,12 +143,29 @@ const TranscriptEditor = ({ transcriptData: initialTranscriptData, mediaUrl, med
             localStorage.setItem('transcriptEditorAutoSave', JSON.stringify(data));
         }
     }, [autoSaveContent]);
-    // Memoized components
-    const mediaControls = useMemo(() => {
+    // Media controls props object instead of memoized JSX
+    const mediaControlsProps = useMemo(() => {
         if (mediaType === 'audio') {
-            return (_jsx(MediaPlayer, { mediaUrl: mediaUrl, handleTimeUpdate: handleTimeUpdateCallback, handlePlayMedia: handlePlayMedia, handleIsPlaying: handleIsPlaying, onLoadedDataGetDuration: onLoadedDataGetDuration, currentTime: state.currentTime, mediaDuration: state.mediaDuration, videoRef: videoRef }));
+            return {
+                type: 'audio',
+                mediaUrl,
+                handleTimeUpdate: handleTimeUpdateCallback,
+                handlePlayMedia,
+                handleIsPlaying,
+                onLoadedDataGetDuration,
+                currentTime: state.currentTime,
+                mediaDuration: state.mediaDuration,
+                videoRef,
+            };
         }
-        return (_jsx(VideoPlayer, { mediaUrl: mediaUrl, onTimeUpdate: handleTimeUpdateCallback, videoRef: videoRef, onLoadedDataGetDuration: onLoadedDataGetDuration, previewIsDisplayed: state.previewIsDisplayed }));
+        return {
+            type: 'video',
+            mediaUrl,
+            onTimeUpdate: handleTimeUpdateCallback,
+            videoRef,
+            onLoadedDataGetDuration,
+            previewIsDisplayed: state.previewIsDisplayed,
+        };
     }, [
         mediaType,
         mediaUrl,
@@ -184,7 +199,7 @@ const TranscriptEditor = ({ transcriptData: initialTranscriptData, mediaUrl, med
     const shortcuts = useMemo(() => (_jsx(Shortcuts, { handleShortcutsToggle: handleShortcutsToggle })), [handleShortcutsToggle]);
     const exportOptions = useMemo(() => (_jsx(ExportOptions, { exportOptionsList: exportOptionsList, handleExportOptionsChange: handleExportOptionsChange, handleExportToggle: handleExportToggle })), [handleExportOptionsChange, handleExportToggle]);
     const tooltip = useMemo(() => (_jsx(HowDoesThisWork, { handleAnalyticsEvents: handleAnalyticsEvents })), [handleAnalyticsEvents]);
-    return (_jsxs("div", { className: style.transcriptEditor, style: state.gridDisplay || undefined, children: [_jsx(Header, { showSettings: state.showSettings, showShortcuts: state.showShortcuts, showExportOptions: state.showExportOptions, settings: settings, shortcuts: shortcuts, exportOptions: exportOptions, tooltip: tooltip, mediaUrl: mediaUrl, mediaControls: mediaControls, handleSettingsToggle: handleSettingsToggle, handleShortcutsToggle: handleShortcutsToggle, handleExportToggle: handleExportToggle }), _jsx("div", { className: style.editorContainer, children: _jsx(TimedTextEditor, { transcriptData: state.transcriptData, handleWordClick: handleWordClick, handleTimeUpdate: handleTimeUpdateCallback, handlePlayMedia: handlePlayMedia, handleIsPlaying: handleIsPlaying, isScrollIntoViewOn: state.isScrollIntoViewOn, isPauseWhileTypingOn: state.isPauseWhileTypingOn, rollBackValueInSeconds: state.rollBackValueInSeconds, timecodeOffset: state.timecodeOffset, showTimecodes: state.showTimecodes, showSpeakers: state.showSpeakers, sttJsonType: sttJsonType, fileName: fileName, spellCheck: spellCheck, autoSaveContentType: autoSaveContentType, autoSaveContent: autoSaveContent, autoSaveMethod: autoSaveMethod, autoSaveInterval: autoSaveInterval, placeholder: placeholder, title: title, handleAutoSaveChanges: handleAutoSaveChanges, handleAnalyticsEvents: handleAnalyticsEvents }) })] }));
+    return (_jsxs("div", { className: style.transcriptEditor, style: state.gridDisplay || undefined, children: [_jsx(Header, { showSettings: state.showSettings, showShortcuts: state.showShortcuts, showExportOptions: state.showExportOptions, settings: settings, shortcuts: shortcuts, exportOptions: exportOptions, tooltip: tooltip, mediaUrl: mediaUrl, mediaControlsProps: mediaControlsProps, handleSettingsToggle: handleSettingsToggle, handleShortcutsToggle: handleShortcutsToggle, handleExportToggle: handleExportToggle }), _jsx("div", { className: style.editorContainer, children: _jsx(TimedTextEditor, { transcriptData: state.transcriptData, handleWordClick: handleWordClick, handleTimeUpdate: handleTimeUpdateCallback, handlePlayMedia: handlePlayMedia, handleIsPlaying: handleIsPlaying, isScrollIntoViewOn: state.isScrollIntoViewOn, isPauseWhileTypingOn: state.isPauseWhileTypingOn, rollBackValueInSeconds: state.rollBackValueInSeconds, timecodeOffset: state.timecodeOffset, showTimecodes: state.showTimecodes, showSpeakers: state.showSpeakers, sttJsonType: sttJsonType, fileName: fileName, spellCheck: spellCheck, autoSaveContentType: autoSaveContentType, autoSaveContent: autoSaveContent, autoSaveMethod: autoSaveMethod, autoSaveInterval: autoSaveInterval, placeholder: placeholder, title: title, handleAutoSaveChanges: handleAutoSaveChanges, handleAnalyticsEvents: handleAnalyticsEvents }) })] }));
 };
 export default TranscriptEditor;
 //# sourceMappingURL=TranscriptEditor.js.map

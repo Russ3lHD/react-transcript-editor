@@ -6,7 +6,28 @@ import {
 } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
+import MediaPlayer from '../../media-player';
+import VideoPlayer from '../../video-player';
 import style from '../index.module.css';
+
+type MediaControlsProps = {
+  type: 'audio';
+  mediaUrl: string | null;
+  handleTimeUpdate: (e: React.SyntheticEvent<HTMLVideoElement>) => void;
+  handlePlayMedia: (isPlaying: boolean) => void;
+  handleIsPlaying: () => boolean;
+  onLoadedDataGetDuration: (e: React.SyntheticEvent<HTMLVideoElement>) => void;
+  currentTime: number;
+  mediaDuration: string;
+  videoRef: React.RefObject<HTMLVideoElement>;
+} | {
+  type: 'video';
+  mediaUrl: string | null;
+  onTimeUpdate: (e: React.SyntheticEvent<HTMLVideoElement>) => void;
+  videoRef: React.RefObject<HTMLVideoElement>;
+  onLoadedDataGetDuration: (e: React.SyntheticEvent<HTMLVideoElement>) => void;
+  previewIsDisplayed: boolean;
+};
 
 export interface HeaderProps {
   showSettings: boolean;
@@ -17,7 +38,7 @@ export interface HeaderProps {
   exportOptions?: React.ReactNode;
   tooltip?: React.ReactNode;
   mediaUrl: string | null;
-  mediaControls?: React.ReactNode;
+  mediaControlsProps?: MediaControlsProps;
   handleSettingsToggle: () => void;
   handleShortcutsToggle: () => void;
   handleExportToggle: () => void;
@@ -32,7 +53,7 @@ const Header: React.FC<HeaderProps> = ({
   exportOptions,
   tooltip,
   mediaUrl,
-  mediaControls,
+  mediaControlsProps,
   handleSettingsToggle,
   handleShortcutsToggle,
   handleExportToggle,
@@ -46,7 +67,28 @@ const Header: React.FC<HeaderProps> = ({
         {tooltip}
       </header>
       <nav className={style.nav}>
-        {mediaUrl === null ? null : mediaControls}
+        {mediaUrl && mediaControlsProps ? (
+          mediaControlsProps.type === 'audio' ? (
+            <MediaPlayer
+              mediaUrl={mediaControlsProps.mediaUrl}
+              handleTimeUpdate={mediaControlsProps.handleTimeUpdate}
+              handlePlayMedia={mediaControlsProps.handlePlayMedia}
+              handleIsPlaying={mediaControlsProps.handleIsPlaying}
+              onLoadedDataGetDuration={mediaControlsProps.onLoadedDataGetDuration}
+              currentTime={mediaControlsProps.currentTime}
+              mediaDuration={mediaControlsProps.mediaDuration}
+              videoRef={mediaControlsProps.videoRef}
+            />
+          ) : (
+            <VideoPlayer
+              mediaUrl={mediaControlsProps.mediaUrl}
+              onTimeUpdate={mediaControlsProps.onTimeUpdate}
+              videoRef={mediaControlsProps.videoRef}
+              onLoadedDataGetDuration={mediaControlsProps.onLoadedDataGetDuration}
+              previewIsDisplayed={mediaControlsProps.previewIsDisplayed}
+            />
+          )
+        ) : null}
       </nav>
 
       <div className={style.settingsContainer}>
