@@ -46,10 +46,13 @@ module.exports = {
       root: 'ReactDOM'
     }
   },
+  resolve: {
+    extensions: ['.ts', '.tsx', '.js', '.jsx']
+  },
   module: {
     rules: [
       {
-        test: /\.jsx?$/,
+        test: /\.(jsx?|tsx?)$/,
         exclude: /node_modules/,
         use: {
           loader: 'babel-loader',
@@ -60,7 +63,8 @@ module.exports = {
                   browsers: ['>0.2%', 'not dead', 'not ie <= 11', 'not op_mini all']
                 }
               }],
-              '@babel/preset-react'
+              '@babel/preset-react',
+              '@babel/preset-typescript'
             ],
             plugins: [
               '@babel/plugin-transform-object-rest-spread',
