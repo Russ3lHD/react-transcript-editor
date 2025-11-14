@@ -8,12 +8,40 @@
 # testing
 /coverage
 
+# .trae files
+.trae
+
+
 # production
 /build
 
 # component to distribute to npm 
 # /dist
+# OS generated files
+.DS_Store?
+ehthumbs.db
+Icon?
+Thumbs.db
 
+# Temporary files
+*.tmp
+*.temp
+*.swp
+*.swo
+*~
+
+# Package lock files (if using pnpm primarily)
+package-lock.json
+yarn.lock
+
+# IDE specific
+.idea/
+*.sublime-project
+*.sublime-workspace
+
+# Debug files
+.debug
+debug.log
 # misc
 .DS_Store
 .env.local

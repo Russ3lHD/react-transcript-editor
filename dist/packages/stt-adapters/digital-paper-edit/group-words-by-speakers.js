@@ -241,7 +241,7 @@ function addWordsToSpeakersParagraphs(words, segments) {
             paragraph = {
                 words: [word],
                 text: `${getWordText(word)} `,
-                speaker: currentSegment.speaker,
+                speaker: currentSegment.speaker
             };
         }
     });
@@ -302,7 +302,7 @@ function normalizeInputs(words, segments) {
                     end: w.end,
                     text: getWordText(w),
                     // keep reference to parent segment if needed
-                    _segment: seg,
+                    _segment: seg
                 }));
                 return acc.concat(segWords);
             }, []);
@@ -314,14 +314,14 @@ function normalizeInputs(words, segments) {
         end: Number(w.end),
         text: getWordText(w),
         // preserve original object when available
-        _orig: w,
+        _orig: w
     })).filter((w) => !Number.isNaN(w.start) && !Number.isNaN(w.end));
     // Ensure segments have start,end and speaker
     normalizedSegments = (normalizedSegments || []).map((s, i) => ({
         start: Number(s.start),
         end: Number(s.end),
         speaker: s.speaker || s.speaker_label || (typeof s.id !== 'undefined' ? `SPK ${s.id}` : `SPK ${i}`),
-        _orig: s,
+        _orig: s
     })).filter((s) => !Number.isNaN(s.start) && !Number.isNaN(s.end));
     return { normalizedWords, normalizedSegments };
 }

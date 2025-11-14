@@ -1,1 +1,1 @@
-{"version":3,"file":"TimeBox.d.ts","sourceRoot":"","sources":["../../../../../../packages/components/media-player/src/PlayerControls/TimeBox.js"],"names":[],"mappings":";AAiBA;;;IACE,wBAAyB,cAAS,aAEhC;IAEF,cAAe,MAAC,UAEd;IAEF,kDAeC;CACF;kBA1CiB,OAAO"}
+{"version":3,"file":"TimeBox.d.ts","sourceRoot":"","sources":["../../../../../../packages/components/media-player/src/PlayerControls/TimeBox.js"],"names":[],"mappings":";AAiBA;;;IACE,wBAAyB,cAAS,aAEhC;IAEF,cAAe,MAAC,UAEd;IAEF,4BAeC;CACF;kBA1CiB,OAAO"}

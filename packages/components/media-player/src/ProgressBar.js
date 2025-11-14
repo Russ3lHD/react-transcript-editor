@@ -6,7 +6,7 @@ import isEqual from 'react-fast-compare';
 let style;
 try {
   style = require('./ProgressBar.module.scss');
-} catch (error) {
+} catch {
   // Fallback styles for Storybook
   style = {
     wrapper: 'progress-bar-wrapper',

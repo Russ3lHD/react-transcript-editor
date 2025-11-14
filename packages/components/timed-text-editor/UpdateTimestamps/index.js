@@ -39,6 +39,7 @@ const createContentFromEntityList = (currentContent, newEntities) => {
     let speaker = block.data.speaker;
 
     if (!speaker) {
+      /* eslint-disable-next-line no-console */
       console.log('speaker', speaker, block);
       speaker = 'U_UKN';
     }

@@ -8,7 +8,7 @@ module.exports = {
         targets: { node: 'current' }
       }
     ],
-    '@babel/preset-react',
+    ['@babel/preset-react', { runtime: 'classic' }],
     '@babel/preset-typescript'
   ],
   plugins: [

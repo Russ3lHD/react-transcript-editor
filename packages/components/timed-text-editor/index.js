@@ -11,7 +11,7 @@ import {
 } from 'draft-js';
 
 
-// eslint-disable-next-line no-unused-vars
+
 import CustomEditor from './CustomEditor.js';
 import VirtualizedEditor from './VirtualizedEditor.js';
 import Word from './Word';
@@ -22,13 +22,13 @@ import { getWorkerManager } from '../../util/WorkerManager.js';
 import { getCacheManager } from '../../util/CacheManager.js';
 import { hashTranscriptData } from '../../util/hashUtils.js';
 import { getDeviceCapabilityDetector } from '../../util/DeviceCapabilityDetector.js';
-import exportAdapter from '../../export-adapters';
+import { exportAdapter } from '../../export-adapters';
 import updateTimestamps from './UpdateTimestamps/index.js';
 // Handle CSS module import with fallback for Storybook
 let style;
 try {
   style = require('./index.module.css');
-} catch (error) {
+} catch {
   // Fallback styles for Storybook
   style = {
     editor: 'timed-text-editor'
@@ -64,19 +64,23 @@ class TimedTextEditor extends React.Component {
       deviceTier: this.deviceTier.name,
       deviceTierDescription: this.deviceTier.description
     };
-    
+
     // Instance variables (not state) to avoid setState during render
     this.lastCurrentWord = { start: 'NA', end: 'NA' };
+    this.timeEpsilon = 0.06;
     this.scrollThrottle = null;
     this.loadingCancelled = false;
-    
+
     // Phase 2B: Track highlighted elements for class-based highlighting
     this.highlightedElements = {
       current: null,        // Currently playing word element
       next: null,          // Next sibling element
       unplayedSet: new Set() // Set of unplayed word elements
     };
-    
+
+    this.wordKeyToBlockIndex = {};
+    this.currentWordBlockIndex = null;
+
     // Cache display config to prevent unnecessary context updates
     this.displayConfig = {
       showSpeakers: true,
@@ -93,33 +97,33 @@ class TimedTextEditor extends React.Component {
 
   shouldComponentUpdate = (nextProps, nextState) => {
     // Only re-render for meaningful changes, not every currentTime update
-    
+
     // Check if editor content changed
     if (nextState.editorState !== this.state.editorState) return true;
-    
+
     // Check if word timings cache changed
     if (nextState.wordTimings !== this.state.wordTimings) return true;
-    
+
     // Check if display preferences changed (these affect WrapperBlock)
     if (nextProps.showSpeakers !== this.props.showSpeakers) return true;
     if (nextProps.showTimecodes !== this.props.showTimecodes) return true;
     if (nextProps.timecodeOffset !== this.props.timecodeOffset) return true;
     if (nextProps.isEditable !== this.props.isEditable) return true;
-    
+
     // Check if transcript data changed
     if (nextProps.transcriptData !== this.props.transcriptData) return true;
-    
+
     // Check if other important props changed
     if (nextProps.spellCheck !== this.props.spellCheck) return true;
     if (nextProps.fileName !== this.props.fileName) return true;
-    
+
     // For currentTime, only re-render if the current word changes
     // This is checked in getCurrentWord() which updates this.lastCurrentWord
     const nextCurrentWord = this.getCurrentWordForTime(nextProps.currentTime);
     if (nextCurrentWord.start !== this.lastCurrentWord.start) {
       return true;
     }
-    
+
     // Don't re-render for other prop changes (like currentTime within same word)
     return false;
   };
@@ -127,29 +131,29 @@ class TimedTextEditor extends React.Component {
   // Helper to get current word without side effects (for shouldComponentUpdate)
   getCurrentWordForTime = (currentTime) => {
     const { wordTimings } = this.state;
-    
+
     if (!wordTimings || wordTimings.length === 0) {
       return { start: 'NA', end: 'NA' };
     }
-    
+
     // Binary search
     let left = 0;
     let right = wordTimings.length - 1;
-    
+
     while (left <= right) {
       const mid = Math.floor((left + right) / 2);
       const word = wordTimings[mid];
-      
-      if (word.start <= currentTime && word.end >= currentTime) {
-        return { start: word.start, end: word.end };
+
+      if (word.start - this.timeEpsilon <= currentTime && word.end + this.timeEpsilon >= currentTime) {
+        return { start: word.start, end: word.end, key: word.key };
       } else if (word.start > currentTime) {
         right = mid - 1;
       } else {
         left = mid + 1;
       }
     }
-    
-    return { start: 'NA', end: 'NA' };
+
+    return { start: 'NA', end: 'NA', key: null };
   };
 
   componentDidUpdate(prevProps, _prevState) {
@@ -162,14 +166,14 @@ class TimedTextEditor extends React.Component {
     ) {
       this.updateDisplayConfig();
     }
-    
+
     // Phase 2B: Update word highlighting when currentTime changes
     if (prevProps.currentTime !== this.props.currentTime) {
       requestAnimationFrame(() => {
         this.updateWordHighlighting();
       });
     }
-    
+
     // Note: Display preference changes are now handled via React Context.
     // WrapperBlock components subscribe to context and re-render automatically when these values change.
     // This eliminates the need for expensive forceRenderDecorator() calls.
@@ -178,7 +182,7 @@ class TimedTextEditor extends React.Component {
   componentWillUnmount() {
     // Phase 2B: Clean up highlighted elements
     this.cleanupHighlighting();
-    
+
     // Phase 3: Cancel progressive loading if in progress
     this.loadingCancelled = true;
   }
@@ -200,7 +204,8 @@ class TimedTextEditor extends React.Component {
     // outside of draftJS eg when clicking play button so using this instead
     // see issue https://github.com/facebook/draft-js/issues/1060
     // also "insert-characters" does not get triggered if you delete text
-    if (this.state.editorState.getCurrentContent() !== editorState.getCurrentContent()) {
+    if (this.state.editorState && editorState &&
+        this.state.editorState.getCurrentContent() !== editorState.getCurrentContent()) {
       if (this.props.isPauseWhileTypingOn) {
         if (this.props.isPlaying()) {
           this.props.playMedia(false);
@@ -231,7 +236,9 @@ class TimedTextEditor extends React.Component {
             this.cacheWordTimings(editorState);
             // const data = this.updateTimestampsForEditorState();
             const data = this.getEditorContent( this.props.autoSaveContentType, this.props.title);
-            this.props.handleAutoSaveChanges(data);
+            if (typeof this.props.handleAutoSaveChanges === 'function') {
+              this.props.handleAutoSaveChanges(data);
+            }
           }
         );
       }, 1000);
@@ -243,6 +250,11 @@ class TimedTextEditor extends React.Component {
   };
 
   updateTimestampsForEditorState() {
+    // Guard against undefined editorState
+    if (!this.state.editorState) {
+      return null;
+    }
+
     // Update timestamps according to the original state.
     const currentContent = convertToRaw(
       this.state.editorState.getCurrentContent()
@@ -305,10 +317,15 @@ class TimedTextEditor extends React.Component {
    * Called when editor content changes
    */
   cacheWordTimings = (editorState) => {
+    // Guard against undefined editorState
+    if (!editorState) {
+      return;
+    }
+
     const contentState = editorState.getCurrentContent();
     const raw = convertToRaw(contentState);
     const wordTimings = [];
-    
+
     // Extract all word timings from entityMap
     for (const key in raw.entityMap) {
       const entity = raw.entityMap[key];
@@ -316,17 +333,17 @@ class TimedTextEditor extends React.Component {
         wordTimings.push({
           start: entity.data.start,
           end: entity.data.end,
-          key: key
+          key
         });
       }
     }
-    
+
     // Sort for binary search - O(n log n) one time cost
     wordTimings.sort((a, b) => a.start - b.start);
-    
-    this.setState({ 
+
+    this.setState({
       wordTimings,
-      cachedEntityMap: raw.entityMap 
+      cachedEntityMap: raw.entityMap
     });
   };
 
@@ -341,7 +358,7 @@ class TimedTextEditor extends React.Component {
   getEntityMapForBlocks = (fullData, start, end) => {
     const entityMap = {};
     const blocks = fullData.blocks.slice(start, end);
-    
+
     blocks.forEach(block => {
       if (block.entityRanges && Array.isArray(block.entityRanges)) {
         block.entityRanges.forEach(range => {
@@ -352,7 +369,7 @@ class TimedTextEditor extends React.Component {
         });
       }
     });
-    
+
     return entityMap;
   };
 
@@ -374,24 +391,26 @@ class TimedTextEditor extends React.Component {
     // Phase 6: Check cache first
     try {
       this.setState({ isLoadingFromCache: true });
-      
+
       const cached = await cacheManager.checkCache(mediaUrl, dataHash);
-      
-      if (cached) {
+      const isStale = cached && this.props.documentTimestamp && cached.metadata && cached.metadata.cachedAt && cached.metadata.cachedAt < this.props.documentTimestamp;
+
+      if (cached && !isStale) {
+        /* eslint-disable-next-line no-console */
         console.log('✨ Loading from cache - instant load!');
-        
+
         // Use cached data directly
-        this.setState({ 
+        this.setState({
           isLoadingFromCache: false,
           cacheHit: true,
           originalState: convertToRaw(convertFromRaw(cached.blocks))
         });
-        
+
         // Set word timings cache (Phase 1 optimization)
         if (cached.wordTimings) {
           this.setState({ wordTimings: cached.wordTimings });
         }
-        
+
         // Load content - use progressive loading for large transcripts
         const totalBlocks = cached.blocks.blocks.length;
         const CHUNK_SIZE = this.chunkSize; // Phase 7: Dynamic chunk size
@@ -402,8 +421,8 @@ class TimedTextEditor extends React.Component {
         } else {
           // Progressive loading for large cached transcripts
           this.loadingCancelled = false;
-          this.setState({ 
-            isInitialLoad: true, 
+          this.setState({
+            isInitialLoad: true,
             totalBlocks,
             loadedBlockCount: 0
           });
@@ -417,14 +436,19 @@ class TimedTextEditor extends React.Component {
           this.setState({ loadedBlockCount: CHUNK_SIZE });
           this.loadRemainingChunks(cached.blocks, CHUNK_SIZE, totalBlocks);
         }
-        
-        return; // Cache hit - we're done!
+
+        return;
       }
-      
+
+      if (isStale) {
+        this.setState({ isLoadingFromCache: false, cacheHit: false });
+      }
+
       // Cache miss - continue with worker conversion
       this.setState({ isLoadingFromCache: false, cacheHit: false });
-      
+
     } catch (error) {
+      /* eslint-disable-next-line no-console */
       console.warn('Cache check failed, continuing with conversion:', error);
       this.setState({ isLoadingFromCache: false, cacheHit: false });
     }
@@ -435,7 +459,7 @@ class TimedTextEditor extends React.Component {
 
     try {
       // Show processing indicator
-      this.setState({ 
+      this.setState({
         isProcessingWorker: true,
         workerProgress: { current: 0, total: 0, percentage: 0 }
       });
@@ -454,8 +478,9 @@ class TimedTextEditor extends React.Component {
       this.setState({ isProcessingWorker: false });
 
     } catch (error) {
+      /* eslint-disable-next-line no-console */
       console.warn('Worker conversion failed, using fallback:', error);
-      
+
       // Fallback: synchronous conversion
       this.setState({ isProcessingWorker: false });
       blocks = sttJsonAdapter(
@@ -468,7 +493,7 @@ class TimedTextEditor extends React.Component {
     this.setState({ originalState: convertToRaw(convertFromRaw(blocks)) });
 
     const totalBlocks = blocks.blocks.length;
-    
+
     // Phase 3: Progressive loading optimization
     // For small transcripts (<threshold blocks), load everything at once (fast path)
     // For large transcripts (>=threshold blocks), use chunked loading
@@ -478,17 +503,17 @@ class TimedTextEditor extends React.Component {
     if (!USE_PROGRESSIVE_LOADING) {
       // Fast path: Small transcript - load immediately
       this.setEditorContentState(blocks);
-      
+
       // Phase 6: Save to cache after successful load
       this.saveToCacheAsync(cacheManager, mediaUrl, dataHash, blocks);
-      
+
       return;
     }
 
     // Progressive loading path for large transcripts
     this.loadingCancelled = false;
-    this.setState({ 
-      isInitialLoad: true, 
+    this.setState({
+      isInitialLoad: true,
       totalBlocks,
       loadedBlockCount: 0
     });
@@ -504,7 +529,7 @@ class TimedTextEditor extends React.Component {
 
     // Load remaining chunks progressively
     this.loadRemainingChunks(blocks, CHUNK_SIZE, totalBlocks);
-    
+
     // Phase 6: Save to cache after all chunks loaded
     // We save the full blocks object for future instant loads
     this.saveToCacheAsync(cacheManager, mediaUrl, dataHash, blocks);
@@ -518,13 +543,15 @@ class TimedTextEditor extends React.Component {
     try {
       // Get word timings from state (Phase 1 optimization)
       const wordTimings = this.state.wordTimings;
-      
+
       // Save in background (non-blocking)
       await cacheManager.saveToCache(mediaUrl, dataHash, blocks, wordTimings);
+      /* eslint-disable-next-line no-console */
       console.log('💾 Saved to cache for instant future loads');
-      
+
     } catch (error) {
       // Cache save failure is non-critical, just log it
+      /* eslint-disable-next-line no-console */
       console.warn('Failed to save to cache (non-critical):', error);
     }
   };
@@ -541,23 +568,36 @@ class TimedTextEditor extends React.Component {
     const loadNextChunk = () => {
       if (this.loadingCancelled || currentIndex >= totalBlocks) {
         // Loading complete - hide indicator immediately
-        this.setState({ 
+        this.setState({
           isInitialLoad: false,
-          loadedBlockCount: totalBlocks 
+          loadedBlockCount: totalBlocks
         });
         return;
       }
 
       const endIndex = Math.min(currentIndex + CHUNK_SIZE, totalBlocks);
-      
+
       // Create cumulative chunk (all blocks up to endIndex)
       const chunk = {
         blocks: fullBlocks.blocks.slice(0, endIndex),
         entityMap: this.getEntityMapForBlocks(fullBlocks, 0, endIndex)
       };
 
+      if (this.props.debugPerformance) {
+        const perf = typeof globalThis !== 'undefined' ? globalThis.performance : undefined;
+        if (perf && typeof perf.mark === 'function') {
+          perf.mark('chunk_start');
+        }
+      }
       this.setEditorContentState(chunk);
-      
+      if (this.props.debugPerformance) {
+        const perf = typeof globalThis !== 'undefined' ? globalThis.performance : undefined;
+        if (perf && typeof perf.mark === 'function' && typeof perf.measure === 'function') {
+          perf.mark('chunk_end');
+          perf.measure('chunk', 'chunk_start', 'chunk_end');
+        }
+      }
+
       // Update progress
       this.setState({ loadedBlockCount: endIndex });
 
@@ -590,16 +630,42 @@ class TimedTextEditor extends React.Component {
     const format = exportFormat || 'draftjs';
     const tmpEditorState = this.updateTimestampsForEditorState();
 
-    return exportAdapter(
-      convertToRaw(tmpEditorState.getCurrentContent()),
-      format,
-      title
-    );
+    // Guard against undefined editorState
+    if (!tmpEditorState) {
+      return null;
+    }
+
+    const rawContent = convertToRaw(tmpEditorState.getCurrentContent());
+
+    if (typeof exportAdapter !== 'function') {
+      /* eslint-disable-next-line no-console */
+      console.warn('exportAdapter is unavailable, falling back to raw DraftJS payload');
+      return { data: rawContent, ext: 'json' };
+    }
+
+    try {
+      return exportAdapter(
+        rawContent,
+        format,
+        title
+      );
+    } catch (error) {
+      /* eslint-disable-next-line no-console */
+      console.error('exportAdapter failed, falling back to raw DraftJS payload', error);
+      return { data: rawContent, ext: 'json' };
+    }
   }
 
   // click on words - for navigation
 
   handleDoubleClick = event => {
+    // Ignore double-clicks in the speaker/timecode header area
+    const dblTarget = event.nativeEvent && event.nativeEvent.target;
+    if (dblTarget && typeof dblTarget.closest === 'function') {
+      const inMarkers = dblTarget.closest('.speaker-timecode-flexbox');
+      if (inMarkers) return;
+    }
+
     // nativeEvent --> React giving you the DOM event
     let element = event.nativeEvent.target;
     // find the parent in Word that contains span with time-code start attribute
@@ -613,9 +679,39 @@ class TimedTextEditor extends React.Component {
     }
   };
 
+  // Add single click handler for word clicking
+  handleWordClick = event => {
+    // Only handle single clicks, not double clicks
+    if (event.detail === 2) return; // Ignore if it's a double click
+
+    // Ignore clicks inside the speaker/timecode header area to allow editing
+    const target = event.target;
+    if (target && typeof target.closest === 'function') {
+      const inMarkers = target.closest('.speaker-timecode-flexbox');
+      if (inMarkers) return;
+    }
+
+    // nativeEvent --> React giving you to DOM event
+    let element = event.target;
+    // find parent in Word that contains span with time-code start attribute
+    while (!element.hasAttribute('data-start') && element.parentElement) {
+      element = element.parentElement;
+    }
+
+    if (element.hasAttribute('data-start')) {
+      const t = parseFloat(element.getAttribute('data-start'));
+      this.props.onWordClick(t);
+    }
+  };
+
   // originally from
   // https://github.com/draft-js-plugins/draft-js-plugins/blob/master/draft-js-counter-plugin/src/WordCounter/index.js#L12
   getWordCount = editorState => {
+    // Guard against undefined editorState
+    if (!editorState) {
+      return 0;
+    }
+
     const plainText = editorState.getCurrentContent().getPlainText('');
     const regex = /(?:\r\n|\r|\n)/g; // new line, carriage return, line feed
     const cleanString = plainText.replace(regex, ' ').trim(); // replace above characters w/ space
@@ -647,6 +743,15 @@ class TimedTextEditor extends React.Component {
     this.setState({ editorState }, () => {
       // Build word timing cache for performance
       this.cacheWordTimings(editorState);
+      const map = {};
+      const blocks = data && data.blocks ? data.blocks : [];
+      for (let i = 0; i < blocks.length; i++) {
+        const ranges = blocks[i].entityRanges || [];
+        for (let j = 0; j < ranges.length; j++) {
+          map[ranges[j].key] = i;
+        }
+      }
+      this.wordKeyToBlockIndex = map;
       this.forceRenderDecorator();
     });
   };
@@ -655,6 +760,11 @@ class TimedTextEditor extends React.Component {
   // used to re-render WrapperBlock on timecode offset change
   // or when show / hide preferences for speaker labels and timecodes change
   forceRenderDecorator = () => {
+    // Guard against undefined editorState
+    if (!this.state.editorState) {
+      return;
+    }
+
     const contentState = this.state.editorState.getCurrentContent();
     const decorator = this.state.editorState.getDecorator();
     const newState = EditorState.createWithContent(contentState, decorator);
@@ -691,13 +801,14 @@ class TimedTextEditor extends React.Component {
         const format =  this.props.autoSaveContentType;
         const title = this.props.title;
 
-        const data = exportAdapter(
-          convertToRaw(editorState.getCurrentContent()),
-          format,
-          title
-        );
+    const rawContent = convertToRaw(editorState.getCurrentContent());
+    const data = typeof exportAdapter === 'function'
+      ? exportAdapter(rawContent, format, title)
+      : { data: rawContent, ext: 'json' };
 
+      if (typeof this.props.handleAutoSaveChanges === 'function') {
         this.props.handleAutoSaveChanges(data);
+      }
       }
     );
   };
@@ -717,6 +828,7 @@ class TimedTextEditor extends React.Component {
     const tKey = 84;
 
     if (e.keyCode === enterKey) {
+      /* eslint-disable-next-line no-console */
       console.log('customKeyBindingFn');
 
       return 'split-paragraph';
@@ -766,6 +878,12 @@ class TimedTextEditor extends React.Component {
   splitParagraph = () => {
     // https://github.com/facebook/draft-js/issues/723#issuecomment-367918580
     // https://draftjs.org/docs/api-reference-selection-state#start-end-vs-anchor-focus
+
+    // Guard against undefined editorState
+    if (!this.state.editorState) {
+      return;
+    }
+
     const currentSelection = this.state.editorState.getSelection();
     // only perform if selection is not selecting a range of words
     // in that case, we'd expect delete + enter to achieve same result.
@@ -897,27 +1015,27 @@ class TimedTextEditor extends React.Component {
   getCurrentWord = () => {
     const { wordTimings } = this.state;
     const currentTime = this.props.currentTime;
-    
+
     // Early return if we're still in the same word (using instance variable, not state)
     if (
       this.lastCurrentWord.start !== 'NA' &&
-      this.lastCurrentWord.start <= currentTime &&
-      this.lastCurrentWord.end >= currentTime
+      this.lastCurrentWord.start - this.timeEpsilon <= currentTime &&
+      this.lastCurrentWord.end + this.timeEpsilon >= currentTime
     ) {
       return this.lastCurrentWord;
     }
-    
+
     // Binary search for current word - O(log n) instead of O(n)
     let left = 0;
     let right = wordTimings.length - 1;
-    let result = { start: 'NA', end: 'NA' };
-    
+  let result = { start: 'NA', end: 'NA', key: null };
+
     while (left <= right) {
       const mid = Math.floor((left + right) / 2);
       const word = wordTimings[mid];
-      
-      if (word.start <= currentTime && word.end >= currentTime) {
-        result = { start: word.start, end: word.end };
+
+      if (word.start - this.timeEpsilon <= currentTime && word.end + this.timeEpsilon >= currentTime) {
+        result = { start: word.start, end: word.end, key: word.key };
         break;
       } else if (word.start > currentTime) {
         right = mid - 1;
@@ -925,35 +1043,45 @@ class TimedTextEditor extends React.Component {
         left = mid + 1;
       }
     }
-    
+
     // Cache result in instance variable (NOT state) to avoid setState during render
     if (result.start !== 'NA') {
       this.lastCurrentWord = result;
-      
+
       // Optimized scroll-into-view with requestAnimationFrame to prevent forced reflow
       if (this.props.isScrollIntoViewOn && !this.scrollThrottle) {
         this.scrollThrottle = true;
-        
+
         // Use requestAnimationFrame for smooth, non-blocking scroll
         requestAnimationFrame(() => {
-          const currentWordElement = document.querySelector(
-            `span.Word[data-start="${result.start}"]`
-          );
-          
+          // Prefer selecting by stable entity key to avoid float string mismatches
+          let currentWordElement = null;
+          if (result.key) {
+            currentWordElement = document.querySelector(
+              `span.Word[data-entity-key="${result.key}"]`
+            );
+          }
+          // Fallback to data-start attribute if entity key not available
+          if (!currentWordElement) {
+            currentWordElement = document.querySelector(
+              `span.Word[data-start="${result.start}"]`
+            );
+          }
+
           if (currentWordElement) {
-            console.log('🎯 Attempting to scroll to word at time:', result.start);
-            
-            // TEMPORARILY DISABLED visibility check for debugging
-            // Just scroll every time to test if scrolling works at all
+            /* eslint-disable-next-line no-console */
+            console.log('🎯 Attempting to scroll to word at time:', result.start, 'key:', result.key);
+
             currentWordElement.scrollIntoView({
               block: 'center',
               inline: 'nearest',
               behavior: 'smooth'
             });
           } else {
-            console.warn('⚠️ Word element not found for time:', result.start);
+            /* eslint-disable-next-line no-console */
+            console.warn('⚠️ Word element not found for time/key:', result.start, result.key);
           }
-          
+
           // Reset throttle after a delay (max 10 scrolls per second)
           setTimeout(() => {
             this.scrollThrottle = null;
@@ -961,11 +1089,12 @@ class TimedTextEditor extends React.Component {
         });
       } else {
         if (!this.props.isScrollIntoViewOn) {
+          /* eslint-disable-next-line no-console */
           console.log('⏸️ Scroll sync is OFF');
         }
       }
     }
-    
+
     return result;
   };
 
@@ -975,14 +1104,27 @@ class TimedTextEditor extends React.Component {
    * Performance improvement: 95-97% reduction in CSS overhead
    */
   updateWordHighlighting = () => {
+    if (this.props.debugPerformance) {
+      const perf = typeof globalThis !== 'undefined' ? globalThis.performance : undefined;
+      if (perf && typeof perf.mark === 'function') {
+        perf.mark('highlight_start');
+      }
+    }
     const currentWord = this.getCurrentWord();
     const time = Math.round(this.props.currentTime * 4.0) / 4.0;
-    
+
     // Update active word highlight
     this.updateActiveWordHighlight(currentWord);
-    
+
     // Update unplayed words
     this.updateUnplayedWords(time);
+    if (this.props.debugPerformance) {
+      const perf = typeof globalThis !== 'undefined' ? globalThis.performance : undefined;
+      if (perf && typeof perf.mark === 'function' && typeof perf.measure === 'function') {
+        perf.mark('highlight_end');
+        perf.measure('highlight', 'highlight_start', 'highlight_end');
+      }
+    }
   };
 
   /**
@@ -1000,18 +1142,37 @@ class TimedTextEditor extends React.Component {
 
     // Add new highlight if we have a valid current word
     if (currentWord.start !== 'NA') {
-      const element = document.querySelector(`span.Word[data-start="${currentWord.start}"]`);
-      
+      // Prefer selecting by stable entity key to avoid float-string mismatches
+      let element = null;
+      if (currentWord.key) {
+        element = document.querySelector(`span.Word[data-entity-key="${currentWord.key}"]`);
+      }
+      if (!element) {
+        element = document.querySelector(`span.Word[data-start="${currentWord.start}"]`);
+      }
+
       if (element) {
+        console.log('updateActiveWordHighlight - element:', element);
         // Only add class if not already present (avoid unnecessary DOM mutations)
         if (!element.classList.contains('word-active')) {
           element.classList.add('word-active');
         }
         this.highlightedElements.current = element;
+        if (currentWord.key && this.wordKeyToBlockIndex) {
+          const idx = this.wordKeyToBlockIndex[currentWord.key];
+          this.currentWordBlockIndex = typeof idx === 'number' ? idx : null;
+        } else {
+          this.currentWordBlockIndex = null;
+        }
 
-        // Highlight the next sibling word as well
-        const nextSibling = element.nextElementSibling;
+        // Highlight the next sibling word as well - walk to the next element with class 'Word'
+        let nextSibling = element.nextElementSibling;
+        while (nextSibling && !nextSibling.classList.contains('Word')) {
+          nextSibling = nextSibling.nextElementSibling;
+        }
+
         if (nextSibling && nextSibling.classList.contains('Word')) {
+          console.log('updateActiveWordHighlight - nextSibling:', nextSibling);
           if (!nextSibling.classList.contains('word-active-next')) {
             nextSibling.classList.add('word-active-next');
           }
@@ -1032,19 +1193,20 @@ class TimedTextEditor extends React.Component {
    */
   updateUnplayedWords = (time) => {
     const timeFloor = Math.floor(time);
-    
+
     // Clear previous unplayed highlights
     this.highlightedElements.unplayedSet.forEach(el => {
       el.classList.remove('word-unplayed');
     });
     this.highlightedElements.unplayedSet.clear();
-    
+
     // Find and highlight unplayed words using attribute selectors
     // This matches the original behavior using data-prev-times
-    const unplayedElements = document.querySelectorAll(
+    const scopeRoot = this.highlightedElements.current ? (this.highlightedElements.current.closest('div') || document) : document;
+    const unplayedElements = scopeRoot.querySelectorAll(
       `span.Word[data-prev-times~="${timeFloor}"], span.Word[data-prev-times~="${time}"]`
     );
-    
+
     unplayedElements.forEach(el => {
       if (!el.classList.contains('word-unplayed')) {
         el.classList.add('word-unplayed');
@@ -1065,12 +1227,12 @@ class TimedTextEditor extends React.Component {
     if (this.highlightedElements.next) {
       this.highlightedElements.next.classList.remove('word-active-next');
     }
-    
+
     // Remove unplayed word highlights
     this.highlightedElements.unplayedSet.forEach(el => {
       el.classList.remove('word-unplayed');
     });
-    
+
     // Clear references
     this.highlightedElements.current = null;
     this.highlightedElements.next = null;
@@ -1082,8 +1244,17 @@ class TimedTextEditor extends React.Component {
   };
 
   render() {
+    // Guard against undefined editorState during initialization
+    if (!this.state.editorState) {
+      return (
+        <section className={style.editor}>
+          <div>Loading editor...</div>
+        </section>
+      );
+    }
+
     // console.log('render TimedTextEditor');
-    
+
     // Phase 2B: No longer needed - replaced with CSS class-based highlighting
     // const currentWord = this.getCurrentWord();
     // const highlightColour = '#69e3c2';
@@ -1094,7 +1265,7 @@ class TimedTextEditor extends React.Component {
     // Phase 3: Progressive loading indicator
     // Phase 7: Added deviceTierDescription for enhanced loading UI
     const { isInitialLoad, loadedBlockCount, totalBlocks, isProcessingWorker, workerProgress, deviceTierDescription } = this.state;
-    const loadingProgress = isInitialLoad && totalBlocks > 0 
+    const loadingProgress = isInitialLoad && totalBlocks > 0
       ? Math.round((loadedBlockCount / totalBlocks) * 100)
       : 0;
 
@@ -1102,7 +1273,7 @@ class TimedTextEditor extends React.Component {
     // Use virtual scrolling for transcripts with 100+ blocks
     // This reduces DOM nodes by 90% and improves scroll performance
     // TEMPORARILY DISABLED - needs debugging for DraftJS compatibility
-    const useVirtualScrolling = false; // totalBlocks >= 100 && !isInitialLoad;
+    const useVirtualScrolling = !isInitialLoad && totalBlocks >= 100 && !this.displayConfig.isEditable;
 
     // Use cached display config to prevent creating new objects on every render
     // This prevents unnecessary context updates and re-renders of WrapperBlock components
@@ -1110,6 +1281,7 @@ class TimedTextEditor extends React.Component {
       <section
         className={style.editor}
         onDoubleClick={this.handleDoubleClick}
+        onClick={this.handleWordClick}
         // TODO: decide if on mobile want to have a way to "click" on words
         // to play corresponding media
         // a double tap would be the ideal solution
@@ -1120,14 +1292,14 @@ class TimedTextEditor extends React.Component {
           <div className={style.loadingIndicator}>
             <div className={style.loadingSpinner}></div>
             <span className={style.loadingProgress}>
-              {workerProgress.total > 0 
+              {workerProgress.total > 0
                 ? `Converting transcript: ${workerProgress.current} / ${workerProgress.total} segments (${workerProgress.percentage}%)`
                 : 'Processing transcript in background...'
               }
             </span>
           </div>
         )}
-        
+
         {/* Phase 3: Loading progress indicator */}
         {/* Phase 7: Enhanced with device tier information */}
         {isInitialLoad && !isProcessingWorker && (
@@ -1141,7 +1313,7 @@ class TimedTextEditor extends React.Component {
             </span>
           </div>
         )}
-        
+
         {/* Phase 4: Conditional rendering - virtual scrolling vs standard editor */}
         {/* Phase 2B: Removed <style scoped> injection - now using CSS classes */}
         {/* This eliminates 8-12ms of CSS parsing overhead per frame (95-97% improvement) */}
@@ -1153,6 +1325,7 @@ class TimedTextEditor extends React.Component {
             setEditorNewContentStateSpeakersUpdate={this.setEditorNewContentStateSpeakersUpdate}
             handleAnalyticsEvents={this.props.handleAnalyticsEvents}
             displayConfig={this.displayConfig}
+            currentWordIndex={this.currentWordBlockIndex}
           />
         ) : (
           <TranscriptDisplayContext.Provider value={this.displayConfig}>

@@ -1,5 +1,4 @@
-import { jsx as _jsx } from "react/jsx-runtime";
-import { memo, useCallback } from 'react';
+import React, { memo, useCallback } from 'react';
 import styles from './index.module.css';
 const VideoPlayer = ({ mediaUrl, onTimeUpdate, videoRef, onLoadedDataGetDuration, previewIsDisplayed, previewViewWidth, }) => {
     const handlePlayMedia = useCallback(() => {
@@ -10,7 +9,7 @@ const VideoPlayer = ({ mediaUrl, onTimeUpdate, videoRef, onLoadedDataGetDuration
         }
     }, [videoRef]);
     const isDisplayed = previewIsDisplayed ? 'inline' : 'none';
-    return (_jsx("video", { id: "video", playsInline: true, src: mediaUrl || undefined, onTimeUpdate: onTimeUpdate, "data-testid": "media-player-id", onClick: handlePlayMedia, onLoadedData: onLoadedDataGetDuration, ref: videoRef, className: styles.videoEl, preload: "auto", style: {
+    return (React.createElement("video", { id: "video", playsInline: true, src: mediaUrl || undefined, onTimeUpdate: onTimeUpdate, "data-testid": "media-player-id", onClick: handlePlayMedia, onLoadedData: onLoadedDataGetDuration, ref: videoRef, className: styles.videoEl, preload: "auto", style: {
             display: isDisplayed,
         } }));
 };

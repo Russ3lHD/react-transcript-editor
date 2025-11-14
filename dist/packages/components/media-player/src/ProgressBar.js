@@ -1,4 +1,3 @@
-import { jsx as _jsx } from "react/jsx-runtime";
 import React from 'react';
 import PropTypes from 'prop-types';
 import isEqual from 'react-fast-compare';
@@ -7,7 +6,7 @@ let style;
 try {
     style = require('./ProgressBar.module.scss');
 }
-catch (error) {
+catch {
     // Fallback styles for Storybook
     style = {
         wrapper: 'progress-bar-wrapper',
@@ -22,7 +21,8 @@ class ProgressBar extends React.Component {
         this.props.buttonClick(e);
     };
     render() {
-        return (_jsx("div", { className: style.wrapper, children: _jsx("input", { type: 'range', className: style.bar, onChange: this.handleOnChange, value: this.props.value, min: '0', max: this.props.max.toString() }) }));
+        return (React.createElement("div", { className: style.wrapper },
+            React.createElement("input", { type: 'range', className: style.bar, onChange: this.handleOnChange, value: this.props.value, min: '0', max: this.props.max.toString() })));
     }
 }
 ProgressBar.propTypes = {

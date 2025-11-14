@@ -1,7 +1,7 @@
-/* eslint-disable no-console, no-undef */
+/* eslint-disable no-console */
 /**
  * WorkerManager - Handles Web Worker instantiation, messaging, and cleanup
- * 
+ *
  * Features:
  * - Promise-based API for async worker communication
  * - Fallback to synchronous processing if workers not available
@@ -104,7 +104,7 @@ class WorkerManager {
    */
   handleError(error) {
     this.pendingRequests.forEach((request) => {
-      request.reject(new Error('Worker error: ' + error.message));
+      request.reject(new Error(`Worker error: ${error.message}`));
     });
     this.pendingRequests.clear();
   }
@@ -112,7 +112,7 @@ class WorkerManager {
   /**
    * Convert STT JSON to DraftJS format
    * Uses worker if available, falls back to synchronous processing
-   * 
+   *
    * @param {Object} transcriptData - STT JSON data
    * @param {string} sttJsonType - Format type ('whisper', 'bbckaldi', etc.)
    * @param {Function} onProgress - Progress callback (optional)
@@ -123,7 +123,7 @@ class WorkerManager {
     if (this.useWorker) {
       try {
         await this.init();
-        
+
         if (this.worker) {
           return this.convertWithWorker(transcriptData, sttJsonType, onProgress);
         }

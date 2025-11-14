@@ -2,14 +2,14 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import isEqual from 'react-fast-compare';
 
-// eslint-disable-next-line no-unused-vars
+
 import Select from './Select';
 
 // Handle CSS module import with fallback for Storybook
 let style;
 try {
   style = require('./PlayerControls/index.module.scss');
-} catch (error) {
+} catch {
   // Fallback styles for Storybook
   style = {
     playBackRate: 'playback-rate'

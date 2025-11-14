@@ -5,7 +5,7 @@ import isEqual from 'react-fast-compare';
 let style;
 try {
   style = require('./index.module.scss');
-} catch (error) {
+} catch {
   // Fallback styles for Storybook
   style = {
     timeBox: 'time-box',

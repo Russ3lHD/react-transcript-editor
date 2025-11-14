@@ -2,7 +2,7 @@ export default SpeakerLabel;
 declare class SpeakerLabel extends React.PureComponent<any, any, any> {
     constructor(props: any);
     constructor(props: any, context: any);
-    render(): import("react/jsx-runtime").JSX.Element;
+    render(): React.JSX.Element;
 }
 declare namespace SpeakerLabel {
     namespace propTypes {

@@ -2,7 +2,7 @@
 import React from 'react';
 import { render, cleanup } from '@testing-library/react';
 
-// eslint-disable-next-line no-unused-vars
+
 import MediaPlayer from './index.js';
 
 afterEach(cleanup);

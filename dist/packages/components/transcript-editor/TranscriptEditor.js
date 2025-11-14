@@ -1,5 +1,4 @@
-import { jsx as _jsx, jsxs as _jsxs } from "react/jsx-runtime";
-import { useState, useEffect, useRef, useCallback, useMemo } from 'react';
+import React, { useState, useEffect, useRef, useCallback, useMemo } from 'react';
 import { secondsToTimecode } from '../../util/timecode-converter';
 import TimedTextEditor from '../timed-text-editor';
 import Settings from '../settings';
@@ -178,7 +177,7 @@ const TranscriptEditor = ({ transcriptData: initialTranscriptData, mediaUrl, med
         state.previewIsDisplayed,
         videoRef,
     ]);
-    const settings = useMemo(() => (_jsx(Settings, { showTimecodes: state.showTimecodes, showSpeakers: state.showSpeakers, timecodeOffset: state.timecodeOffset, handleShowTimecodes: handleShowTimecodes, handleShowSpeakers: handleShowSpeakers, handleSetTimecodeOffset: handleSetTimecodeOffset, handleSettingsToggle: handleSettingsToggle, handlePauseWhileTyping: handlePauseWhileTyping, handleIsScrollIntoViewChange: handleIsScrollIntoViewChange, handleRollBackValueInSeconds: handleRollBackValueInSeconds, defaultValueScrollSync: state.isScrollIntoViewOn, defaultValuePauseWhileTyping: state.isPauseWhileTypingOn, defaultRollBackValueInSeconds: state.rollBackValueInSeconds, previewIsDisplayed: state.previewIsDisplayed, handlePreviewIsDisplayed: handlePreviewIsDisplayed, handleAnalyticsEvents: handleAnalyticsEvents })), [
+    const settings = useMemo(() => (React.createElement(Settings, { showTimecodes: state.showTimecodes, showSpeakers: state.showSpeakers, timecodeOffset: state.timecodeOffset, handleShowTimecodes: handleShowTimecodes, handleShowSpeakers: handleShowSpeakers, handleSetTimecodeOffset: handleSetTimecodeOffset, handleSettingsToggle: handleSettingsToggle, handlePauseWhileTyping: handlePauseWhileTyping, handleIsScrollIntoViewChange: handleIsScrollIntoViewChange, handleRollBackValueInSeconds: handleRollBackValueInSeconds, defaultValueScrollSync: state.isScrollIntoViewOn, defaultValuePauseWhileTyping: state.isPauseWhileTypingOn, defaultRollBackValueInSeconds: state.rollBackValueInSeconds, previewIsDisplayed: state.previewIsDisplayed, handlePreviewIsDisplayed: handlePreviewIsDisplayed, handleAnalyticsEvents: handleAnalyticsEvents })), [
         state.showTimecodes,
         state.showSpeakers,
         state.timecodeOffset,
@@ -196,10 +195,13 @@ const TranscriptEditor = ({ transcriptData: initialTranscriptData, mediaUrl, med
         handlePreviewIsDisplayed,
         handleAnalyticsEvents,
     ]);
-    const shortcuts = useMemo(() => (_jsx(Shortcuts, { handleShortcutsToggle: handleShortcutsToggle })), [handleShortcutsToggle]);
-    const exportOptions = useMemo(() => (_jsx(ExportOptions, { exportOptionsList: exportOptionsList, handleExportOptionsChange: handleExportOptionsChange, handleExportToggle: handleExportToggle })), [handleExportOptionsChange, handleExportToggle]);
-    const tooltip = useMemo(() => (_jsx(HowDoesThisWork, { handleAnalyticsEvents: handleAnalyticsEvents })), [handleAnalyticsEvents]);
-    return (_jsxs("div", { className: style.transcriptEditor, style: state.gridDisplay || undefined, children: [_jsx(Header, { showSettings: state.showSettings, showShortcuts: state.showShortcuts, showExportOptions: state.showExportOptions, settings: settings, shortcuts: shortcuts, exportOptions: exportOptions, tooltip: tooltip, mediaUrl: mediaUrl, mediaControlsProps: mediaControlsProps, handleSettingsToggle: handleSettingsToggle, handleShortcutsToggle: handleShortcutsToggle, handleExportToggle: handleExportToggle }), _jsx("div", { className: style.editorContainer, children: _jsx(TimedTextEditor, { transcriptData: state.transcriptData, handleWordClick: handleWordClick, handleTimeUpdate: handleTimeUpdateCallback, handlePlayMedia: handlePlayMedia, handleIsPlaying: handleIsPlaying, isScrollIntoViewOn: state.isScrollIntoViewOn, isPauseWhileTypingOn: state.isPauseWhileTypingOn, rollBackValueInSeconds: state.rollBackValueInSeconds, timecodeOffset: state.timecodeOffset, showTimecodes: state.showTimecodes, showSpeakers: state.showSpeakers, sttJsonType: sttJsonType, fileName: fileName, spellCheck: spellCheck, autoSaveContentType: autoSaveContentType, autoSaveContent: autoSaveContent, autoSaveMethod: autoSaveMethod, autoSaveInterval: autoSaveInterval, placeholder: placeholder, title: title, handleAutoSaveChanges: handleAutoSaveChanges, handleAnalyticsEvents: handleAnalyticsEvents }) })] }));
+    const shortcuts = useMemo(() => (React.createElement(Shortcuts, { handleShortcutsToggle: handleShortcutsToggle })), [handleShortcutsToggle]);
+    const exportOptions = useMemo(() => (React.createElement(ExportOptions, { exportOptionsList: exportOptionsList, handleExportOptionsChange: handleExportOptionsChange, handleExportToggle: handleExportToggle })), [handleExportOptionsChange, handleExportToggle]);
+    const tooltip = useMemo(() => (React.createElement(HowDoesThisWork, { handleAnalyticsEvents: handleAnalyticsEvents })), [handleAnalyticsEvents]);
+    return (React.createElement("div", { className: style.transcriptEditor, style: state.gridDisplay || undefined },
+        React.createElement(Header, { showSettings: state.showSettings, showShortcuts: state.showShortcuts, showExportOptions: state.showExportOptions, settings: settings, shortcuts: shortcuts, exportOptions: exportOptions, tooltip: tooltip, mediaUrl: mediaUrl, mediaControlsProps: mediaControlsProps, handleSettingsToggle: handleSettingsToggle, handleShortcutsToggle: handleShortcutsToggle, handleExportToggle: handleExportToggle }),
+        React.createElement("div", { className: style.editorContainer },
+            React.createElement(TimedTextEditor, { transcriptData: state.transcriptData, handleWordClick: handleWordClick, handleTimeUpdate: handleTimeUpdateCallback, handlePlayMedia: handlePlayMedia, handleIsPlaying: handleIsPlaying, isScrollIntoViewOn: state.isScrollIntoViewOn, isPauseWhileTypingOn: state.isPauseWhileTypingOn, rollBackValueInSeconds: state.rollBackValueInSeconds, timecodeOffset: state.timecodeOffset, showTimecodes: state.showTimecodes, showSpeakers: state.showSpeakers, sttJsonType: sttJsonType, fileName: fileName, spellCheck: spellCheck, autoSaveContentType: autoSaveContentType, autoSaveContent: autoSaveContent, autoSaveMethod: autoSaveMethod, autoSaveInterval: autoSaveInterval, placeholder: placeholder, title: title, handleAutoSaveChanges: handleAutoSaveChanges, handleAnalyticsEvents: handleAnalyticsEvents }))));
 };
 export default TranscriptEditor;
 //# sourceMappingURL=TranscriptEditor.js.map

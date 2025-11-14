@@ -135,6 +135,28 @@ pnpm test
 pnpm run build:component
 ```
 
-## 📄 **License**
+## 📚 **Documentation:**
+
+### Getting Started
+- **[Quick Start Guide](./QUICK_START.md)** - Get up and running in 5 minutes
+- **[How to Use](./HOW_TO_USE.md)** - Comprehensive usage guide
+- **[Integration Guide](./INTEGRATION_GUIDE.md)** - How to integrate into your project
+- **[Integration Prompt](./INTEGRATION_PROMPT.md)** - Quick integration instructions
+- **[Framework Examples](./FRAMEWORK_EXAMPLES.md)** - Examples for different frameworks
+- **[Contributing](./CONTRIBUTING.md)** - How to contribute to this project
+
+### Format Support
+- **[Whisper Format Integration Guide](./WHISPER_FORMAT_INTEGRATION_GUIDE.md)** - Complete guide for Whisper JSON format (recommended)
+- **[Whisper Backend Findings](./WHISPER_BACKEND_FINDINGS.md)** - Backend integration insights
+- **[Format Comparison Analysis](./TRANSCRIPT_FORMAT_PERFORMANCE_ANALYSIS.md)** - BBC Kaldi vs Whisper comparison
+- **[STT Adapters Guide](./packages/stt-adapters/README.md)** - Supported transcript formats
+
+### Technical Details
+- **[Features List](./docs/features-list.md)** - Component capabilities
+- **[Architecture Decision Records](./docs/adr/)** - Design decisions and rationale
+- **[Implementation History](./docs/implementation-history/)** - Archive of completed enhancements
+- **[Modernization Archive](./docs/modernization-archive/)** - Component modernization details
+
+## �📄 **License**
 
 MIT - Same as the original package

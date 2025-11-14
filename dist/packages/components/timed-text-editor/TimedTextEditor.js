@@ -1,5 +1,4 @@
-import { jsx as _jsx, jsxs as _jsxs } from "react/jsx-runtime";
-import { useState, useEffect, useRef, useCallback, useMemo } from 'react';
+import React, { useState, useEffect, useRef, useCallback, useMemo } from 'react';
 import { Editor, EditorState, convertToRaw, convertFromRaw } from 'draft-js';
 import 'draft-js/dist/Draft.css';
 import CustomEditor from './CustomEditor';
@@ -61,7 +60,7 @@ const TimedTextEditor = ({ transcriptData, handleWordClick, handleTimeUpdate, ha
         handleTimeUpdate(event);
     }, [handleTimeUpdate]);
     // Memoized custom editor component
-    const customEditor = useMemo(() => (_jsx(CustomEditor, { transcriptData: transcriptData, handleWordClick: handleWordClickCallback, showTimecodes: showTimecodes, showSpeakers: showSpeakers, placeholder: placeholder, spellCheck: spellCheck, autoSaveContent: autoSaveContent, autoSaveInterval: autoSaveInterval, handleAutoSaveChanges: handleAutoSaveChanges })), [
+    const customEditor = useMemo(() => (React.createElement(CustomEditor, { transcriptData: transcriptData, handleWordClick: handleWordClickCallback, showTimecodes: showTimecodes, showSpeakers: showSpeakers, placeholder: placeholder, spellCheck: spellCheck, autoSaveContent: autoSaveContent, autoSaveInterval: autoSaveInterval, handleAutoSaveChanges: handleAutoSaveChanges })), [
         transcriptData,
         handleWordClickCallback,
         showTimecodes,
@@ -72,7 +71,12 @@ const TimedTextEditor = ({ transcriptData, handleWordClick, handleTimeUpdate, ha
         autoSaveInterval,
         handleAutoSaveChanges,
     ]);
-    return (_jsx("div", { className: style.timedTextEditor, children: _jsxs("div", { className: style.container, children: [_jsx("h3", { children: title }), _jsx("div", { className: style.editor, children: _jsx(Editor, { ref: editorRef, editorState: editorState, onChange: handleEditorChange, placeholder: placeholder, spellCheck: spellCheck }) }), customEditor] }) }));
+    return (React.createElement("div", { className: style.timedTextEditor },
+        React.createElement("div", { className: style.container },
+            React.createElement("h3", null, title),
+            React.createElement("div", { className: style.editor },
+                React.createElement(Editor, { ref: editorRef, editorState: editorState, onChange: handleEditorChange, placeholder: placeholder, spellCheck: spellCheck })),
+            customEditor)));
 };
 export default TimedTextEditor;
 //# sourceMappingURL=TimedTextEditor.js.map

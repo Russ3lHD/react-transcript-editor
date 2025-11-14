@@ -1,6 +1,6 @@
 import React from 'react';
 import {
-  // eslint-disable-next-line no-unused-vars
+
   EditorBlock,
   Modifier,
   EditorState,
@@ -9,7 +9,7 @@ import {
   convertToRaw
 } from 'draft-js';
 
-// eslint-disable-next-line no-unused-vars
+
 import SpeakerLabel from './SpeakerLabel';
 import { TranscriptDisplayContext } from './TranscriptDisplayContext.js';
 
@@ -22,7 +22,7 @@ import {
 let style;
 try {
   style = require('./WrapperBlock.module.css');
-} catch (error) {
+} catch {
   // Fallback styles for Storybook
   style = {
     WrapperBlock: 'wrapper-block',
@@ -33,17 +33,6 @@ try {
   };
 }
 
-const updateSpeakerName = (oldName, newName, state) => {
-  const contentToUpdate = convertToRaw(state);
-
-  contentToUpdate.blocks.forEach(block => {
-    if (block.data.speaker === oldName) {
-      block.data.speaker = newName;
-    }
-  });
-
-  return convertFromRaw(contentToUpdate);
-};
 
 
 class WrapperBlock extends React.Component {
@@ -55,7 +44,11 @@ class WrapperBlock extends React.Component {
 
     this.state = {
       speaker: '',
-      start: 0
+      start: 0,
+      isEditing: false,
+      tempSpeaker: '',
+      uniqueSpeakers: [],
+      actionType: null
     };
   }
 
@@ -69,6 +62,10 @@ class WrapperBlock extends React.Component {
       speaker,
       start
     });
+
+    if (typeof window !== 'undefined' && typeof window.addEventListener === 'function') {
+      window.addEventListener('rte-speaker-editing', this.onEditingEvent);
+    }
   }
   // reducing unnecessary re-renders
   shouldComponentUpdate = (nextProps, nextState, nextContext) => {
@@ -97,16 +94,20 @@ class WrapperBlock extends React.Component {
       return true;
     }
 
+    if (nextState.isEditing !== this.state.isEditing) {
+      return true;
+    }
+
     if(nextProps.block.getData().get('speaker') !== this.state.speaker){
       return true;
     }
     return false;
   };
 
-  componentDidUpdate  = (prevProps, prevState) => {
+  componentDidUpdate  = (prevProps, _prevState) => {
     // Update local state when speaker changes in block data
     const currentSpeaker = this.props.block.getData().get('speaker');
-    
+
     if(prevProps.block.getData().get('speaker') !== currentSpeaker && currentSpeaker !== this.state.speaker){
       this.setState({
         speaker: currentSpeaker
@@ -114,58 +115,136 @@ class WrapperBlock extends React.Component {
     }
   };
 
-  handleOnClickEdit = () => {
-    const oldSpeakerName = this.state.speaker;
-    const newSpeakerName = prompt('New Speaker Name?', this.state.speaker);
-    if (newSpeakerName !== '' && newSpeakerName !== null) {
-      this.setState({ speaker: newSpeakerName });
-      const isUpdateAllSpeakerInstances = confirm(`Would you like to replace all occurrences of ${oldSpeakerName} with ${newSpeakerName}?`);
+  componentWillUnmount() {
+    if (typeof window !== 'undefined' && typeof window.removeEventListener === 'function') {
+      window.removeEventListener('rte-speaker-editing', this.onEditingEvent);
+    }
+  }
 
+  onEditingEvent = (ev) => {
+    const key = ev && ev.detail ? ev.detail.key : null;
+    if (key && key !== this.props.block.getKey()) {
+      if (this.state.isEditing) {
+        this.setState({ isEditing: false, actionType: null });
+      }
+    }
+  };
+
+  getOtherSpeakers = () => {
+    const contentState = this.props.contentState;
+    const unique = new Set();
+    contentState.getBlockMap().forEach(block => {
+      unique.add(block.getData().get('speaker'));
+    });
+    return Array.from(unique).filter(Boolean).sort();
+  };
+
+  handleStartEditing = () => {
+    const uniqueSpeakers = this.getOtherSpeakers();
+    if (typeof window !== 'undefined' && typeof window.dispatchEvent === 'function') {
+      const CE = (typeof window.CustomEvent === 'function')
+        ? window.CustomEvent
+        : function(type, params) {
+            const e = document.createEvent('Event');
+            e.initEvent(type, params && params.bubbles || false, params && params.cancelable || false);
+            e.detail = params ? params.detail : undefined;
+            return e;
+          };
+      window.dispatchEvent(new CE('rte-speaker-editing', { detail: { key: this.props.block.getKey() } }));
+    }
+    this.setState({
+      isEditing: true,
+      uniqueSpeakers,
+      tempSpeaker: this.state.speaker,
+      actionType: null
+    });
+  };
+
+  handleChangeTempSpeaker = (e) => {
+    this.setState({ tempSpeaker: e.target.value });
+  };
+
+  handleKeyDown = (_e) => {
+    // scope selection handled by explicit buttons
+  };
+
+  handleSwitchSegment = (newSpeakerName) => {
+    const newName = newSpeakerName.trim();
+    if (newName && newName !== this.state.speaker) {
+      const keyForCurrentCurrentBlock = this.props.block.getKey();
+      const currentBlockSelection = SelectionState.createEmpty(keyForCurrentCurrentBlock);
+      const editorStateWithSelectedCurrentBlock = EditorState.acceptSelection(
+        this.props.blockProps.editorState,
+        currentBlockSelection
+      );
+      const currentBlockSelectionState = editorStateWithSelectedCurrentBlock.getSelection();
+      const newBlockDataWithSpeakerName = { speaker: newName };
+      const newContentState = Modifier.mergeBlockData(
+        this.props.contentState,
+        currentBlockSelectionState,
+        newBlockDataWithSpeakerName
+      );
+      this.props.blockProps.setEditorNewContentStateSpeakersUpdate(newContentState);
+      this.setState({ speaker: newName, isEditing: false, actionType: null });
       if (this.props.blockProps.handleAnalyticsEvents) {
         this.props.blockProps.handleAnalyticsEvents({
           category: 'WrapperBlock',
-          action: 'handleOnClickEdit',
+          action: 'switchSegment',
           name: 'newSpeakerName',
-          value: newSpeakerName
+          value: newName
         });
       }
-
-      if(isUpdateAllSpeakerInstances){
-        const ContentState = this.props.blockProps.editorState.getCurrentContent();
-        const contentToUpdateWithSpekaers = updateSpeakerName(oldSpeakerName, newSpeakerName, ContentState);
-        this.props.blockProps.setEditorNewContentStateSpeakersUpdate(contentToUpdateWithSpekaers);
-      }
-      else{
-        // From docs: https://draftjs.org/docs/api-reference-selection-state#keys-and-offsets
-        // selection points are tracked as key/offset pairs,
-        // where the key value is the key of the ContentBlock where the point is positioned
-        // and the offset value is the character offset within the block.
-
-        // Get key of the currentBlock
-        const keyForCurrentCurrentBlock = this.props.block.getKey();
-        // create empty selection for current block
-        // https://draftjs.org/docs/api-reference-selection-state#createempty
-        const currentBlockSelection = SelectionState.createEmpty(
-          keyForCurrentCurrentBlock
-        );
-        const editorStateWithSelectedCurrentBlock = EditorState.acceptSelection(
-          this.props.blockProps.editorState,
-          currentBlockSelection
-        );
-
-        const currentBlockSelectionState = editorStateWithSelectedCurrentBlock.getSelection();
-        const newBlockDataWithSpeakerName = { speaker: newSpeakerName };
-
-        // https://draftjs.org/docs/api-reference-modifier#mergeblockdata
-        const newContentState = Modifier.mergeBlockData(
-          this.props.contentState,
-          currentBlockSelectionState,
-          newBlockDataWithSpeakerName
-        );
-
-        this.props.blockProps.setEditorNewContentStateSpeakersUpdate(newContentState);
-      }
+    } else {
+      this.setState({ isEditing: false, actionType: null });
     }
+  };
+
+  handleRenameAll = () => {
+    const oldName = this.state.speaker;
+    const newName = this.state.tempSpeaker.trim();
+    if (!newName || newName === oldName) {
+      this.setState({ isEditing: false });
+      return;
+    }
+    const raw = convertToRaw(this.props.contentState);
+    raw.blocks.forEach(block => {
+      const data = block.data || {};
+      if (data.speaker === oldName) {
+        data.speaker = newName;
+        block.data = data;
+      }
+    });
+    const newContentState = convertFromRaw(raw);
+    this.props.blockProps.setEditorNewContentStateSpeakersUpdate(newContentState);
+    this.setState({ speaker: newName, isEditing: false });
+    if (this.props.blockProps.handleAnalyticsEvents) {
+      this.props.blockProps.handleAnalyticsEvents({
+        category: 'WrapperBlock',
+        action: 'renameAll',
+        name: 'newSpeakerName',
+        value: newName
+      });
+    }
+  };
+
+  handleOptionSelect = (e) => {
+    const value = e.target.value;
+    if (value === '__rename__') {
+      this.setState({ actionType: 'rename', tempSpeaker: this.state.speaker });
+    } else if (value === '__add__') {
+      this.setState({ actionType: 'add', tempSpeaker: '' });
+    } else {
+      this.handleSwitchSegment(value);
+    }
+  };
+
+  applySegmentScope = () => {
+    const newName = this.state.tempSpeaker;
+    this.handleSwitchSegment(newName);
+  };
+
+  applyGlobalScope = () => {
+    this.handleRenameAll();
   };
 
   handleTimecodeClick = () => {
@@ -189,13 +268,42 @@ class WrapperBlock extends React.Component {
       startTimecode += timecodeOffset;
     }
 
-    const speakerElement = (
-      <SpeakerLabel
-        name={ this.state.speaker }
-        handleOnClickEdit={ this.handleOnClickEdit }
-        isEditable={isEditable}
-      />
-    );
+    let speakerElement;
+    if (this.state.isEditing) {
+      const listId = `${this.props.block.getKey()}-speakers-select`;
+      speakerElement = (
+        <>
+          <select id={listId} defaultValue={this.state.speaker} onChange={this.handleOptionSelect}>
+            {this.state.uniqueSpeakers.map(s => (
+              <option key={s} value={s}>{s}</option>
+            ))}
+            <option value="__rename__">Rename…</option>
+            <option value="__add__">Add speaker…</option>
+          </select>
+          {this.state.actionType ? (
+            <>
+              <input
+                type="text"
+                value={this.state.tempSpeaker}
+                onChange={this.handleChangeTempSpeaker}
+                onKeyDown={this.handleKeyDown}
+                autoFocus
+              />
+              <button type="button" onClick={this.applySegmentScope}>Segment only</button>
+              <button type="button" onClick={this.applyGlobalScope}>Global</button>
+            </>
+          ) : null}
+        </>
+      );
+    } else {
+      speakerElement = (
+        <SpeakerLabel
+          name={ this.state.speaker }
+          handleOnClickEdit={ this.handleStartEditing }
+          isEditable={isEditable}
+        />
+      );
+    }
 
     const timecodeElement = (
       <span className={ style.time } onClick={ this.handleTimecodeClick }>
@@ -203,10 +311,33 @@ class WrapperBlock extends React.Component {
       </span>
     );
 
+    // Determine speaker-change related CSS classes for spacing
+    let speakerChangeClass = '';
+    try {
+      const contentState = this.props.contentState;
+      if (contentState) {
+        const prevBlock = contentState.getBlockBefore(this.props.block.getKey());
+        if (!prevBlock) {
+          // First block in document
+          speakerChangeClass = 'speaker-block first-speaker-block';
+        } else {
+          const prevSpeaker = prevBlock.getData().get('speaker');
+          const currSpeaker = this.state.speaker;
+          if (prevSpeaker !== currSpeaker) {
+            speakerChangeClass = 'speaker-block';
+          } else {
+            speakerChangeClass = 'same-speaker-segment';
+          }
+        }
+      }
+    } catch {
+      // ignore and render without extra classes
+    }
+
     return (
-      <div className={ style.WrapperBlock }>
+      <div className={ [style.WrapperBlock, speakerChangeClass].join(' ') }>
         <div
-          className={ [ style.markers, style.unselectable ].join(' ') }
+          className={ [ style.markers, 'speaker-timecode-flexbox', style.unselectable ].join(' ') }
           contentEditable={ false }
         >
           {showSpeakers ? speakerElement : ''}

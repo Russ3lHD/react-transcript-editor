@@ -2,9 +2,9 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { hotkeys } from 'react-keyboard-shortcuts';
 
-// eslint-disable-next-line no-unused-vars
+
 import PlayerControls from './src/PlayerControls';
-// eslint-disable-next-line no-unused-vars
+
 import ProgressBar from './src/ProgressBar';
 
 import returnHotKeys from './src/config/defaultHotKeys';
@@ -13,7 +13,7 @@ import returnHotKeys from './src/config/defaultHotKeys';
 let styles;
 try {
   styles = require('./index.module.scss');
-} catch (error) {
+} catch {
   // Fallback styles for Storybook
   styles = {
     topSection: 'media-player-top-section',
@@ -337,6 +337,7 @@ class MediaPlayer extends React.Component {
         }
 
         this.props.videoRef.current.requestPictureInPicture().catch(error => {
+          /* eslint-disable-next-line no-console */
           console.error('Video failed to enter Picture-in-Picture mode', error);
 
           if (this.props.handleAnalyticsEvents) {
@@ -357,6 +358,7 @@ class MediaPlayer extends React.Component {
         }
 
         document.exitPictureInPicture().catch(error => {
+          /* eslint-disable-next-line no-console */
           console.error('Video failed to leave Picture-in-Picture mode', error);
 
           if (this.props.handleAnalyticsEvents) {

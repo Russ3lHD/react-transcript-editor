@@ -1,1 +1,1 @@
-{"version":3,"file":"ProgressBar.d.ts","sourceRoot":"","sources":["../../../../../packages/components/media-player/src/ProgressBar.js"],"names":[],"mappings":";AAgBA;;;IACE,wBAAyB,cAAS,aAEhC;IAEF,iBAAkB,MAAC,UAEjB;IAEF,kDAaC;CACF;;;;;;;;;;;;;;kBAvCiB,OAAO"}
+{"version":3,"file":"ProgressBar.d.ts","sourceRoot":"","sources":["../../../../../packages/components/media-player/src/ProgressBar.js"],"names":[],"mappings":";AAgBA;;;IACE,wBAAyB,cAAS,aAEhC;IAEF,iBAAkB,MAAC,UAEjB;IAEF,4BAaC;CACF;;;;;;;;;;;;;;kBAvCiB,OAAO"}

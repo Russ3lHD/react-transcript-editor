@@ -2,7 +2,7 @@
 import React, { PureComponent } from 'react';
 import PropTypes from 'prop-types';
 
-// eslint-disable-next-line no-unused-vars
+
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faUserEdit } from '@fortawesome/free-solid-svg-icons';
 
@@ -10,11 +10,11 @@ import { faUserEdit } from '@fortawesome/free-solid-svg-icons';
 let style;
 try {
   style = require('./WrapperBlock.module.css');
-} catch (error) {
+} catch {
   // Fallback styles for Storybook
   style = {
     speaker: 'speaker-label',
-    speakerEditable: 'speaker-label-editable',
+    speakerEditable: 'speakerEditable',
     speakerNotEditable: 'speaker-label-not-editable',
     EditLabel: 'speaker-edit-label'
   };

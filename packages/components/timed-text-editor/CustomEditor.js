@@ -1,7 +1,7 @@
 import React from 'react';
 // eslint-disable-next-line no-unused-vars
 import PropTypes from 'prop-types';
-// eslint-disable-next-line no-unused-vars
+
 import { Editor } from 'draft-js';
 
 
@@ -48,6 +48,11 @@ class CustomEditor extends React.Component {
   };
 
   render() {
+    // Guard against undefined editorState
+    if (!this.props.editorState) {
+      return <div>Loading editor state...</div>;
+    }
+
     return (
       <Editor
         editorState={this.props.editorState}

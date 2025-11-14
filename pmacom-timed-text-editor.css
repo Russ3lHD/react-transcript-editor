@@ -41,46 +41,38 @@ https://github.com/facebook/draft-js/issues/528
 .index-module__editor___PYFqL .word-active {
   background-color: #69e3c2;
   text-shadow: 0 0 0.01px black;
-  transition: background-color 140ms ease, transform 120ms ease;
-  transform: translateY(-1px);
-  will-change: background-color, transform;
+  transition: background-color 0.1s ease;
 }
 
 /* Global fallback for word-active (works even if .editor class is not found) */
 .word-active {
   background-color: #69e3c2 !important;
   text-shadow: 0 0 0.01px black;
-  transition: background-color 140ms ease, transform 120ms ease;
-  transform: translateY(-1px);
-  will-change: background-color, transform;
+  transition: background-color 0.1s ease;
 }
 
 /* Sibling highlight - applied to word following active word */
 .index-module__editor___PYFqL .word-active-next {
   background-color: #69e3c2;
-  transition: background-color 140ms ease, transform 120ms ease;
-  transform: translateY(-0.5px);
-  will-change: background-color, transform;
+  transition: background-color 0.1s ease;
 }
 
 /* Global fallback for word-active-next */
 .word-active-next {
   background-color: #69e3c2 !important;
-  transition: background-color 140ms ease, transform 120ms ease;
-  transform: translateY(-0.5px);
-  will-change: background-color, transform;
+  transition: background-color 0.1s ease;
 }
 
 /* Unplayed words - words that haven't been reached yet */
 .index-module__editor___PYFqL .word-unplayed {
   color: #767676;
-  transition: color 150ms ease;
+  transition: color 0.15s ease;
 }
 
 /* Global fallback for word-unplayed */
 .word-unplayed {
   color: #767676 !important;
-  transition: color 150ms ease;
+  transition: color 0.15s ease;
 }
 
 /* ===================================================
@@ -175,20 +167,22 @@ to get text out of component with timecodes and speaker names in the interim */
 /* Desktop size */
 @media (min-width: 768px) {
 
-  /* Top row: speaker (left) and timecode (right). Text sits below spanning full width. */
   .WrapperBlock-module__markers___LciWo {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    width: 100%;
+    display: grid;
+    grid-template-columns: 2fr 1fr;
   }
 
   .WrapperBlock-module__WrapperBlock___jR_wN {
     margin-bottom: 1em;
     overflow: hidden;
-    display: flex;
-    flex-direction: column;
-    width: 100%;
+    display: grid;
+    grid-template-columns: [col-speaker] minmax(200px, 18%) [col-text] minmax(
+      50%,
+      81%
+    );
+    grid-column-gap: 1%;
+    justify-content: center;
+    align-content: center;
   }
 
   .WrapperBlock-module__speaker____MOrB {
@@ -205,9 +199,8 @@ to get text out of component with timecodes and speaker names in the interim */
 
   .WrapperBlock-module__text___j2DGQ {
     font-size: 1em;
-    /* Text should appear in its own row under the speaker/timecode */
-    width: 100%;
-    box-sizing: border-box;
+    float: right;
+    clear: right;
   }
 }
 

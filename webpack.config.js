@@ -44,6 +44,24 @@ module.exports = {
       commonjs2: 'react-dom',
       amd: 'ReactDOM',
       root: 'ReactDOM'
+    },
+    'react-dom/client': {
+      commonjs: 'react-dom/client',
+      commonjs2: 'react-dom/client',
+      amd: 'react-dom/client',
+      root: ['ReactDOM', 'client']
+    },
+    'react/jsx-runtime': {
+      commonjs: 'react/jsx-runtime',
+      commonjs2: 'react/jsx-runtime',
+      amd: 'react/jsx-runtime',
+      root: ['React', 'jsxRuntime']
+    },
+    'react/jsx-dev-runtime': {
+      commonjs: 'react/jsx-dev-runtime',
+      commonjs2: 'react/jsx-dev-runtime',
+      amd: 'react/jsx-dev-runtime',
+      root: ['React', 'jsxDevRuntime']
     }
   },
   resolve: {
@@ -63,7 +81,7 @@ module.exports = {
                   browsers: ['>0.2%', 'not dead', 'not ie <= 11', 'not op_mini all']
                 }
               }],
-              '@babel/preset-react',
+              ['@babel/preset-react', { runtime: 'classic' }],
               '@babel/preset-typescript'
             ],
             plugins: [
@@ -124,14 +142,12 @@ module.exports = {
     })
   ],
   resolve: {
-    extensions: ['.js', '.jsx'],
+    extensions: ['.ts', '.tsx', '.js', '.jsx'],
     fallback: {
       // Polyfills for Node.js core modules (required for webpack 5)
-      // These are needed by the difflib package
       assert: require.resolve('assert/'),
       buffer: require.resolve('buffer/'),
       process: require.resolve('process/browser.js'),
-      // Add other polyfills as needed
       util: false,
       stream: false,
       path: false,

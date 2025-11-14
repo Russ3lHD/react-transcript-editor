@@ -55,6 +55,7 @@ const sttJsonAdapter = (transcriptData, sttJsonType) => {
 
   default:
     // code block
+    /* eslint-disable-next-line no-console */
     console.error('Did not recognize the stt engine.');
   }
 };

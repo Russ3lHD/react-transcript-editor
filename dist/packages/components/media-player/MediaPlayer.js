@@ -1,5 +1,4 @@
-import { jsx as _jsx, jsxs as _jsxs } from "react/jsx-runtime";
-import { useState, useEffect, useCallback, useMemo } from 'react';
+import React, { useState, useEffect, useCallback, useMemo } from 'react';
 import PlayerControls from './src/PlayerControls';
 import ProgressBar from './src/ProgressBar';
 import styles from './index.module.scss';
@@ -173,7 +172,7 @@ const MediaPlayer = ({ mediaUrl, currentTime, mediaDuration, videoRef, handleTim
         return video ? parseInt(video.currentTime.toString()) : 0;
     }, [videoRef]);
     // Memoized components
-    const playerControls = useMemo(() => (_jsx(PlayerControls, { isPlaying: state.isPlaying, currentTime: currentTime, mediaDuration: mediaDuration, playbackRate: state.playbackRate, playbackRateOptions: state.playbackRateOptions, isMute: state.isMute, onPlayPause: togglePlayMedia, onSkipForward: skipForward, onSkipBackward: skipBackward, onPlaybackRateChange: setPlayBackRate, onMuteToggle: handleMuteVolume, onPictureInPicture: handlePictureInPicture, onProgressBarClick: handleProgressBarClick, onRollBack: rollBack, onSetCurrentTime: promptSetCurrentTime, rollBackValueInSeconds: state.rollBackValueInSeconds, handleAnalyticsEvents: handleAnalyticsEvents })), [
+    const playerControls = useMemo(() => (React.createElement(PlayerControls, { isPlaying: state.isPlaying, currentTime: currentTime, mediaDuration: mediaDuration, playbackRate: state.playbackRate, playbackRateOptions: state.playbackRateOptions, isMute: state.isMute, onPlayPause: togglePlayMedia, onSkipForward: skipForward, onSkipBackward: skipBackward, onPlaybackRateChange: setPlayBackRate, onMuteToggle: handleMuteVolume, onPictureInPicture: handlePictureInPicture, onProgressBarClick: handleProgressBarClick, onRollBack: rollBack, onSetCurrentTime: promptSetCurrentTime, rollBackValueInSeconds: state.rollBackValueInSeconds, handleAnalyticsEvents: handleAnalyticsEvents })), [
         state.isPlaying,
         currentTime,
         mediaDuration,
@@ -192,8 +191,11 @@ const MediaPlayer = ({ mediaUrl, currentTime, mediaDuration, videoRef, handleTim
         promptSetCurrentTime,
         handleAnalyticsEvents,
     ]);
-    const progressBar = useMemo(() => (_jsx(ProgressBar, { currentTime: getProgressBarValue(), duration: getProgressBarMax(), onProgressBarClick: handleProgressBarClick })), [getProgressBarValue, getProgressBarMax, handleProgressBarClick]);
-    return (_jsxs("div", { className: styles.mediaPlayer, children: [_jsx("video", { ref: videoRef, className: styles.video, src: mediaUrl || undefined, onTimeUpdate: handleTimeUpdate, onLoadedData: onLoadedDataGetDuration, muted: state.isMute }), playerControls, progressBar] }));
+    const progressBar = useMemo(() => (React.createElement(ProgressBar, { currentTime: getProgressBarValue(), duration: getProgressBarMax(), onProgressBarClick: handleProgressBarClick })), [getProgressBarValue, getProgressBarMax, handleProgressBarClick]);
+    return (React.createElement("div", { className: styles.mediaPlayer },
+        React.createElement("video", { ref: videoRef, className: styles.video, src: mediaUrl || undefined, onTimeUpdate: handleTimeUpdate, onLoadedData: onLoadedDataGetDuration, muted: state.isMute }),
+        playerControls,
+        progressBar));
 };
 export default MediaPlayer;
 //# sourceMappingURL=MediaPlayer.js.map

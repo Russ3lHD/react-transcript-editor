@@ -15,7 +15,7 @@ declare class CustomEditor extends React.Component<any, any, any> {
     };
     shouldComponentUpdate(nextProps: any): boolean;
     handleOnChange: (e: any) => void;
-    render(): import("react/jsx-runtime").JSX.Element;
+    render(): React.JSX.Element;
 }
 import React from 'react';
 import WrapperBlock from './WrapperBlock';

@@ -1,17 +1,18 @@
-import React, { useRef, useCallback, useEffect, useMemo } from 'react';
+import React from 'react';
 import PropTypes from 'prop-types';
 import { List, useDynamicRowHeight } from 'react-window';
 import AutoSizer from 'react-virtualized-auto-sizer';
-import { EditorBlock, convertToRaw } from 'draft-js';
 
 import WrapperBlock from './WrapperBlock';
 import { TranscriptDisplayContext } from './TranscriptDisplayContext.js';
+
+const { useRef, useCallback, useEffect, useMemo } = React;
 
 // Handle CSS module import with fallback for Storybook
 let style;
 try {
   style = require('./index.module.css');
-} catch (error) {
+} catch {
   // Fallback styles for Storybook
   style = {
     virtualizedContainer: 'virtualized-container',
@@ -21,19 +22,19 @@ try {
 
 /**
  * VirtualizedEditor Component
- * 
+ *
  * Implements virtual scrolling for large transcripts (100+ blocks) to dramatically
  * improve performance by only rendering visible blocks.
- * 
+ *
  * IMPORTANT: This component is optimized for read-only/playback scenarios.
  * For active editing, the parent component should switch back to the standard CustomEditor.
- * 
+ *
  * Performance Benefits:
  * - Reduces DOM nodes by 90% (200 blocks → 15-20 visible)
  * - Improves scroll FPS to consistent 60 FPS
  * - Reduces memory usage by 60%
  * - Scales to 1000+ block transcripts without degradation
- * 
+ *
  * @param {Object} props - Component props
  * @param {EditorState} props.editorState - DraftJS editor state
  * @param {Function} props.onChange - Editor change handler (for compatibility, not actively used)
@@ -45,13 +46,15 @@ try {
  */
 const VirtualizedEditor = ({
   editorState,
-  onChange,
+  onChange: _onChange,
   onWordClick,
   setEditorNewContentStateSpeakersUpdate,
   handleAnalyticsEvents,
   displayConfig,
   currentWordIndex
 }) => {
+  // Preserve API compatibility without triggering lint errors
+  void _onChange;
   const listRef = useRef(null);
   const blockRefs = useRef({});
 
@@ -61,25 +64,28 @@ const VirtualizedEditor = ({
     defaultRowHeight: 80
   });
 
-  // Get content blocks from editor state
-  const contentState = editorState.getCurrentContent();
-  const blocks = useMemo(() => contentState.getBlocksAsArray(), [contentState]);
+  // Get content blocks from editor state - with null safety
+  const contentState = editorState ? editorState.getCurrentContent() : null;
+  const blocks = useMemo(() => {
+    if (!contentState) return [];
+    return contentState.getBlocksAsArray();
+  }, [contentState]);
   const blockCount = blocks.length;
 
   /**
    * Measure and cache actual block height after render
    * This is called via ref callback on each block element
-   * 
+   *
    * @param {number} index - Block index
    * @param {HTMLElement} element - Block DOM element
    */
   const setBlockRef = useCallback((index, element) => {
     if (element && dynamicRowHeight) {
       blockRefs.current[index] = element;
-      
+
       // Measure actual height
       const height = element.getBoundingClientRect().height;
-      
+
       // Update the dynamic row height cache
       dynamicRowHeight.setRowHeight(index, height);
     }
@@ -124,19 +130,19 @@ const VirtualizedEditor = ({
   /**
    * Render a single virtualized block row
    * This is called by react-window for each visible block
-   * 
+   *
    * @param {Object} params - Row render parameters from react-window
    * @param {number} params.index - Block index
    * @param {Object} params.style - Positioning styles from react-window
    * @returns {JSX.Element} Rendered block
    */
-  const BlockRow = useCallback(({ index, style: rowStyle, rowProps }) => {
+  const BlockRow = useCallback(({ index, style: rowStyle }) => {
     const block = blocks[index];
-    
-    if (!block) {
+
+    if (!block || !editorState || !contentState) {
       return <div style={rowStyle} />;
     }
-    
+
     // Create block props that match what CustomEditor provides to WrapperBlock
     const blockProps = {
       editorState,
@@ -173,6 +179,11 @@ const VirtualizedEditor = ({
     handleAnalyticsEvents,
     setBlockRef
   ]);
+
+  // Guard against undefined editorState - return loading state if not ready
+  if (!editorState || !contentState) {
+    return <div className={style.virtualizedContainer}>Loading editor...</div>;
+  }
 
   return (
     <TranscriptDisplayContext.Provider value={displayConfig}>

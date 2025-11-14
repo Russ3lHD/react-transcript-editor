@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { faWindowClose } from '@fortawesome/free-solid-svg-icons';
-// eslint-disable-next-line no-unused-vars
+
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
 import returnHotKeys from './hot-keys';
@@ -10,7 +10,7 @@ import returnHotKeys from './hot-keys';
 let style;
 try {
   style = require('./index.module.css');
-} catch (error) {
+} catch {
   // Fallback styles for Storybook
   style = {
     shortcuts: 'keyboard-shortcuts',

@@ -1,18 +1,18 @@
 /**
  * DeviceCapabilityDetector - Detects device performance tier for optimal loading
- * 
+ *
  * Phase 7: Dynamic Chunk Sizing Implementation
- * 
+ *
  * Detects device capabilities (CPU cores, RAM, network speed) and categorizes
  * devices into performance tiers to optimize progressive loading chunk sizes.
- * 
+ *
  * Features:
  * - Detects CPU cores via navigator.hardwareConcurrency
  * - Detects RAM via navigator.deviceMemory
  * - Detects network speed via navigator.connection
  * - Graceful fallback for unsupported browsers
  * - Singleton pattern for performance
- * 
+ *
  * @module DeviceCapabilityDetector
  */
 
@@ -100,8 +100,8 @@ class DeviceCapabilityDetector {
    */
   getConnectionSpeed() {
     try {
-      if (typeof navigator !== 'undefined' && 
-          navigator.connection && 
+      if (typeof navigator !== 'undefined' &&
+          navigator.connection &&
           navigator.connection.effectiveType) {
         return navigator.connection.effectiveType;
       }
@@ -124,7 +124,7 @@ class DeviceCapabilityDetector {
     // 3-4 cores: Mid-range (40-60)
     // 5-8 cores: Good (60-80)
     // 9+ cores: High-end (80-100)
-    
+
     if (cores <= 2) return Math.min(cores * 20, 40);
     if (cores <= 4) return 40 + ((cores - 2) * 10);
     if (cores <= 8) return 60 + ((cores - 4) * 5);
@@ -142,7 +142,7 @@ class DeviceCapabilityDetector {
     // 2-4 GB: Mid-range (30-60)
     // 4-8 GB: Good (60-80)
     // 8+ GB: High-end (80-100)
-    
+
     if (memoryGB < 2) return Math.min(memoryGB * 15, 30);
     if (memoryGB < 4) return 30 + ((memoryGB - 2) * 15);
     if (memoryGB < 8) return 60 + ((memoryGB - 4) * 5);
@@ -178,7 +178,7 @@ class DeviceCapabilityDetector {
     const memoryScore = this.calculateMemoryScore(memoryGB);
     const networkScore = this.calculateNetworkScore(connectionType);
 
-    const totalScore = 
+    const totalScore =
       (cpuScore * SCORING_WEIGHTS.CPU) +
       (memoryScore * SCORING_WEIGHTS.MEMORY) +
       (networkScore * SCORING_WEIGHTS.NETWORK);

@@ -13,7 +13,26 @@ import {
   localSave
 } from "./local-storage.js";
 
-import DEMO_TRANSCRIPT from "./sample-data/KateDarling-bbcKaldiTranscriptWithSpeakerSegments.json";
+const DEMO_TRANSCRIPT = {
+  "retval": {
+    "words": [
+      {"word": "Sample", "start": 0, "end": 1, "conf": 1},
+      {"word": "transcript", "start": 1, "end": 2, "conf": 1},
+      {"word": "with", "start": 2, "end": 3, "conf": 1},
+      {"word": "speakers.", "start": 3, "end": 4, "conf": 1}
+    ],
+    "segmentation": {
+      "segments": [
+        {
+          "@type": "Segment",
+          "start": 0,
+          "duration": 4,
+          "speaker": {"@id": "S0", "gender": "F"}
+        }
+      ]
+    }
+  }
+};
 const DEMO_MEDIA_URL =
   "https://download.ted.com/talks/KateDarling_2018S-950k.mp4";
 const DEMO_TITLE =

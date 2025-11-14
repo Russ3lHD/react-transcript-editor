@@ -1,8 +1,8 @@
-/* eslint-disable no-restricted-globals, no-undef */
+/* eslint-disable no-undef */
 /**
  * Web Worker for STT JSON to DraftJS conversion
  * Offloads CPU-intensive transcript processing to background thread
- * 
+ *
  * Performance Impact:
  * - Keeps UI thread responsive during processing
  * - Enables progress reporting for large transcripts
@@ -199,12 +199,12 @@ const whisperToDraft = (whisperJson, onProgress) => {
   const mergedBlocks = [];
   for (let i = 0; i < blocks.length; i++) {
     const currentBlock = blocks[i];
-    
+
     if (mergedBlocks.length === 0 || mergedBlocks[mergedBlocks.length - 1].data.speaker !== currentBlock.data.speaker) {
       mergedBlocks.push(currentBlock);
     } else {
       const previousBlock = mergedBlocks[mergedBlocks.length - 1];
-      previousBlock.text = previousBlock.text + ' ' + currentBlock.text;
+      previousBlock.text = `${previousBlock.text} ${currentBlock.text}`;
       previousBlock.data.words = [...previousBlock.data.words, ...currentBlock.data.words];
       previousBlock.entityRanges = generateEntitiesRanges(previousBlock.data.words, 'punct');
     }
@@ -224,7 +224,7 @@ const bbcKaldiToDraft = (bbcKaldiJson, onProgress) => {
 
   const words = bbcKaldiJson.words;
   const totalWords = words.length;
-  
+
   // Group words by paragraph/speaker
   const paragraphs = [];
   let currentParagraph = { words: [], speaker: null };
@@ -240,12 +240,12 @@ const bbcKaldiToDraft = (bbcKaldiJson, onProgress) => {
     }
 
     const speaker = word.speaker || 'Unknown';
-    
+
     if (currentParagraph.speaker !== speaker && currentParagraph.words.length > 0) {
       paragraphs.push(currentParagraph);
       currentParagraph = { words: [], speaker };
     }
-    
+
     currentParagraph.speaker = speaker;
     currentParagraph.words.push({
       start: word.start,
@@ -297,15 +297,15 @@ const processTranscript = (transcriptData, sttJsonType, onProgress) => {
     case 'whisper':
       blocks = whisperToDraft(transcriptData, onProgress);
       break;
-    
+
     case 'bbckaldi':
       blocks = bbcKaldiToDraft(transcriptData, onProgress);
       break;
-    
+
     case 'draftjs':
       // Already in DraftJS format
       return transcriptData;
-    
+
     default:
       throw new Error(`Unsupported STT format: ${sttJsonType}`);
   }

@@ -49,7 +49,13 @@ export default [
         alert: 'readonly',
         prompt: 'readonly',
         confirm: 'readonly',
-        Blob: 'readonly'
+        fetch: 'readonly',
+        navigator: 'readonly',
+        requestAnimationFrame: 'readonly',
+        requestIdleCallback: 'readonly',
+        cancelAnimationFrame: 'readonly',
+        cancelIdleCallback: 'readonly',
+        jest: 'readonly'
       }
     },
     plugins: {
@@ -72,7 +78,8 @@ export default [
       'comma-dangle': ['error', 'never'],
       'indent': 'off',
       'no-trailing-spaces': 'error',
-      'eol-last': 'error'
+      'eol-last': 'error',
+      'react/jsx-uses-vars': 'error'
     },
     settings: {
       react: {
@@ -82,6 +89,11 @@ export default [
   },
   {
     ignores: [
+      'dist/**',
+      'build/**',
+      'demo/**',
+      '.storybook/**',
+      'packages/**/example-usage.js',
       'node_modules/**',
       'dist/**',
       'build/**',

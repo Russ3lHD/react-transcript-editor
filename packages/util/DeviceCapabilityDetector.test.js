@@ -3,9 +3,9 @@
  * Phase 7: Dynamic Chunk Sizing Implementation
  */
 
-import DeviceCapabilityDetector, { 
-  getDeviceCapabilityDetector, 
-  DEVICE_TIERS 
+import DeviceCapabilityDetector, {
+  getDeviceCapabilityDetector,
+  DEVICE_TIERS
 } from './DeviceCapabilityDetector.js';
 
 describe('DeviceCapabilityDetector', () => {
@@ -20,21 +20,21 @@ describe('DeviceCapabilityDetector', () => {
     it('should detect CPU cores from navigator.hardwareConcurrency', () => {
       const mockCores = 8;
       global.navigator = { hardwareConcurrency: mockCores };
-      
+
       const cores = detector.getCPUCores();
       expect(cores).toBe(mockCores);
     });
 
     it('should fallback to 4 cores when API not available', () => {
       global.navigator = {};
-      
+
       const cores = detector.getCPUCores();
       expect(cores).toBe(4);
     });
 
     it('should handle navigator being undefined', () => {
       global.navigator = undefined;
-      
+
       const cores = detector.getCPUCores();
       expect(cores).toBe(4);
     });
@@ -44,14 +44,14 @@ describe('DeviceCapabilityDetector', () => {
     it('should detect device memory from navigator.deviceMemory', () => {
       const mockMemory = 8;
       global.navigator = { deviceMemory: mockMemory };
-      
+
       const memory = detector.getDeviceMemory();
       expect(memory).toBe(mockMemory);
     });
 
     it('should fallback to 4 GB when API not available', () => {
       global.navigator = {};
-      
+
       const memory = detector.getDeviceMemory();
       expect(memory).toBe(4);
     });
@@ -62,7 +62,7 @@ describe('DeviceCapabilityDetector', () => {
       global.navigator = {
         connection: { effectiveType: '4g' }
       };
-      
+
       const connection = detector.getConnectionSpeed();
       expect(connection).toBe('4g');
     });
@@ -71,14 +71,14 @@ describe('DeviceCapabilityDetector', () => {
       global.navigator = {
         connection: { effectiveType: '3g' }
       };
-      
+
       const connection = detector.getConnectionSpeed();
       expect(connection).toBe('3g');
     });
 
     it('should fallback to 4g when API not available', () => {
       global.navigator = {};
-      
+
       const connection = detector.getConnectionSpeed();
       expect(connection).toBe('4g');
     });
@@ -204,7 +204,7 @@ describe('DeviceCapabilityDetector', () => {
       };
 
       const tier = detector.detectDeviceTier();
-      
+
       expect(tier.name).toBe('HIGH_END');
       expect(tier.chunkSize).toBe(100);
       expect(tier.capabilities.cores).toBe(16);
@@ -219,7 +219,7 @@ describe('DeviceCapabilityDetector', () => {
       };
 
       const tier = detector.detectDeviceTier();
-      
+
       expect(tier.name).toBe('MID_RANGE');
       expect(tier.chunkSize).toBe(50);
     });
@@ -232,7 +232,7 @@ describe('DeviceCapabilityDetector', () => {
       };
 
       const tier = detector.detectDeviceTier();
-      
+
       expect(tier.name).toBe('LOW_END');
       expect(tier.chunkSize).toBe(25);
       expect(tier.threshold).toBe(75);
@@ -248,11 +248,11 @@ describe('DeviceCapabilityDetector', () => {
       };
 
       const tier1 = detector.detectDeviceTier();
-      
+
       // Change navigator (should still return cached result)
       global.navigator.hardwareConcurrency = 2;
       const tier2 = detector.detectDeviceTier();
-      
+
       expect(tier1).toBe(tier2);
       expect(tier2.capabilities.cores).toBe(8); // Original value
     });
@@ -266,7 +266,7 @@ describe('DeviceCapabilityDetector', () => {
 
       detector.detectDeviceTier();
       expect(detector.cachedTier).toBeTruthy();
-      
+
       detector.clearCache();
       expect(detector.cachedTier).toBeNull();
     });
@@ -275,7 +275,7 @@ describe('DeviceCapabilityDetector', () => {
   describe('Tier Override', () => {
     it('should allow tier override for testing', () => {
       detector.setTierOverride('LOW_END');
-      
+
       const tier = detector.getTier();
       expect(tier.name).toBe('LOW_END');
       expect(tier.overridden).toBe(true);
@@ -283,9 +283,9 @@ describe('DeviceCapabilityDetector', () => {
 
     it('should handle invalid tier override', () => {
       const consoleError = jest.spyOn(console, 'error').mockImplementation();
-      
+
       detector.setTierOverride('INVALID_TIER');
-      
+
       expect(consoleError).toHaveBeenCalled();
       consoleError.mockRestore();
     });
@@ -295,7 +295,7 @@ describe('DeviceCapabilityDetector', () => {
     it('should return same instance', () => {
       const instance1 = getDeviceCapabilityDetector();
       const instance2 = getDeviceCapabilityDetector();
-      
+
       expect(instance1).toBe(instance2);
     });
 
@@ -308,10 +308,10 @@ describe('DeviceCapabilityDetector', () => {
 
       const instance1 = getDeviceCapabilityDetector();
       const tier1 = instance1.detectDeviceTier();
-      
+
       const instance2 = getDeviceCapabilityDetector();
       const tier2 = instance2.getTier();
-      
+
       expect(tier1).toBe(tier2);
     });
   });
@@ -329,7 +329,7 @@ describe('DeviceCapabilityDetector', () => {
 
     it('should handle missing connection object', () => {
       global.navigator = { connection: null };
-      
+
       const connection = detector.getConnectionSpeed();
       expect(connection).toBe('4g'); // Fallback
     });
@@ -341,7 +341,7 @@ describe('DeviceCapabilityDetector', () => {
       };
 
       const tier = detector.detectDeviceTier();
-      
+
       expect(tier).toBeTruthy();
       expect(tier.capabilities.cores).toBe(8);
       expect(tier.capabilities.memoryGB).toBe(4); // Fallback

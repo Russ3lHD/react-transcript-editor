@@ -12,7 +12,7 @@ const asNumber = value => {
 const normaliseWords = (segment, segmentIndex) => {
   if (Array.isArray(segment.words) && segment.words.length > 0) {
     return segment.words
-      .map((word, index) => {
+      .map((word, _index) => {
         const rawText = (word.word ?? word.text ?? '').toString().trim();
         if (!rawText) {
           return null;
@@ -121,14 +121,14 @@ const whisperToDraft = whisperJson => {
   const mergedBlocks = [];
   for (let i = 0; i < blocks.length; i++) {
     const currentBlock = blocks[i];
-    
+
     // If this is the first block or speaker changed, add it
     if (mergedBlocks.length === 0 || mergedBlocks[mergedBlocks.length - 1].data.speaker !== currentBlock.data.speaker) {
       mergedBlocks.push(currentBlock);
     } else {
       // Same speaker as previous block - merge them
       const previousBlock = mergedBlocks[mergedBlocks.length - 1];
-      previousBlock.text = previousBlock.text + ' ' + currentBlock.text;
+      previousBlock.text = `${previousBlock.text} ${currentBlock.text}`;
       previousBlock.data.words = [...previousBlock.data.words, ...currentBlock.data.words];
       previousBlock.entityRanges = generateEntitiesRanges(previousBlock.data.words, 'punct');
     }

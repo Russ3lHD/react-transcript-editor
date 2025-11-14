@@ -1,12 +1,36 @@
-import { jsx as _jsx, jsxs as _jsxs } from "react/jsx-runtime";
-import { memo } from 'react';
+import React, { memo } from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faWindowClose } from '@fortawesome/free-solid-svg-icons';
 import Toggle from './Toggle/';
 import TimecodeOffset from './TimecodeOffset';
 import style from './index.module.css';
 const Settings = ({ showTimecodes, showSpeakers, timecodeOffset, handleShowTimecodes, handleShowSpeakers, handleSetTimecodeOffset, handleSettingsToggle, handlePauseWhileTyping, handleIsScrollIntoViewChange, handleRollBackValueInSeconds, defaultValueScrollSync, defaultValuePauseWhileTyping, defaultRollBackValueInSeconds, previewIsDisplayed, handlePreviewIsDisplayed, handleAnalyticsEvents, }) => {
-    return (_jsxs("div", { className: style.settings, children: [_jsx("h2", { className: style.header, children: "Settings Panel" }), _jsx("div", { className: style.closeButton, onClick: handleSettingsToggle, children: _jsx(FontAwesomeIcon, { icon: faWindowClose }) }), _jsxs("div", { className: style.controlsContainer, children: [_jsxs("section", { className: style.settingElement, children: [_jsx("div", { className: style.label, children: "Pause While Typing" }), _jsx(Toggle, { defaultValue: defaultValuePauseWhileTyping, label: "Pause while typing", handleToggle: handlePauseWhileTyping })] }), _jsxs("section", { className: style.settingElement, children: [_jsx("div", { className: style.label, children: "Scroll Sync" }), _jsx(Toggle, { defaultValue: defaultValueScrollSync, label: "ScrollSync", handleToggle: handleIsScrollIntoViewChange })] }), _jsxs("section", { className: style.settingElement, children: [_jsx("div", { className: style.label, children: "Rollback Interval (sec)" }), _jsx("input", { className: style.rollbackValue, type: "number", step: "1", max: "60", min: "1", value: defaultRollBackValueInSeconds, onChange: handleRollBackValueInSeconds, name: "lname" })] }), _jsxs("section", { className: style.settingElement, children: [_jsx("div", { className: style.label, children: "Show Timecodes" }), _jsx(Toggle, { defaultValue: showTimecodes, label: "Hide Timecodes", handleToggle: handleShowTimecodes })] }), _jsxs("section", { className: style.settingElement, children: [_jsx("div", { className: style.label, children: "Show Speaker Labels" }), _jsx(Toggle, { defaultValue: showSpeakers, label: "Hide Speaker Labels", handleToggle: handleShowSpeakers })] }), _jsxs("section", { className: style.settingElement, children: [_jsx("div", { className: style.label, children: "Display Preview" }), _jsx(Toggle, { defaultValue: previewIsDisplayed, label: "Display Preview", handleToggle: handlePreviewIsDisplayed })] }), _jsxs("section", { className: style.settingElement, children: [_jsx("div", { className: style.timecodeLabel, children: "Timecode Offset \u2139" }), _jsx(TimecodeOffset, { timecodeOffset: timecodeOffset, handleSetTimecodeOffset: handleSetTimecodeOffset, handleAnalyticsEvents: handleAnalyticsEvents })] })] })] }));
+    return (React.createElement("div", { className: style.settings },
+        React.createElement("h2", { className: style.header }, "Settings Panel"),
+        React.createElement("div", { className: style.closeButton, onClick: handleSettingsToggle },
+            React.createElement(FontAwesomeIcon, { icon: faWindowClose })),
+        React.createElement("div", { className: style.controlsContainer },
+            React.createElement("section", { className: style.settingElement },
+                React.createElement("div", { className: style.label }, "Pause While Typing"),
+                React.createElement(Toggle, { defaultValue: defaultValuePauseWhileTyping, label: "Pause while typing", handleToggle: handlePauseWhileTyping })),
+            React.createElement("section", { className: style.settingElement },
+                React.createElement("div", { className: style.label }, "Scroll Sync"),
+                React.createElement(Toggle, { defaultValue: defaultValueScrollSync, label: "ScrollSync", handleToggle: handleIsScrollIntoViewChange })),
+            React.createElement("section", { className: style.settingElement },
+                React.createElement("div", { className: style.label }, "Rollback Interval (sec)"),
+                React.createElement("input", { className: style.rollbackValue, type: "number", step: "1", max: "60", min: "1", value: defaultRollBackValueInSeconds, onChange: handleRollBackValueInSeconds, name: "lname" })),
+            React.createElement("section", { className: style.settingElement },
+                React.createElement("div", { className: style.label }, "Show Timecodes"),
+                React.createElement(Toggle, { defaultValue: showTimecodes, label: "Hide Timecodes", handleToggle: handleShowTimecodes })),
+            React.createElement("section", { className: style.settingElement },
+                React.createElement("div", { className: style.label }, "Show Speaker Labels"),
+                React.createElement(Toggle, { defaultValue: showSpeakers, label: "Hide Speaker Labels", handleToggle: handleShowSpeakers })),
+            React.createElement("section", { className: style.settingElement },
+                React.createElement("div", { className: style.label }, "Display Preview"),
+                React.createElement(Toggle, { defaultValue: previewIsDisplayed, label: "Display Preview", handleToggle: handlePreviewIsDisplayed })),
+            React.createElement("section", { className: style.settingElement },
+                React.createElement("div", { className: style.timecodeLabel }, "Timecode Offset \u2139"),
+                React.createElement(TimecodeOffset, { timecodeOffset: timecodeOffset, handleSetTimecodeOffset: handleSetTimecodeOffset, handleAnalyticsEvents: handleAnalyticsEvents })))));
 };
 export default memo(Settings);
 //# sourceMappingURL=Settings.js.map

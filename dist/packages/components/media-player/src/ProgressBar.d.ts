@@ -4,7 +4,7 @@ declare class ProgressBar extends React.Component<any, any, any> {
     constructor(props: any, context: any);
     shouldComponentUpdate: (nextProps: any) => boolean;
     handleOnChange: (e: any) => void;
-    render(): import("react/jsx-runtime").JSX.Element;
+    render(): React.JSX.Element;
 }
 declare namespace ProgressBar {
     namespace propTypes {

@@ -9,22 +9,22 @@
 * attribute for the word object containing the text. eg word ={ punct:'helo', ... }
 *  or eg word ={ text:'helo', ... }
 */
+let entityKeyCounter = 0;
 const generateEntitiesRanges = (words, wordAttributeName) => {
     let position = 0;
     return words.map((word) => {
+        const wordText = word[wordAttributeName] || '';
         const result = {
-            start: word.start,
-            end: word.end,
-            confidence: word.confidence,
-            text: word[wordAttributeName],
+            start: parseFloat(word.start) || 0,
+            end: parseFloat(word.end) || 0,
+            confidence: word.confidence ? parseFloat(word.confidence) : undefined,
+            text: wordText,
             offset: position,
-            length: word[wordAttributeName].length,
-            key: Math.random()
-                .toString(36)
-                .substring(6)
+            length: wordText.length,
+            key: `entity_${entityKeyCounter++}`
         };
         // increase position counter - to determine word offset in paragraph
-        position = position + word[wordAttributeName].length + 1;
+        position = position + wordText.length + 1;
         return result;
     });
 };

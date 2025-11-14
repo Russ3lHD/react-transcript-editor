@@ -34,38 +34,46 @@ https://github.com/facebook/draft-js/issues/528
 .editor :global(.word-active) {
   background-color: #69e3c2;
   text-shadow: 0 0 0.01px black;
-  transition: background-color 0.1s ease;
+  transition: background-color 140ms ease, transform 120ms ease;
+  transform: translateY(-1px);
+  will-change: background-color, transform;
 }
 
 /* Global fallback for word-active (works even if .editor class is not found) */
 :global(.word-active) {
   background-color: #69e3c2 !important;
   text-shadow: 0 0 0.01px black;
-  transition: background-color 0.1s ease;
+  transition: background-color 140ms ease, transform 120ms ease;
+  transform: translateY(-1px);
+  will-change: background-color, transform;
 }
 
 /* Sibling highlight - applied to word following active word */
 .editor :global(.word-active-next) {
   background-color: #69e3c2;
-  transition: background-color 0.1s ease;
+  transition: background-color 140ms ease, transform 120ms ease;
+  transform: translateY(-0.5px);
+  will-change: background-color, transform;
 }
 
 /* Global fallback for word-active-next */
 :global(.word-active-next) {
   background-color: #69e3c2 !important;
-  transition: background-color 0.1s ease;
+  transition: background-color 140ms ease, transform 120ms ease;
+  transform: translateY(-0.5px);
+  will-change: background-color, transform;
 }
 
 /* Unplayed words - words that haven't been reached yet */
 .editor :global(.word-unplayed) {
   color: #767676;
-  transition: color 0.15s ease;
+  transition: color 150ms ease;
 }
 
 /* Global fallback for word-unplayed */
 :global(.word-unplayed) {
   color: #767676 !important;
-  transition: color 0.15s ease;
+  transition: color 150ms ease;
 }
 
 /* ===================================================

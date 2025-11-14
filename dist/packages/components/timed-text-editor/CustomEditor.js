@@ -1,8 +1,6 @@
-import { jsx as _jsx } from "react/jsx-runtime";
 import React from 'react';
 // eslint-disable-next-line no-unused-vars
 import PropTypes from 'prop-types';
-// eslint-disable-next-line no-unused-vars
 import { Editor } from 'draft-js';
 import WrapperBlock from './WrapperBlock';
 // NOTE: custom editor is in a separate class to minimise re-renders
@@ -40,7 +38,11 @@ class CustomEditor extends React.Component {
         this.props.onChange(e);
     };
     render() {
-        return (_jsx(Editor, { editorState: this.props.editorState, onChange: this.handleOnChange, stripPastedStyles: true, blockRendererFn: this.renderBlockWithTimecodes, handleKeyCommand: this.props.handleKeyCommand, keyBindingFn: this.props.customKeyBindingFn, spellCheck: this.props.spellCheck }));
+        // Guard against undefined editorState
+        if (!this.props.editorState) {
+            return React.createElement("div", null, "Loading editor state...");
+        }
+        return (React.createElement(Editor, { editorState: this.props.editorState, onChange: this.handleOnChange, stripPastedStyles: true, blockRendererFn: this.renderBlockWithTimecodes, handleKeyCommand: this.props.handleKeyCommand, keyBindingFn: this.props.customKeyBindingFn, spellCheck: this.props.spellCheck }));
     }
 }
 export default CustomEditor;

@@ -7,7 +7,7 @@ declare class PlayerControls extends React.Component<any, any, any> {
     interval: NodeJS.Timeout | undefined;
     setIntervalHelperForward: () => void;
     clearIntervalHelper: () => void;
-    render(): import("react/jsx-runtime").JSX.Element;
+    render(): React.JSX.Element;
 }
 declare namespace PlayerControls {
     namespace propTypes {

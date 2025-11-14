@@ -14,19 +14,19 @@ import {
   faVolumeUp,
   faVolumeMute
 } from '@fortawesome/free-solid-svg-icons';
-// eslint-disable-next-line no-unused-vars
+
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
-// eslint-disable-next-line no-unused-vars
+
 import PlaybackRate from '../PlaybackRate';
-// eslint-disable-next-line no-unused-vars
+
 import TimeBox from './TimeBox.js';
 
 // Handle CSS module import with fallback for Storybook
 let style;
 try {
   style = require('./index.module.scss');
-} catch (error) {
+} catch {
   // Fallback styles for Storybook
   style = {
     playerControls: 'player-controls',

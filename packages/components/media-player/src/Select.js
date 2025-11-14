@@ -5,7 +5,7 @@ import PropTypes from 'prop-types';
 let style;
 try {
   style = require('./Select.module.scss');
-} catch (error) {
+} catch {
   // Fallback styles for Storybook
   style = {
     selectPlayerControl: 'select-player-control'

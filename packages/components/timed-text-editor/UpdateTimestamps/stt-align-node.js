@@ -28,7 +28,10 @@ function normaliseWord(wordText) {
     if (isANumber(wordTextResult)) {
       const sanitizedWord = removeTrailingPunctuation(wordTextResult);
       if (sanitizedWord !== '') {
-        return toWords(sanitizedWord);
+        const numericValue = Number(sanitizedWord);
+        if (Number.isFinite(numericValue)) {
+          return toWords(numericValue);
+        }
       }
     }
 

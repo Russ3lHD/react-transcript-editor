@@ -17,22 +17,20 @@ to get text out of component with timecodes and speaker names in the interim */
 /* Desktop size */
 @media (min-width: 768px) {
 
+  /* Top row: speaker (left) and timecode (right). Text sits below spanning full width. */
   .markers {
-    display: grid;
-    grid-template-columns: 2fr 1fr;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    width: 100%;
   }
 
   .WrapperBlock {
     margin-bottom: 1em;
     overflow: hidden;
-    display: grid;
-    grid-template-columns: [col-speaker] minmax(200px, 18%) [col-text] minmax(
-      50%,
-      81%
-    );
-    grid-column-gap: 1%;
-    justify-content: center;
-    align-content: center;
+    display: flex;
+    flex-direction: column;
+    width: 100%;
   }
 
   .speaker {
@@ -49,8 +47,9 @@ to get text out of component with timecodes and speaker names in the interim */
 
   .text {
     font-size: 1em;
-    float: right;
-    clear: right;
+    /* Text should appear in its own row under the speaker/timecode */
+    width: 100%;
+    box-sizing: border-box;
   }
 }
 

@@ -77,6 +77,7 @@ const exportAdapter = (blockData, exportFormat, transcriptTitle) => {
   }
   default:
     // code block
+    /* eslint-disable-next-line no-console */
     console.error('Did not recognise the export format');
   }
 };

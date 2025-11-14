@@ -10,13 +10,27 @@ declare class WrapperBlock extends React.Component<any, any, any> {
     state: {
         speaker: string;
         start: number;
+        isEditing: boolean;
+        tempSpeaker: string;
+        uniqueSpeakers: never[];
+        actionType: null;
     };
     componentDidMount(): void;
     shouldComponentUpdate: (nextProps: any, nextState: any, nextContext: any) => boolean;
-    componentDidUpdate: (prevProps: any, prevState: any) => void;
-    handleOnClickEdit: () => void;
+    componentDidUpdate: (prevProps: any, _prevState: any) => void;
+    componentWillUnmount(): void;
+    onEditingEvent: (ev: any) => void;
+    getOtherSpeakers: () => any[];
+    handleStartEditing: () => void;
+    handleChangeTempSpeaker: (e: any) => void;
+    handleKeyDown: (_e: any) => void;
+    handleSwitchSegment: (newSpeakerName: any) => void;
+    handleRenameAll: () => void;
+    handleOptionSelect: (e: any) => void;
+    applySegmentScope: () => void;
+    applyGlobalScope: () => void;
     handleTimecodeClick: () => void;
-    render(): import("react/jsx-runtime").JSX.Element;
+    render(): React.JSX.Element;
 }
 import React from 'react';
 //# sourceMappingURL=WrapperBlock.d.ts.map

@@ -1,5 +1,4 @@
-import { jsx as _jsx, jsxs as _jsxs } from "react/jsx-runtime";
-import { useState, useCallback, useEffect } from 'react';
+import React, { useState, useCallback, useEffect } from 'react';
 import style from './index.module.css';
 import { timecodeToSeconds, secondsToTimecode } from '../../../util/timecode-converter';
 /**
@@ -65,7 +64,14 @@ const TimecodeOffset = ({ handleSetTimecodeOffset, onChange, timecodeOffset = 0,
         }
         handleSetTimecodeOffset?.(offsetInSeconds);
     }, [handleAnalyticsEvents, handleSetTimecodeOffset, localTimecodeOffset]);
-    return (_jsxs("div", { className: `${style.offsetContainer} ${className}`.trim(), children: [_jsx("label", { htmlFor: "timecode-offset-input", className: style.visuallyHidden, children: "Timecode Offset" }), _jsx("input", { id: "timecode-offset-input", className: style.inputBox, type: "text", value: localTimecodeOffset, onChange: handleChange, placeholder: "00:00:00:00", "aria-label": "Timecode offset in HH:MM:SS:FF format", "data-testid": testId }), _jsx("button", { type: "button", className: style.button, onClick: resetTimecodeOffset, "aria-label": "Reset timecode offset to zero", children: _jsx("u", { children: "Reset" }) }), _jsx("span", { "aria-hidden": "true", children: " | " }), _jsx("button", { type: "button", className: style.button, onClick: saveTimecodeOffset, "aria-label": "Apply timecode offset", children: _jsx("u", { children: "Save" }) })] }));
+    return (React.createElement("div", { className: `${style.offsetContainer} ${className}`.trim() },
+        React.createElement("label", { htmlFor: "timecode-offset-input", className: style.visuallyHidden }, "Timecode Offset"),
+        React.createElement("input", { id: "timecode-offset-input", className: style.inputBox, type: "text", value: localTimecodeOffset, onChange: handleChange, placeholder: "00:00:00:00", "aria-label": "Timecode offset in HH:MM:SS:FF format", "data-testid": testId }),
+        React.createElement("button", { type: "button", className: style.button, onClick: resetTimecodeOffset, "aria-label": "Reset timecode offset to zero" },
+            React.createElement("u", null, "Reset")),
+        React.createElement("span", { "aria-hidden": "true" }, " | "),
+        React.createElement("button", { type: "button", className: style.button, onClick: saveTimecodeOffset, "aria-label": "Apply timecode offset" },
+            React.createElement("u", null, "Save"))));
 };
 export default TimecodeOffset;
 //# sourceMappingURL=index.js.map
