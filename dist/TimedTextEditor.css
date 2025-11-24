@@ -187,7 +187,9 @@ to get text out of component with timecodes and speaker names in the interim */
     margin-bottom: 1em;
     overflow: hidden;
     display: flex;
-    flex-direction: column;
+    flex-direction: row;
+    align-items: center;
+    gap: 0.75rem;
     width: 100%;
   }
 
@@ -199,14 +201,16 @@ to get text out of component with timecodes and speaker names in the interim */
     overflow: hidden;
     white-space: nowrap;
     justify-self: start;
-    max-width: 100%;
+    max-width: 30%;
     text-align: left;
+    flex: 0 0 auto;
   }
 
   .WrapperBlock-module__text___j2DGQ {
     font-size: 1em;
-    /* Text should appear in its own row under the speaker/timecode */
-    width: 100%;
+    flex: 1 1 auto;
+    min-width: 0;
+    width: auto;
     box-sizing: border-box;
   }
 }
@@ -216,6 +220,8 @@ to get text out of component with timecodes and speaker names in the interim */
   font-weight: lighter;
   cursor: pointer;
   justify-self: start;
+  white-space: nowrap;
+  flex: 0 0 auto;
 }
 
 .WrapperBlock-module__time___TC6MD:hover {
@@ -252,6 +258,9 @@ to get text out of component with timecodes and speaker names in the interim */
     margin-bottom: 1em;
     line-height: 1.2em;
     overflow: hidden;
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
   }
 
   .WrapperBlock-module__speaker____MOrB {
